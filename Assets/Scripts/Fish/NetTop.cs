@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class NetTop : MonoBehaviour {
 	//public Transform fish;
 	Text score;
+	Text specialScore;
 	Transform scoreParent;
 	SubmarineController submarine;
 	GameObject scoreParticle;
@@ -17,6 +18,7 @@ public class NetTop : MonoBehaviour {
 		isOver = false;
 		submarine = SubmarineController.Instance;
 		score = submarine.score;
+		specialScore = submarine.specialScore;
 		scoreParent = submarine.scoreParent;
 		scoreParticle = (GameObject)Resources.Load("ScoreParticle");
 	}
@@ -56,10 +58,15 @@ public class NetTop : MonoBehaviour {
 	}
 
 	void ScoreGenerate(Transform fish,Vector3 offset){
-		Text text = Text.Instantiate (score, fish.position, score.transform.rotation, scoreParent);
-		text.text = (submarine.fishDic [fish.name]/2).ToString();
+		Text text = score;
+		if (fish.name.StartsWith ("fish")) {
+			text = Text.Instantiate (score, fish.position, score.transform.rotation, scoreParent);
+			text.color = Color.white;
+		} else {
+			text = Text.Instantiate (specialScore, fish.position, score.transform.rotation, scoreParent);
+		}
+		text.text = "$"+(submarine.fishDic [fish.name]/2).ToString();
 		text.transform.position = Camera.main.WorldToScreenPoint (fish.position)+offset;
-		text.color = Color.white;
 		GameObject scoreParticleObj = Instantiate (scoreParticle, Camera.main.ScreenToWorldPoint(text.transform.position), scoreParticle.transform.rotation);
 		StartCoroutine (ScoreWithParticle (text.transform, scoreParticleObj.transform));
 		text.transform.DOScale (1.5f, 0.3f).OnComplete(()=>{text.transform.DOScale (1f, 0.3f).OnComplete(()=>{

@@ -140,7 +140,7 @@ public class Map : MonoBehaviour {
 			}
 		} else {
 			int cost = 300000000;
-			MessageBox.Show ("", "It costs "+"$300,000K" +"to unlock" ,2);
+			MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,2);
 			MessageBox.confim =()=>{
 				int gold = PlayerPrefs.GetInt ("gold", 0);
 				if(gold>cost){

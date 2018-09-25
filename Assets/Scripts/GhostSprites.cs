@@ -163,6 +163,9 @@ public class GhostSprites : MonoBehaviour
 	
 	void Update ()
 	{
+		if (ProgressManager.Instance.isReady) {
+			return;
+		}
         if (killSwitch)
         {
             return;

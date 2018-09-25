@@ -15,6 +15,7 @@ public class SubmarineController : MonoBehaviour {
 	public Transform boundL;
 	public Transform boundR;
 	public Text score;
+	public Text specialScore;
 	public Transform scoreParent;
 	public Slider progressSlider;
 	public GameObject settleView;
@@ -38,7 +39,7 @@ public class SubmarineController : MonoBehaviour {
 
 	void Awake(){
 		instance = this;
-		//PlayerPrefs.SetInt ("gold", 999999999);
+		//PlayerPrefs.SetInt ("gold", 1999999999);
 		//PlayerPrefs.DeleteAll ();
 	}
 
@@ -96,7 +97,7 @@ public class SubmarineController : MonoBehaviour {
 				HidePopUI (true);
 			}
 			time += Time.deltaTime;
-			if (time > settleTime) {
+			if (time >= settleTime) {
 				if (fishIndex < settleCount) {
 					Transform fish = netParent.GetChild (fishIndex);
 					Settlement (fish, 0.3f);
@@ -162,27 +163,46 @@ public class SubmarineController : MonoBehaviour {
 						MessageBox.doubleR =()=>{															
 							//GameObject popBG = (GameObject)Resources.Load("PopBG");
 							//Transform doubleTrans = popBG.transform.Find("double");
-							string doubleName = doubleTrans.GetComponentInChildren<Text>().text;
-							int gold = 0;
-							goldSum*=goldMultiple;
-							if(doubleName == "Bonus×3"){
-								gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
-							}else if(doubleName == "Bonus×4"){
-								gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
-							}else if(doubleName == "Bonus×5"){
-								gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
-							}else if(doubleName == "Bonus×2"){
-								gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
-							}
-
-							PlayerPrefs.SetInt ("gold", gold);
-							Upgrading.Instance.CheckGold();
-							UpgradingOffline.Instance.CheckGold();
-							ProgressManager.Instance.GameWin ();														
+																				
 							PlayerPrefs.SetInt("double",0);
 							if (TGSDK.CouldShowAd(TGSDKManager.tripleID)) {
 								TGSDK.ShowAd(TGSDKManager.tripleID);
-							}	
+							}
+			
+
+							TGSDK.AdCompleteCallback = (string msg) => {
+								Debug.Log("AdCompleteCallback");
+
+								GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
+
+
+
+								string doubleName = doubleTrans.GetComponentInChildren<Text>().text;
+								int gold = 0;
+								goldSum*=goldMultiple;
+								if(doubleName == "Bonus×3"){
+									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
+								}else if(doubleName == "Bonus×4"){
+									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
+								}else if(doubleName == "Bonus×5"){
+									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
+								}else if(doubleName == "Bonus×2"){
+									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
+								}
+
+								Button btn = adPop.transform.Find("sure").GetComponent<Button>();
+								adPop.transform.Find("content").GetComponent<Text>().text ="$" + (gold-PlayerPrefs.GetInt ("gold", 0)-goldSum).ToString();
+								btn.onClick.AddListener(()=>{
+									PlayerPrefs.SetInt ("gold", gold);
+									Upgrading.Instance.CheckGold();
+									UpgradingOffline.Instance.CheckGold();
+									ProgressManager.Instance.GameWin ();	
+								});
+
+
+
+
+							};
 						};							
 							
 					});						
@@ -339,8 +359,14 @@ public class SubmarineController : MonoBehaviour {
 	}
 
 	void ScoreGenerate(Transform fish){
-		Text text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
-		text.text = (fishDic [fish.name]/2).ToString();
+		Text text = score;
+		if (fish.name.StartsWith ("fish")) {
+			text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
+		} else {
+			text = Text.Instantiate (specialScore, netParent.position, score.transform.rotation, scoreParent);
+		}
+		//text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
+		text.text ="$"+(fishDic [fish.name]/2).ToString();
 		goldSum += (fishDic [fish.name]/2);
 		text.transform.position = Camera.main.WorldToScreenPoint (fish.position);
 		text.DOFade (1f, 0.3f);
