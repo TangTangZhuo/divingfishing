@@ -11,6 +11,7 @@ public class TimeManager : MonoBehaviour {
 
 	DateTime currentDate;
 	DateTime oldDate;
+	FlyGold flyGold;
 
 	int messageCount;
 	void Awake(){
@@ -31,7 +32,7 @@ public class TimeManager : MonoBehaviour {
 		if (PlayerPrefs.GetInt ("quitGame", 0) == 1) {
 			UpdateGold ();
 		}
-
+		flyGold = (FlyGold)UnityEngine.Object.FindObjectOfType (typeof(FlyGold));
 	}
 
 	void OnApplicationQuit()
@@ -83,7 +84,8 @@ public class TimeManager : MonoBehaviour {
 				} else {
 					doubleTrans.GetComponent<Button> ().interactable = true;
 				}
-
+				if (MessageBox.Messagebox != null)
+					return;
 				MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange(min * PlayerPrefs.GetInt ("valueOffline", 40)));
 				PlayerPrefs.SetInt ("offlineOnClick", 1);
 				messageCount++;
@@ -96,12 +98,32 @@ public class TimeManager : MonoBehaviour {
 				};
 				MessageBox.doubleR = () => {
 					TGSDK.ShowAdScene(TGSDKManager.doubleID);
-					int gold = PlayerPrefs.GetInt ("gold", 0) + (int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*2*(1+goldMutiple));
-					OnMessageBoxBtn(gold);
-					PlayerPrefs.SetInt ("quitGame", 0);
+
 					if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
 						TGSDK.ShowAd(TGSDKManager.doubleID);
 					}
+						
+
+					doubleTrans.DOScale(1,2).OnComplete(()=>{
+						GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
+
+						int gold = PlayerPrefs.GetInt ("gold", 0) + (int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*2*(1+goldMutiple));
+
+
+						Button btn = adPop.transform.Find("sure").GetComponent<Button>();
+						adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-PlayerPrefs.GetInt ("gold", 0))/(2*(1+goldMutiple))).ToString();
+						btn.onClick.AddListener(()=>{
+							OnMessageBoxBtn(gold);
+							PlayerPrefs.SetInt ("quitGame", 0);
+							ProgressManager.Instance.GameWin ();
+						});
+
+//						int gold = PlayerPrefs.GetInt ("gold", 0) + (int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*2*(1+goldMutiple));
+//						OnMessageBoxBtn(gold);
+//						PlayerPrefs.SetInt ("quitGame", 0);
+
+					});
+
 				};
 			}
 		}
@@ -109,7 +131,9 @@ public class TimeManager : MonoBehaviour {
 
 	void OnMessageBoxBtn(int gold){
 		PlayerPrefs.SetInt ("gold", gold);
-		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.None, null);
+		flyGold.FlyGoldGenerate ();
+
+		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);
 		Upgrading.Instance.CheckGold ();
 		UpgradingOffline.Instance.CheckGold ();
 		//PlayerPrefs.SetString ("sysString", System.DateTime.Now.ToBinary ().ToString ());	

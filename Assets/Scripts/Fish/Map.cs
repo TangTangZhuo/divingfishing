@@ -60,12 +60,9 @@ public class Map : MonoBehaviour {
 	}
 
 	public void OnLevel2Btn(){
-		print (1);
 		if (PlayerPrefs.GetInt ("Lock2", 0) == 1) {
-			print (2);
 			int level = PlayerPrefs.GetInt ("Level", 1);
 			if (level != 2) {
-				print (3);
 				MultiHaptic.HapticMedium ();
 				int index = int.Parse ((levelPos [level - 1].name.ToString ()));
 				int curIndex = int.Parse ((levelPos [1].name.ToString ()));
@@ -98,7 +95,7 @@ public class Map : MonoBehaviour {
 				if(gold>cost){
 					gold -=cost;
 					PlayerPrefs.SetInt ("gold", gold);
-					UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.None, null);
+					UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.Numerals, null);
 					Upgrading.Instance.CheckGold ();
 					UpgradingOffline.Instance.CheckGold ();
 					PlayerPrefs.SetInt ("Lock2",1);
@@ -146,7 +143,7 @@ public class Map : MonoBehaviour {
 				if(gold>cost){
 					gold -=cost;
 					PlayerPrefs.SetInt ("gold", gold);
-					UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.None, null);
+					UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.Numerals, null);
 					Upgrading.Instance.CheckGold ();
 					UpgradingOffline.Instance.CheckGold ();
 					PlayerPrefs.SetInt ("Lock3",1);

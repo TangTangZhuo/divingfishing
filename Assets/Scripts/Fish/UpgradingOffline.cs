@@ -44,7 +44,7 @@ public class UpgradingOffline : MonoBehaviour {
 		priceT.text = "$" + UIManager.UnitChange(price);
 
 		gold = PlayerPrefs.GetInt ("gold", 0);
-		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.None, null);
+		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(1);
 	}
 
 	public void OnOfflineClick(){

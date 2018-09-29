@@ -27,6 +27,7 @@ public class SubmarineController : MonoBehaviour {
 	int goldSum;
 	int settleCount;
 	float settleTime;
+	//FlyGold flyGod;
 	[HideInInspector]
 	int goldMultiple = 1;
 
@@ -60,6 +61,7 @@ public class SubmarineController : MonoBehaviour {
 		goldSum = 0;
 		InitProgressSlider ();
 //		UpdateGoldMutiple ();
+//		flyGod = (FlyGold)Object.FindObjectOfType(typeof(FlyGold));
 	}
 	
 	// Update is called once per frame
@@ -120,6 +122,7 @@ public class SubmarineController : MonoBehaviour {
 
 						GameObject popBG = (GameObject)Resources.Load("PopBG");
 						Transform doubleTrans = popBG.transform.Find("double");
+						doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
 
 						if(PlayerPrefs.GetInt("double",0)>=2){
 							
@@ -139,70 +142,97 @@ public class SubmarineController : MonoBehaviour {
 						}
 						//UpdateGoldMutiple ();
 
-						if (!TGSDK.CouldShowAd (TGSDKManager.doubleID)) {
-							doubleTrans.GetComponent<Button> ().interactable = false;
-						} else {
-							doubleTrans.GetComponent<Button> ().interactable = true;
+						string doubleText = doubleTrans.GetComponentInChildren<Text>().text;
+						if(doubleText == "Bonus×2"){
+							if (!TGSDK.CouldShowAd (TGSDKManager.doubleID)) {
+								doubleTrans.GetComponent<Button> ().interactable = false;
+							} else {
+								doubleTrans.GetComponent<Button> ().interactable = true;
+							}
+						}else{
+							if (!TGSDK.CouldShowAd (TGSDKManager.tripleID)) {
+								doubleTrans.GetComponent<Button> ().interactable = false;
+							} else {
+								doubleTrans.GetComponent<Button> ().interactable = true;
+							}
 						}
 
 						MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
-						if(PlayerPrefs.GetInt("double",0)>=2){
+
+						if(PlayerPrefs.GetInt("double",0)>=2){							
+							print(1);
 							Transform doubleTrans1 = GameObject.FindGameObjectWithTag("PopBG").transform.Find("double");
+							print(2);
 							if(doubleTrans!=null){
+								print(3);
 								doubleTrans1.DOPunchRotation(new Vector3(0,0,5),1,5,1).SetLoops(100);
 							}
 						}
-						MessageBox.confim =()=>{
+
+						MessageBox.confim =()=>{					
 							int gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*goldMultiple;
 							PlayerPrefs.SetInt ("gold", gold);
 							Upgrading.Instance.CheckGold();
 							UpgradingOffline.Instance.CheckGold();
+
 							ProgressManager.Instance.GameWin ();
 							PlayerPrefs.SetInt ("double", PlayerPrefs.GetInt ("double", 0) + 1);
+							PlayerPrefs.SetInt ("ClamGold", 1);
 						};
 						MessageBox.doubleR =()=>{															
 							//GameObject popBG = (GameObject)Resources.Load("PopBG");
 							//Transform doubleTrans = popBG.transform.Find("double");
 																				
-							PlayerPrefs.SetInt("double",0);
-							if (TGSDK.CouldShowAd(TGSDKManager.tripleID)) {
-								TGSDK.ShowAd(TGSDKManager.tripleID);
+							if(doubleText == "Bonus×2"){
+								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
+									TGSDK.ShowAd(TGSDKManager.doubleID);
+								}
+							}else{
+								if (TGSDK.CouldShowAd(TGSDKManager.tripleID)) {
+									TGSDK.ShowAd(TGSDKManager.tripleID);
+								}
 							}
-			
+								
 
-							TGSDK.AdCompleteCallback = (string msg) => {
-								Debug.Log("AdCompleteCallback");
 
+							doubleTrans.DOScale(1,2).OnComplete(()=>{
 								GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
 
 
-
 								string doubleName = doubleTrans.GetComponentInChildren<Text>().text;
-								int gold = 0;
+								int gold = PlayerPrefs.GetInt ("gold", 0);
 								goldSum*=goldMultiple;
-								if(doubleName == "Bonus×3"){
-									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
-								}else if(doubleName == "Bonus×4"){
-									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
-								}else if(doubleName == "Bonus×5"){
-									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
-								}else if(doubleName == "Bonus×2"){
-									gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
-								}
 
 								Button btn = adPop.transform.Find("sure").GetComponent<Button>();
-								adPop.transform.Find("content").GetComponent<Text>().text ="$" + (gold-PlayerPrefs.GetInt ("gold", 0)-goldSum).ToString();
+								adPop.transform.Find("content").GetComponent<Text>().text ="$" + 0.ToString();
 								btn.onClick.AddListener(()=>{
+									PlayerPrefs.SetInt ("ClamGold", 1);
 									PlayerPrefs.SetInt ("gold", gold);
 									Upgrading.Instance.CheckGold();
 									UpgradingOffline.Instance.CheckGold();
 									ProgressManager.Instance.GameWin ();	
 								});
 
+								TGSDK.AdCompleteCallback = (string msg) => {
+									Debug.Log("AdCompleteCallback");
+									PlayerPrefs.SetInt("double",0);
+									if(doubleName == "Bonus×3"){
+										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
+									}else if(doubleName == "Bonus×4"){
+										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
+									}else if(doubleName == "Bonus×5"){
+										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
+									}else if(doubleName == "Bonus×2"){
+										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
+									}
+									adPop.transform.Find("content").GetComponent<Text>().text ="$" + (gold-PlayerPrefs.GetInt ("gold", 0)-goldSum).ToString();
+								};
+
+							});
+								
 
 
-
-							};
+						//	};
 						};							
 							
 					});						
@@ -221,6 +251,11 @@ public class SubmarineController : MonoBehaviour {
 			}
 
 		}
+	}
+
+	void ADReward(){
+		
+
 	}
 
 	float GetSettleTime(int count){
@@ -382,19 +417,19 @@ public class SubmarineController : MonoBehaviour {
 		fishDic.Add ("fish5(Clone)", 3000);
 		fishDic.Add ("fish6(Clone)", 4500);
 		fishDic.Add ("fish7(Clone)", 7000);
-		fishDic.Add ("fish8(Clone)", 10000);
+		fishDic.Add ("fish8(Clone)", 10000*3);
 		fishDic.Add ("fish9(Clone)", 16000);
-		fishDic.Add ("fish10(Clone)", 25000);
+		fishDic.Add ("fish10(Clone)", 25000*3);
 		fishDic.Add ("fish11(Clone)", 10000);
 		fishDic.Add ("fish12(Clone)", 20000);
 		fishDic.Add ("fish13(Clone)", 30000);
 		fishDic.Add ("fish14(Clone)", 40000);
-		fishDic.Add ("fish15(Clone)", 60000);
+		fishDic.Add ("fish15(Clone)", 60000*3);
 		fishDic.Add ("fish16(Clone)", 90000);
 		fishDic.Add ("fish17(Clone)", 135000);
 		fishDic.Add ("fish18(Clone)", 202500);
 		fishDic.Add ("fish19(Clone)", 303750);
-		fishDic.Add ("fish20(Clone)", 455600);
+		fishDic.Add ("fish20(Clone)", 455600*3);
 		fishDic.Add ("fish21(Clone)", 203400);
 		fishDic.Add ("fish22(Clone)", 305100);
 		fishDic.Add ("fish23(Clone)", 457650);

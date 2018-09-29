@@ -9,7 +9,7 @@ namespace Common
 	public delegate void DoubleR();
 	public class MessageBox 
 	{
-		static GameObject Messagebox;
+		public static GameObject Messagebox;
 //		static int Result = -1;
 		public static Confim confim;
 		public static Cancle cancle;
@@ -61,6 +61,7 @@ namespace Common
 
 		public static void Sure()
 		{
+			
 			if (confim!= null)
 			{
 				MultiHaptic.HapticMedium ();

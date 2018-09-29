@@ -11,8 +11,8 @@ public class FishController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		speeds = new float[]{ 1.05f, 1.1f, 1.15f, 1.2f, 1.5f };
-		speed = speeds [Random.Range (0, 5)];
+		speeds = new float[]{ 0.5f, 0.8f, 1f, 1.2f, 1.5f,1.7f,2f };
+		speed = speeds [Random.Range (0, speeds.Length)];
 		leftScreen = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, 0)).x;
 		rightScreen = Camera.main.ViewportToWorldPoint (new Vector3 (1, 1, 1)).x;
 	}

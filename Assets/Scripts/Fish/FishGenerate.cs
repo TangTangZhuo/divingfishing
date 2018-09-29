@@ -46,26 +46,37 @@ public class FishGenerate : MonoBehaviour {
 	public void GenerateFish(){
 		float screenMid = startPosition.position.x;
 		int counter = 0;
+		int fishNumber = 0; 
+		bool isBig = false;
 		for (int i = (int)startPosition.position.y-2; i > UIManager.Instance.diveDepth; i+=0) {
 			float baseGeneratePosy = i - typeDistance / 2 ;
-			for (int num = 0; num < 10; num++) {
+			string fishName = fish [fishIndex].GetComponent<SpriteRenderer> ().sprite.name;
+			if (fishName == "fish7" || fishName == "fish10" || fishName == "fish26" || fishName == "fish20") {
+				fishNumber = 3;
+				isBig = true;
+			} else {
+				isBig = false;
+				fishNumber = 10;
+			}
+			for (int num = 0; num < fishNumber; num++) {
+				
 				Transform fishNormal = Transform.Instantiate (fish[fishIndex], new Vector3 (screenMid + Random.Range (-2, 3), baseGeneratePosy + Random.Range (-5, 6)), 
 					Quaternion.Euler (0, euler [Random.Range (0, 2)], 0), transform);
-				
-				//设置图层遮挡鱼的眼睛
-				if (Random.Range (0, 10) == 5) {
-					fishNormal.GetComponent<SpriteRenderer> ().sortingOrder = 2;
-					fishNormal.GetChild(0).GetComponent<SpriteRenderer> ().sortingOrder = 3;
+				if (!isBig) {
+					//设置图层遮挡鱼的眼睛
+					if (Random.Range (0, 10) == 5) {
+						fishNormal.GetComponent<SpriteRenderer> ().sortingOrder = 2;
+						fishNormal.GetChild (0).GetComponent<SpriteRenderer> ().sortingOrder = 3;
+					}
+					if (Random.Range (0, 20) == 5) {
+						fishNormal.GetComponent<SpriteRenderer> ().sortingOrder = 4;
+						fishNormal.GetChild (0).GetComponent<SpriteRenderer> ().sortingOrder = 5;
+					}
+					if (Random.Range (0, 40) == 5) {
+						fishNormal.GetComponent<SpriteRenderer> ().sortingOrder = 6;
+						fishNormal.GetChild (0).GetComponent<SpriteRenderer> ().sortingOrder = 7;
+					}
 				}
-				if (Random.Range (0, 20) == 5) {
-					fishNormal.GetComponent<SpriteRenderer> ().sortingOrder = 4;
-					fishNormal.GetChild(0).GetComponent<SpriteRenderer> ().sortingOrder = 5;
-				}
-				if (Random.Range (0, 40) == 5) {
-					fishNormal.GetComponent<SpriteRenderer> ().sortingOrder = 6;
-					fishNormal.GetChild(0).GetComponent<SpriteRenderer> ().sortingOrder = 7;
-				}
-
 				ChangeFishEye (fishNormal);
 				if (Random.Range (0, 60) == 10) {
 					Transform fishUnusual = Transform.Instantiate (unusual[fishIndex], new Vector3 (screenMid + Random.Range (-2, 3), baseGeneratePosy + Random.Range (-5, 6)), 
@@ -92,6 +103,7 @@ public class FishGenerate : MonoBehaviour {
 				}
 				counter = 0;
 			}
+
 		}
 	}
 
