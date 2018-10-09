@@ -40,7 +40,7 @@ public class SubmarineController : MonoBehaviour {
 
 	void Awake(){
 		instance = this;
-		PlayerPrefs.SetInt ("gold", 1999999999);
+		//PlayerPrefs.SetInt ("gold", 1999999999);
 		//PlayerPrefs.DeleteAll ();
 	}
 
