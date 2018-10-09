@@ -92,7 +92,8 @@ public class SubmarineController : MonoBehaviour {
 			}
 			progressSlider.value = transform.position.y;
 		}
-		if (isSettle) {		
+		if (isSettle) {	
+			PlayerPrefs.SetInt ("foreGold", PlayerPrefs.GetInt("gold",0));	
 			if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
 				HidePopUI (false);
 			} else {
@@ -160,11 +161,8 @@ public class SubmarineController : MonoBehaviour {
 						MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
 
 						if(PlayerPrefs.GetInt("double",0)>=2){							
-							print(1);
-							Transform doubleTrans1 = GameObject.FindGameObjectWithTag("PopBG").transform.Find("double");
-							print(2);
-							if(doubleTrans!=null){
-								print(3);
+							Transform doubleTrans1 = GameObject.Find("PopBG(Clone)").transform.Find("double");
+							if(doubleTrans1!=null){
 								doubleTrans1.DOPunchRotation(new Vector3(0,0,5),1,5,1).SetLoops(100);
 							}
 						}
@@ -410,7 +408,7 @@ public class SubmarineController : MonoBehaviour {
 	}
 
 	void InitFishDic(){
-		fishDic.Add ("fish1(Clone)", 500);
+		fishDic.Add ("fish1(Clone)", 510);
 		fishDic.Add ("fish2(Clone)", 750);
 		fishDic.Add ("fish3(Clone)", 1250);
 		fishDic.Add ("fish4(Clone)", 2000);

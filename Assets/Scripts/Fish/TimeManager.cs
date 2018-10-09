@@ -40,6 +40,7 @@ public class TimeManager : MonoBehaviour {
 		//Savee the current system time as a string in the player prefs class
 		PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
 		PlayerPrefs.SetInt ("quitGame", 1);
+		PlayerPrefs.SetInt ("foreGold", PlayerPrefs.GetInt("gold",0));	
 	}
 
 	void OnApplicationPause(bool isPause){

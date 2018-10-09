@@ -25,7 +25,7 @@ public class UpgradingOffline : MonoBehaviour {
 		valueT = transform.Find ("value").GetComponent<Text> ();
 		priceT = transform.Find ("price").GetComponent<Text> ();
 
-		UpdateData ();
+		UpdateData (1);
 		CheckGold ();
 	}
 	
@@ -34,7 +34,7 @@ public class UpgradingOffline : MonoBehaviour {
 		
 	}
 
-	void UpdateData(){
+	void UpdateData(float dalay){
 		
 		UIManager.Instance.offlineGold = PlayerPrefs.GetInt ("valueOffline", 40);
 
@@ -44,10 +44,12 @@ public class UpgradingOffline : MonoBehaviour {
 		priceT.text = "$" + UIManager.UnitChange(price);
 
 		gold = PlayerPrefs.GetInt ("gold", 0);
-		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(1);
+		UIManager.Instance.goldT.text = PlayerPrefs.GetInt ("foreGold", PlayerPrefs.GetInt("gold",0)).ToString();	
+		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(dalay);
 	}
 
 	public void OnOfflineClick(){
+		gold = PlayerPrefs.GetInt ("gold", 0);
 		if (gold > price) {
 			MultiHaptic.HapticMedium ();
 			gold -= price;
@@ -62,7 +64,7 @@ public class UpgradingOffline : MonoBehaviour {
 			PlayerPrefs.SetInt ("valueOffline", UIManager.Instance.offlineGold);
 			PlayerPrefs.SetInt ("priceOffline", price);
 			PlayerPrefs.SetInt ("gold", gold);
-			UpdateData ();
+			UpdateData (0);
 			CheckGold ();
 		}
 	}

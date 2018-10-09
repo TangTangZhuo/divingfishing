@@ -25,7 +25,7 @@ public class Upgrading : MonoBehaviour {
 		valueT = transform.Find ("value").GetComponent<Text> ();
 		priceT = transform.Find ("price").GetComponent<Text> ();
 
-		UpdateData ();
+		UpdateData (1);
 		CheckGold ();
 	}
 	
@@ -34,7 +34,7 @@ public class Upgrading : MonoBehaviour {
 		
 	}
 
-	void UpdateData(){
+	void UpdateData(float delay){
 		
 		if (PlayerPrefs.GetInt ("Level", 1) == 1) {
 			UIManager.Instance.diveDepth = PlayerPrefs.GetInt ("valueDepth", -17);
@@ -55,10 +55,12 @@ public class Upgrading : MonoBehaviour {
 		
 		gold = PlayerPrefs.GetInt ("gold", 0);
 
-		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(1);
+		UIManager.Instance.goldT.text = PlayerPrefs.GetInt ("foreGold", PlayerPrefs.GetInt("gold",0)).ToString();	
+		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(delay);
 	}
 
 	public void OnDepthClick(){
+		gold = PlayerPrefs.GetInt ("gold", 0);
 		if (gold > price) {
 			MultiHaptic.HapticMedium ();
 			gold -= price;
@@ -77,7 +79,7 @@ public class Upgrading : MonoBehaviour {
 			}
 
 			PlayerPrefs.SetInt ("gold", gold);
-			UpdateData ();
+			UpdateData (0);
 			CheckGold ();
 		}
 	}

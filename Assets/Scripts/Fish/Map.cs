@@ -38,7 +38,7 @@ public class Map : MonoBehaviour {
 
 	public void OnMapBtn(){
 		gameObject.SetActive (true);
-		point.DOPunchPosition (new Vector3 (0, 10, 0), 1, 5, 1, false).SetLoops(10);
+		point.DOPunchPosition (new Vector3 (0, 10, 0), 1, 5, 1, false).SetLoops(100);
 		MultiHaptic.HapticMedium ();
 	}
 
@@ -157,7 +157,7 @@ public class Map : MonoBehaviour {
 
 	public void OnLevel4Btn(){
 		MultiHaptic.HapticMedium ();
-		GenerateText (lv4, "当前关卡还未开放！");
+		GenerateText (lv4, "To Be Continue...");
 	}
 
 	void GenerateText(Transform trans,string content){

@@ -7,12 +7,16 @@ public class GoldCollect : MonoBehaviour {
 	Transform goldImage;
 	// Use this for initialization
 	void Start () {
-		goldImage = GameObject.FindGameObjectWithTag ("goldImage").transform;
+		Invoke ("GetGoldImage", 0.5f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	void GetGoldImage(){
+		goldImage = GameObject.FindGameObjectWithTag ("goldImage").transform;
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
