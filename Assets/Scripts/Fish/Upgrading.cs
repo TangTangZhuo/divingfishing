@@ -55,7 +55,7 @@ public class Upgrading : MonoBehaviour {
 		
 		gold = PlayerPrefs.GetInt ("gold", 0);
 
-		UIManager.Instance.goldT.text = PlayerPrefs.GetInt ("foreGold", PlayerPrefs.GetInt("gold",0)).ToString();	
+		UIManager.Instance.goldT.text = UIManager.UnitChange(PlayerPrefs.GetInt ("foreGold", PlayerPrefs.GetInt("gold",0)));	
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(delay);
 	}
 
