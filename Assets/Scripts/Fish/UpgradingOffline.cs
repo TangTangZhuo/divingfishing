@@ -66,14 +66,20 @@ public class UpgradingOffline : MonoBehaviour {
 			PlayerPrefs.SetInt ("gold", gold);
 			UpdateData (0);
 			CheckGold ();
+			Upgrading.Instance.CheckGold ();
 		}
 	}
 
 	public void CheckGold(){
 		if (gold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
+			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
+
+
 		} else {
 			transform.GetComponent<Button> ().interactable = false;
+			transform.GetComponent<Image> ().color = new Color (200 / 255f, 200 / 255f, 200 / 255f, 0.5f);
+
 		}
 	}
 

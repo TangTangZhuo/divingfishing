@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 
 public class MultiHaptic {
+	#if UNITY_IOS && !UNITY_EDITOR
 	[DllImport("__Internal")]
 	static extern void _hapticMedium();
 
@@ -33,4 +34,17 @@ public class MultiHaptic {
 			_hapticHeavy ();
 		}
 	}
+	#else
+	public static void HapticLight() {
+		
+	}
+
+	public static void HapticMedium() {
+		
+	}
+
+	public static void HapticHeavy() {
+		
+	}
+	#endif
 }

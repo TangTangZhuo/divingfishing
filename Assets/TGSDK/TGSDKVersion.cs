@@ -1,6 +1,6 @@
 
 namespace Together {
     public class TGSDKVersion {
-        static public string TGSDKVERSION = "1.8.1p1";
+        static public string TGSDKVERSION = "1.8.2";
     }
 }

@@ -111,6 +111,8 @@ namespace Together
         private static extern string _TGSDK_getIsAgeRestrictedUser();
 		[DllImport("__Internal")]
         private static extern void _TGSDK_setIsAgeRestrictedUser(string status);
+		[DllImport("__Internal")]
+        private static extern string _TGSDK_getSceneNameById(string scene);
 
 #elif UNITY_ANDROID && !UNITY_EDITOR
 		private static AndroidJavaClass _jc = null;
@@ -297,6 +299,10 @@ namespace Together
         {
             jc().CallStatic("setIsAgeRestrictedUser", status);
         }
+		private static string _TGSDK_getSceneNameById(string scene)
+		{
+			return jc().CallStatic<string>("getSceneNameById", scene);
+		}
 #else
         private static string _TGSDK_sdkVersion() {return null;}
         private static bool _TGSDK_checkSDKVersion(string version) {return false;}
@@ -357,6 +363,7 @@ namespace Together
         private static void _TGSDK_setUserGDPRConsentStatus(string status) {}
         private static string _TGSDK_getIsAgeRestrictedUser() { return ""; }
         private static void _TGSDK_setIsAgeRestrictedUser(string status) {}
+		private static string _TGSDK_getSceneNameById(string scene) { return ""; }
 #endif
 		public static Action<string> SDKInitFinishedCallback = null;
 
@@ -957,5 +964,15 @@ namespace Together
 				Debug.LogWarning (e);
             }
         }
+
+		public static string GetSceneNameById(string scene)
+		{
+			try {
+				return _TGSDK_getSceneNameById(scene);
+			} catch (Exception e) {
+				Debug.LogWarning (e);
+				return "";
+			}
+		}
     }
 }
