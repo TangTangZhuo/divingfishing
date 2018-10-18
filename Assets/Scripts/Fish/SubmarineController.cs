@@ -181,6 +181,11 @@ public class SubmarineController : MonoBehaviour {
 							//GameObject popBG = (GameObject)Resources.Load("PopBG");
 							//Transform doubleTrans = popBG.transform.Find("double");
 																				
+
+
+
+							AndroidAdComplete(doubleTrans);
+								
 							if(doubleText == "Bonus×2"){
 								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
 									TGSDK.ShowAd(TGSDKManager.doubleID);
@@ -190,44 +195,6 @@ public class SubmarineController : MonoBehaviour {
 									TGSDK.ShowAd(TGSDKManager.tripleID);
 								}
 							}
-								
-
-
-							doubleTrans.DOScale(1,2).OnComplete(()=>{
-								GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
-
-
-								string doubleName = doubleTrans.GetComponentInChildren<Text>().text;
-								int gold = PlayerPrefs.GetInt ("gold", 0);
-								goldSum*=goldMultiple;
-
-								Button btn = adPop.transform.Find("sure").GetComponent<Button>();
-								adPop.transform.Find("content").GetComponent<Text>().text ="$" + 0.ToString();
-								btn.onClick.AddListener(()=>{
-									PlayerPrefs.SetInt ("ClamGold", 1);
-									PlayerPrefs.SetInt ("gold", gold);
-									Upgrading.Instance.CheckGold();
-									UpgradingOffline.Instance.CheckGold();
-									ProgressManager.Instance.GameWin ();	
-								});
-
-								TGSDK.AdCompleteCallback = (string msg) => {
-									Debug.Log("AdCompleteCallback");
-									PlayerPrefs.SetInt("double",0);
-									if(doubleName == "Bonus×3"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
-									}else if(doubleName == "Bonus×4"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
-									}else if(doubleName == "Bonus×5"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
-									}else if(doubleName == "Bonus×2"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
-									}
-									adPop.transform.Find("content").GetComponent<Text>().text ="$" + (gold-PlayerPrefs.GetInt ("gold", 0)-goldSum).ToString();
-								};
-
-							});
-								
 
 
 						//	};
@@ -249,6 +216,44 @@ public class SubmarineController : MonoBehaviour {
 			}
 
 		}
+	}
+
+	void AndroidAdComplete(Transform doubleTrans){
+		//doubleTrans.DOScale(1,2).OnComplete(()=>{
+			GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
+
+
+			string doubleName = doubleTrans.GetComponentInChildren<Text>().text;
+			int gold = PlayerPrefs.GetInt ("gold", 0);
+			goldSum*=goldMultiple;
+
+			Button btn = adPop.transform.Find("sure").GetComponent<Button>();
+			adPop.transform.Find("content").GetComponent<Text>().text ="$" + goldSum.ToString();
+			btn.onClick.AddListener(()=>{
+				PlayerPrefs.SetInt ("ClamGold", 1);
+				PlayerPrefs.SetInt ("gold", gold+goldSum);
+				Upgrading.Instance.CheckGold();
+				UpgradingOffline.Instance.CheckGold();
+				ProgressManager.Instance.GameWin ();	
+			});
+
+			TGSDK.AdCompleteCallback = (string msg) => {
+				Debug.Log("AdCompleteCallback");
+				PlayerPrefs.SetInt("double",0);
+				if(doubleName == "Bonus×3"){
+					gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
+				}else if(doubleName == "Bonus×4"){
+					gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
+				}else if(doubleName == "Bonus×5"){
+					gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
+				}else if(doubleName == "Bonus×2"){
+					gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
+				}
+				adPop.transform.Find("content").GetComponent<Text>().text ="$" + (gold-PlayerPrefs.GetInt ("gold", 0)-goldSum).ToString();
+			};
+
+		//});
+		//yield return null;
 	}
 
 	void ADReward(){
