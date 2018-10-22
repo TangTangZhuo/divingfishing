@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class AreaIllustration : MonoBehaviour {
 
+	public Sprite[] AreaImage;
+	public Sprite[] AreaClickImage;
 	public Sprite[] fishImage;
 	public string[] fishName;
 	public Sprite[] unusualImage;
@@ -47,12 +49,32 @@ public class AreaIllustration : MonoBehaviour {
 		Illustration.Instance.unusualImage = unusualImage;
 		Illustration.Instance.unLockImage = unLockImage;
 		Illustration.Instance.IllUpdate (index);
-		transform.GetComponent<Image> ().color = new Color (0.5f, 0.5f, 0.5f);
+
+		if (PlayerPrefs.GetInt ("Level", 1) == 1) {
+			transform.GetComponent<Image> ().sprite = AreaClickImage [0];
+		}
+		if (PlayerPrefs.GetInt ("Level", 1) == 2) {
+			transform.GetComponent<Image> ().sprite = AreaClickImage [1];
+		}
+		if (PlayerPrefs.GetInt ("Level", 1) == 3) {
+			transform.GetComponent<Image> ().sprite = AreaClickImage [2];
+		}
+	//	transform.GetComponent<Image> ().color = new Color (255/255f, 142/255f, 13/255f);
 		MultiHaptic.HapticMedium ();
 
 	}
 
 	public void ChangeColorToWrite(){
-		transform.GetComponent<Image> ().color = new Color (1, 1, 1);
+		//transform.GetComponent<Image> ().color = new Color (229/255f, 113/255f, 6/255f);
+
+		if (PlayerPrefs.GetInt ("Level", 1) == 1) {
+			transform.GetComponent<Image> ().sprite = AreaImage [0];
+		}
+		if (PlayerPrefs.GetInt ("Level", 1) == 2) {
+			transform.GetComponent<Image> ().sprite = AreaImage [1];
+		}
+		if (PlayerPrefs.GetInt ("Level", 1) == 3) {
+			transform.GetComponent<Image> ().sprite = AreaImage [2];
+		}
 	}
 }

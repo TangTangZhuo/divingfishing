@@ -68,6 +68,12 @@ public class Illustration : MonoBehaviour {
 				item.Find ("unusual").GetComponent<Image> ().enabled = false;
 			}
 		}
+
+		for (int i = 0; i < 2; i++) {
+			GameObject obj = new GameObject ("go");
+			obj.AddComponent<RectTransform> ();
+			obj.transform.SetParent (scrollContent);
+		}
 	}
 
 	public void OnIllBtnClick(){
