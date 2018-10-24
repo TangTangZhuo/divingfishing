@@ -15,6 +15,7 @@ public class TimeManager : MonoBehaviour {
 
 	int messageCount;
 	void Awake(){
+		StartCoroutine (GetNetWorkTime ());
 		messageCount = 0;
 		int gold = PlayerPrefs.GetInt ("gold", 0)/2;
 		if(gold>=1000000){
@@ -51,6 +52,7 @@ public class TimeManager : MonoBehaviour {
 			UpdateGold ();
 		}
 	}
+		
 
 	int OfflineTime(){
 		//Store the current time when it starts
@@ -87,7 +89,15 @@ public class TimeManager : MonoBehaviour {
 				}
 				if (MessageBox.Messagebox != null)
 					return;
-				MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange(min * PlayerPrefs.GetInt ("valueOffline", 40)));
+				
+				if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
+					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*(1+goldMutiple))));
+				}
+				if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
+					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * PlayerPrefs.GetInt ("valueOffline", 40)));
+				}
+				ChangeUIWithVip (GameObject.Find ("PopBG(Clone)").transform, min);
+
 				PlayerPrefs.SetInt ("offlineOnClick", 1);
 				messageCount++;
 
@@ -112,7 +122,7 @@ public class TimeManager : MonoBehaviour {
 
 
 						Button btn = adPop.transform.Find("sure").GetComponent<Button>();
-						adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-PlayerPrefs.GetInt ("gold", 0))/(2*(1+goldMutiple))).ToString();
+						adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((int)(((gold-PlayerPrefs.GetInt ("gold", 0))/(2*(1+goldMutiple)))*(1+goldMutiple))).ToString();
 						btn.onClick.AddListener(()=>{
 							OnMessageBoxBtn(gold);
 							PlayerPrefs.SetInt ("quitGame", 0);
@@ -132,7 +142,7 @@ public class TimeManager : MonoBehaviour {
 
 	void OnMessageBoxBtn(int gold){
 		PlayerPrefs.SetInt ("gold", gold);
-		flyGold.FlyGoldGenerate ();
+		flyGold.FlyGoldGenerate (flyGold.targetPos);
 
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);
 		Upgrading.Instance.CheckGold ();
@@ -143,16 +153,58 @@ public class TimeManager : MonoBehaviour {
 	}
 
 	void VipReward(){
-//		GameObject popBG = (GameObject)Resources.Load ("PopBG");
-//		Transform popTrans = popBG.transform;
-//		GameObject passVip = popBG.transform.Find ("PassVip").gameObject;
-//		GameObject doubleImage = popBG.transform.Find ("GoldDouble").gameObject;
-//		GameObject extra = popBG.transform.Find ("extra").gameObject;
-//		doubleImage.SetActive (false);
-//		passVip.SetActive (true);
-//		if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
-//			passVip.SetActive (false);
-//			extra.SetActive (true);
-//		}
+		GameObject popBG = (GameObject)Resources.Load ("PopBG");
+		Transform popTrans = popBG.transform;
+		GameObject passVip = popBG.transform.Find ("PassVip").gameObject;
+		GameObject doubleImage = popBG.transform.Find ("GoldDouble").gameObject;
+		GameObject extra = popBG.transform.Find ("extra").gameObject;
+		doubleImage.SetActive (false);
+		passVip.SetActive (true);
+		if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
+			passVip.SetActive (false);
+			extra.SetActive (true);
+		}
 	}
+
+	private IEnumerator GetNetWorkTime(){
+		WWW req = new WWW ("http://www.hko.gov.hk/cgi-bin/gts/time5a.pr?a=2");
+		yield return req;
+
+		if (req.error == null) {
+			int lastDay = PlayerPrefs.GetInt ("DayOfYear", 0);
+			string timeStamp = req.text.Split ('=') [1].Substring (0, 10); 
+			DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime (new DateTime (1970, 1, 1));
+			long lTime = long.Parse (timeStamp + "0000000");
+			TimeSpan toNow = new TimeSpan (lTime);
+			DateTime now = dtStart.Add (toNow);
+			Debug.Log ("now.DayOfYear - lastDay"+(now.DayOfYear - lastDay));
+			if (now.DayOfYear - lastDay> 0) {
+				PlayerPrefs.SetInt ("DayOfYear", now.DayOfYear);
+				PlayerPrefs.SetInt ("NewDay", 1);
+			}
+
+		}
+		else {
+			yield return new WaitForSeconds(300);
+
+			StartCoroutine (GetNetWorkTime ());
+		}
+
+	}
+
+	void ChangeUIWithVip(Transform popBG,int min){
+		if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
+			popBG.Find ("content").localPosition -= new Vector3 (0, 150, 0);
+			popBG.Find ("sure").localPosition -= new Vector3 (0, 150, 0);
+			popBG.Find ("double").localPosition -= new Vector3 (0, 150, 0);
+			GameObject lineGold =Instantiate ((GameObject)Resources.Load("LineGold"),popBG); 
+			lineGold.GetComponent<Text> ().text = "$" + UIManager.UnitChange (min * PlayerPrefs.GetInt ("valueOffline", 40));
+			//popBG.Find ("content").GetComponent<Text> ().text = "$" + UIManager.UnitChange (goldSum*2);
+
+		}
+		if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
+			return;
+		}
+	}
+
 }

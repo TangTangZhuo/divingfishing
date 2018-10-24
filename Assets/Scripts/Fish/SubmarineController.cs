@@ -8,6 +8,8 @@ using Together;
 
 public class SubmarineController : MonoBehaviour {
 	public float moveSpeed;
+	[HideInInspector]
+	public float maxSpeed = 0;
 	Rigidbody2D playerRig;
 	[HideInInspector]
 	public float gravityScale;
@@ -40,8 +42,10 @@ public class SubmarineController : MonoBehaviour {
 
 	void Awake(){
 		instance = this;
-		//PlayerPrefs.SetInt ("gold", 1999999999);
+
 		//PlayerPrefs.DeleteAll ();
+		//PlayerPrefs.SetInt ("gold", 1999999999);
+
 	}
 
 	// Use this for initialization
@@ -52,15 +56,19 @@ public class SubmarineController : MonoBehaviour {
 		isSettle = false;
 		fishIndex = 0;
 		playerRig = GetComponent<Rigidbody2D> ();
-		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
-			moveSpeed = 0.5f;
-		else
-			moveSpeed = 10;
+
+		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android) {
+			maxSpeed = 0.3f;
+			moveSpeed = maxSpeed;
+		} else {
+			maxSpeed = 10;
+			moveSpeed = maxSpeed;
+		}
 		playerRig.gravityScale = 0;
 		InitFishDic ();
 		goldSum = 0;
 		InitProgressSlider ();
-//		UpdateGoldMutiple ();
+		UpdateGoldMutiple ();
 //		flyGod = (FlyGold)Object.FindObjectOfType(typeof(FlyGold));
 	}
 	
@@ -82,13 +90,14 @@ public class SubmarineController : MonoBehaviour {
 				}
 			} else {
 
-				if (Input.GetKey (KeyCode.A)) {
+				if (Input.GetKey (KeyCode.A)) {		
 					transform.rotation = Quaternion.Euler (0, 180, 0);
 					transform.Translate (new Vector3 (-moveSpeed * Time.deltaTime, 0, 0), Space.World);			
 				} else if (Input.GetKey (KeyCode.D)) {
 					transform.rotation = Quaternion.Euler (0, 0, 0);
 					transform.Translate (new Vector3 (moveSpeed * Time.deltaTime, 0, 0), Space.World);
 				}
+					
 			}
 			progressSlider.value = transform.position.y;
 		}
@@ -157,8 +166,13 @@ public class SubmarineController : MonoBehaviour {
 								doubleTrans.GetComponent<Button> ().interactable = true;
 							}
 						}
-
-						MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
+						if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
+							MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum*2));
+						}
+						if (PlayerPrefs.GetInt ("golden_net", 0) == 0) {
+							MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
+						}
+						ChangeUIWithGoldNet(GameObject.Find("PopBG(Clone)").transform);
 
 						if(PlayerPrefs.GetInt("double",0)>=2){							
 							Transform doubleTrans1 = GameObject.Find("PopBG(Clone)").transform.Find("double");
@@ -205,7 +219,7 @@ public class SubmarineController : MonoBehaviour {
 								adPop.transform.Find("content").GetComponent<Text>().text ="$" + 0.ToString();
 								btn.onClick.AddListener(()=>{
 									PlayerPrefs.SetInt ("ClamGold", 1);
-									PlayerPrefs.SetInt ("gold", gold);
+									PlayerPrefs.SetInt ("gold", gold+goldSum);
 									Upgrading.Instance.CheckGold();
 									UpgradingOffline.Instance.CheckGold();
 									ProgressManager.Instance.GameWin ();	
@@ -214,6 +228,9 @@ public class SubmarineController : MonoBehaviour {
 								TGSDK.AdCompleteCallback = (string msg) => {
 									Debug.Log("AdCompleteCallback");
 									PlayerPrefs.SetInt("double",0);
+									if (PlayerPrefs.GetInt ("FreeRward", 0) < 5) {
+										PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
+									}
 									if(doubleName == "Bonus×3"){
 										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
 									}else if(doubleName == "Bonus×4"){
@@ -223,7 +240,7 @@ public class SubmarineController : MonoBehaviour {
 									}else if(doubleName == "Bonus×2"){
 										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
 									}
-									adPop.transform.Find("content").GetComponent<Text>().text ="$" + (gold-PlayerPrefs.GetInt ("gold", 0)-goldSum).ToString();
+									adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-PlayerPrefs.GetInt ("gold", 0)-goldSum)*2).ToString();
 								};
 
 							});
@@ -254,6 +271,21 @@ public class SubmarineController : MonoBehaviour {
 	void ADReward(){
 		
 
+	}
+
+	void ChangeUIWithGoldNet(Transform popBG){
+		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
+			popBG.Find ("content").localPosition -= new Vector3 (0, 150, 0);
+			popBG.Find ("sure").localPosition -= new Vector3 (0, 150, 0);
+			popBG.Find ("double").localPosition -= new Vector3 (0, 150, 0);
+			GameObject lineGold =Instantiate ((GameObject)Resources.Load("LineGold"),popBG); 
+			lineGold.GetComponent<Text> ().text = "$" + UIManager.UnitChange (goldSum);
+			popBG.Find ("content").GetComponent<Text> ().text = "$" + UIManager.UnitChange (goldSum*2);
+
+		}
+		if (PlayerPrefs.GetInt ("golden_net", 0) == 0) {
+			return;
+		}
 	}
 
 	float GetSettleTime(int count){
@@ -310,7 +342,7 @@ public class SubmarineController : MonoBehaviour {
 					if (Input.GetTouch (0).deltaPosition.x < 0) {
 						moveSpeed = 0;
 					} else {
-						moveSpeed = 0.5f;
+						moveSpeed = maxSpeed;
 					}
 				} 
 			}
@@ -318,7 +350,7 @@ public class SubmarineController : MonoBehaviour {
 				if (Input.GetKey (KeyCode.A)) {
 					moveSpeed = 0;
 				} else {
-					moveSpeed = 10;
+					moveSpeed = maxSpeed;
 				}
 			}
 		}
@@ -328,14 +360,14 @@ public class SubmarineController : MonoBehaviour {
 					if (Input.GetTouch (0).deltaPosition.x > 0) {
 						moveSpeed = 0;
 					} else {
-						moveSpeed = 0.5f;
+						moveSpeed = maxSpeed;
 					}
 				} 
 			} else {
 				if (Input.GetKey (KeyCode.D)) {
 					moveSpeed = 0;
 				} else {
-					moveSpeed = 10;
+					moveSpeed = maxSpeed;
 				}
 			}
 		}
@@ -349,15 +381,17 @@ public class SubmarineController : MonoBehaviour {
 					if (Input.GetTouch (0).deltaPosition.x < 0) {
 						moveSpeed = 0;
 					} else {
-						moveSpeed = 0.5f;
+						moveSpeed = maxSpeed;
 					}
 				} 
 			}
 			else {
 				if (Input.GetKey (KeyCode.A)) {
 					moveSpeed = 0;
+
 				} else {
-					moveSpeed = 10;
+					//moveSpeed = minSpeed;
+					moveSpeed = maxSpeed;
 				}
 			}
 		}
@@ -367,14 +401,15 @@ public class SubmarineController : MonoBehaviour {
 					if (Input.GetTouch (0).deltaPosition.x > 0) {
 						moveSpeed = 0;
 					} else {
-						moveSpeed = 0.5f;
+						moveSpeed = maxSpeed;
 					}
 				} 
 			} else {
 				if (Input.GetKey (KeyCode.D)) {
 					moveSpeed = 0;
 				} else {
-					moveSpeed = 10;
+					//moveSpeed = minSpeed;
+					moveSpeed = maxSpeed;
 				}
 			}
 		}
@@ -457,34 +492,36 @@ public class SubmarineController : MonoBehaviour {
 		progressSlider.transform.Find ("depth").GetComponent<Text> ().text = UIManager.Instance.diveDepth+"M";
 	}
 
-//	public void UpdateGoldMutiple(){
-//		GameObject popBG = (GameObject)Resources.Load ("PopBG");
-//		GameObject doubleImage = popBG.transform.Find ("GoldDouble").gameObject;
-//		GameObject passVip = popBG.transform.Find ("PassVip").gameObject;
-//		SkinnedMeshRenderer skin1 = netParent.parent.Find ("FishNet").GetComponent<SkinnedMeshRenderer> ();
-//		SkinnedMeshRenderer skin2 = netParent.parent.Find ("FishNetReady").GetComponent<SkinnedMeshRenderer> ();
-////		Material goldNet = IPAManager.Instance.goldNet;
-//				
-//		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
-//			goldMultiple = 2;
-//			skin1.material = goldNet;
-//			skin2.material = goldNet;
-//				//skin1.transform.GetChild (0).gameObject.SetActive (true);
-//				//skin2.transform.GetChild (0).gameObject.SetActive (true);			
-//		}
-//		if (PlayerPrefs.GetInt ("golden_net", 0) == 0) {
-//			goldMultiple = 1;
-//		}
-//
-//	}
+	public void UpdateGoldMutiple(){
+		GameObject popBG = (GameObject)Resources.Load ("PopBG");
+		GameObject doubleImage = popBG.transform.Find ("GoldDouble").gameObject;
+		//GameObject passVip = popBG.transform.Find ("PassVip").gameObject;
+		SkinnedMeshRenderer skin1 = netParent.parent.Find ("FishNet").GetComponent<SkinnedMeshRenderer> ();
+		SkinnedMeshRenderer skin2 = netParent.parent.Find ("FishNetReady").GetComponent<SkinnedMeshRenderer> ();
+		Material goldNet = IPAManager.Instance.goldNet;
+				
+		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
+			goldMultiple = 2;
+			skin1.material = goldNet;
+			skin2.material = goldNet;
+			doubleImage.SetActive (true);
+				//skin1.transform.GetChild (0).gameObject.SetActive (true);
+				//skin2.transform.GetChild (0).gameObject.SetActive (true);			
+		}
+		if (PlayerPrefs.GetInt ("golden_net", 0) == 0) {
+			goldMultiple = 1;
+			doubleImage.SetActive (false);
+		}
+
+	}
 
 	void HidePopUI(bool bo){
-//		GameObject popBG = (GameObject)Resources.Load ("PopBG");
-//		GameObject doubleImage = popBG.transform.Find ("GoldDouble").gameObject;
-//		GameObject passVip = popBG.transform.Find ("PassVip").gameObject;
-//		GameObject extra = popBG.transform.Find ("extra").gameObject;
-//		doubleImage.SetActive (!bo);
-//		passVip.SetActive (false);
-//		extra.SetActive (false);
+		GameObject popBG = (GameObject)Resources.Load ("PopBG");
+		GameObject doubleImage = popBG.transform.Find ("GoldDouble").gameObject;
+		GameObject passVip = popBG.transform.Find ("PassVip").gameObject;
+		GameObject extra = popBG.transform.Find ("extra").gameObject;
+		doubleImage.SetActive (!bo);
+		passVip.SetActive (false);
+		extra.SetActive (false);
 	}
 }

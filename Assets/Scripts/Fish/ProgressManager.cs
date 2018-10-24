@@ -71,9 +71,9 @@ public class ProgressManager : MonoBehaviour {
 		isReady = false;
 		SubmarineController.Instance.gravityScale = 2;
 		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
-			SubmarineController.Instance.moveSpeed = 1;
+			SubmarineController.Instance.moveSpeed = SubmarineController.Instance.maxSpeed;
 		else
-			SubmarineController.Instance.moveSpeed = 10;
+			SubmarineController.Instance.moveSpeed = SubmarineController.Instance.maxSpeed;
 		FishGenerate.Instance.GenerateFish ();
 		BGmanager.Instance.GenerateWaterF ();
 		BGmanager.Instance.GenerateParallx ();

@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class GoldCollect : MonoBehaviour {
 	Transform goldImage;
+	Transform extraImage;
 	// Use this for initialization
 	void Start () {
 		Invoke ("GetGoldImage", 0.5f);
@@ -17,14 +18,22 @@ public class GoldCollect : MonoBehaviour {
 
 	void GetGoldImage(){
 		goldImage = GameObject.FindGameObjectWithTag ("goldImage").transform;
+		extraImage = GameObject.FindGameObjectWithTag ("extraImage").transform;
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
 		if (col.tag == "goldCollider") {
-			goldImage.DOScale (new Vector3 (1.5f, 1.5f, 1.5f), 0.2f).OnComplete(()=>{
-				goldImage.DOScale (1, 0.2f);
+			goldImage.DOScale (new Vector3 (2f, 2f, 2f), 0.2f).OnComplete(()=>{
+				goldImage.DOScale (1.8f, 0.2f);
 				Destroy(gameObject);
 			});
 		}
+		if (col.tag == "extraCollider") {
+			extraImage.DOScale (new Vector3 (3f, 3f, 3f), 0.2f).OnComplete(()=>{
+				extraImage.DOScale (2.5f, 0.2f);
+				Destroy(gameObject);
+			});
+		}
+
 	}
 }

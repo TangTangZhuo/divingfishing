@@ -1,18 +1,17 @@
 fileFormatVersion: 2
-guid: d7f0f9713a70f498382138f157eaac40
-timeCreated: 1540275990
+guid: 0bb1504faace64a3383a22cef2b940d2
+timeCreated: 1540368370
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: MainSceneIcon_0
-    21300002: MainSceneIcon_1
-    21300004: MainSceneIcon_2
-    21300006: MainSceneIcon_4
-    21300008: MainSceneIcon_6
-    21300010: MainSceneIcon_7
-    21300012: MainSceneIcon_8
-    21300014: MainSceneIcon_9
-    21300016: MainSceneIcon_10
+    21300000: Main2SceneIcon_0
+    21300002: Main2SceneIcon_1
+    21300004: Main2SceneIcon_2
+    21300006: Main2SceneIcon_3
+    21300008: Main2SceneIcon_4
+    21300010: Main2SceneIcon_5
+    21300012: Main2SceneIcon_6
+    21300014: Main2SceneIcon_7
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -103,119 +102,80 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MainSceneIcon_0
+      name: Main2SceneIcon_0
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 162
+        width: 99
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 19, y: 24, z: 27, w: 22}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Main2SceneIcon_1
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 172
+        width: 67
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Main2SceneIcon_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 347
-        width: 146
-        height: 75
+        y: 74
+        width: 173
+        height: 91
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_1
+      name: Main2SceneIcon_3
       rect:
         serializedVersion: 2
-        x: 177
-        y: 354
-        width: 58
-        height: 61
+        x: 312
+        y: 84
+        width: 78
+        height: 63
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_2
+      name: Main2SceneIcon_4
       rect:
         serializedVersion: 2
-        x: 499
-        y: 347
-        width: 60
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: MainSceneIcon_4
-      rect:
-        serializedVersion: 2
-        x: 246
-        y: 303
-        width: 43
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: MainSceneIcon_6
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 178
-        width: 124
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: MainSceneIcon_7
-      rect:
-        serializedVersion: 2
-        x: 441
-        y: 176
-        width: 131
-        height: 73
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: MainSceneIcon_8
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 101
-        width: 124
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: MainSceneIcon_9
-      rect:
-        serializedVersion: 2
-        x: 442
-        y: 100
-        width: 127
+        x: 430
+        y: 90
+        width: 137
         height: 71
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_10
+      name: Main2SceneIcon_6
       rect:
         serializedVersion: 2
-        x: 484
+        x: 315
         y: 0
-        width: 59
-        height: 68
+        width: 72
+        height: 63
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

@@ -1,18 +1,24 @@
 fileFormatVersion: 2
-guid: d7f0f9713a70f498382138f157eaac40
-timeCreated: 1540275990
+guid: 7862c37b33b8144989ad60e85ea6e9b8
+timeCreated: 1540257635
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
-    21300000: MainSceneIcon_0
-    21300002: MainSceneIcon_1
-    21300004: MainSceneIcon_2
-    21300006: MainSceneIcon_4
-    21300008: MainSceneIcon_6
-    21300010: MainSceneIcon_7
-    21300012: MainSceneIcon_8
-    21300014: MainSceneIcon_9
-    21300016: MainSceneIcon_10
+    21300000: PopUps_0
+    21300002: PopUps_1
+    21300004: PopUps_3
+    21300006: PopUps_4
+    21300008: PopUps_7
+    21300010: PopUps_8
+    21300012: PopUps_9
+    21300014: PopUps_10
+    21300016: PopUps_11
+    21300018: PopUps_12
+    21300020: PopUps_13
+    21300022: PopUps_14
+    21300024: PopUps_15
+    21300026: PopUps_16
+    21300028: PopUps_17
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -103,119 +109,171 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MainSceneIcon_0
+      name: PopUps_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 347
-        width: 146
-        height: 75
+        y: 0
+        width: 510
+        height: 869
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_1
+      name: PopUps_1
       rect:
         serializedVersion: 2
-        x: 177
-        y: 354
-        width: 58
-        height: 61
+        x: 733
+        y: 782
+        width: 56
+        height: 54
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_2
+      name: PopUps_3
       rect:
         serializedVersion: 2
-        x: 499
-        y: 347
-        width: 60
-        height: 66
+        x: 539
+        y: 697
+        width: 93
+        height: 65
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_4
+      name: PopUps_4
       rect:
         serializedVersion: 2
-        x: 246
-        y: 303
-        width: 43
+        x: 653
+        y: 548
+        width: 399
+        height: 196
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: PopUps_7
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 562
+        width: 118
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: PopUps_8
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 459
+        width: 48
         height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_6
+      name: PopUps_9
       rect:
         serializedVersion: 2
-        x: 5
-        y: 178
-        width: 124
-        height: 68
+        x: 721
+        y: 361
+        width: 262
+        height: 123
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_7
+      name: PopUps_10
       rect:
         serializedVersion: 2
-        x: 441
-        y: 176
-        width: 131
-        height: 73
+        x: 621
+        y: 389
+        width: 44
+        height: 51
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_8
+      name: PopUps_11
       rect:
         serializedVersion: 2
-        x: 5
-        y: 101
-        width: 124
-        height: 68
+        x: 622
+        y: 311
+        width: 48
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_9
+      name: PopUps_12
       rect:
         serializedVersion: 2
-        x: 442
-        y: 100
-        width: 127
-        height: 71
+        x: 706
+        y: 111
+        width: 365
+        height: 205
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: MainSceneIcon_10
+      name: PopUps_13
       rect:
         serializedVersion: 2
-        x: 484
-        y: 0
-        width: 59
-        height: 68
+        x: 623
+        y: 250
+        width: 48
+        height: 47
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: PopUps_16
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 192
+        width: 45
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: PopUps_17
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 109
+        width: 52
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
