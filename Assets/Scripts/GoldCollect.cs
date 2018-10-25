@@ -17,8 +17,17 @@ public class GoldCollect : MonoBehaviour {
 	}
 
 	void GetGoldImage(){
-		goldImage = GameObject.FindGameObjectWithTag ("goldImage").transform;
-		extraImage = GameObject.FindGameObjectWithTag ("extraImage").transform;
+		if (GameObject.FindGameObjectWithTag ("goldImage")) {
+			goldImage = GameObject.FindGameObjectWithTag ("goldImage").transform;
+			extraImage = GameObject.FindGameObjectWithTag ("extraImage").transform;
+
+		}else{
+			Invoke ("DestroyImage", 1f);
+		}
+	}
+
+	void DestroyImage(){
+		Destroy(gameObject);
 	}
 
 	void OnTriggerEnter2D(Collider2D col){

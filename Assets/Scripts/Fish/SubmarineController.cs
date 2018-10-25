@@ -24,7 +24,8 @@ public class SubmarineController : MonoBehaviour {
 	public float force;
 
 	float time;
-	bool isSettle;
+	[HideInInspector]
+	public bool isSettle;
 	int fishIndex;
 	int goldSum;
 	int settleCount;
@@ -117,7 +118,7 @@ public class SubmarineController : MonoBehaviour {
 						PlayerPrefs.SetInt ("illNew", 1);
 					}
 					PlayerPrefs.SetInt (fish.name.Split (new char[]{'('}) [0], 1);
-					ScoreGenerate (fish);
+					ScoreGenerate (fish,settleTime);
 
 				}
 				else if(fishIndex == settleCount){
@@ -181,7 +182,9 @@ public class SubmarineController : MonoBehaviour {
 							}
 						}
 
-						MessageBox.confim =()=>{					
+						MessageBox.confim =()=>{
+							FBLogWithLevel();
+
 							int gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*goldMultiple;
 							PlayerPrefs.SetInt ("gold", gold);
 							Upgrading.Instance.CheckGold();
@@ -191,7 +194,8 @@ public class SubmarineController : MonoBehaviour {
 							PlayerPrefs.SetInt ("double", PlayerPrefs.GetInt ("double", 0) + 1);
 							PlayerPrefs.SetInt ("ClamGold", 1);
 						};
-						MessageBox.doubleR =()=>{															
+						MessageBox.doubleR =()=>{	
+							FBLogWithLevel();
 							//GameObject popBG = (GameObject)Resources.Load("PopBG");
 							//Transform doubleTrans = popBG.transform.Find("double");
 																				
@@ -256,7 +260,7 @@ public class SubmarineController : MonoBehaviour {
 						PlayerPrefs.SetInt ("illNew", 1);
 					}
 					PlayerPrefs.SetInt (fish.name.Split (new char[]{'('}) [0], 1);
-					ScoreGenerate (fish);
+					ScoreGenerate (fish,settleTime);
 					PlayerPrefs.SetInt ("accumulation", PlayerPrefs.GetInt ("accumulation", 0)+(int)(goldSum*0.6f));
 
 				}	
@@ -268,9 +272,14 @@ public class SubmarineController : MonoBehaviour {
 		}
 	}
 
-	void ADReward(){
-		
-
+	void FBLogWithLevel(){
+		if (PlayerPrefs.GetInt ("Level", 1) == 1) {
+			FaceBookGetLog.LogFinishLevel1Event();
+		} else if (PlayerPrefs.GetInt ("Level", 1) == 2) {
+			FaceBookGetLog.LogFinishLevel1Event();
+		} else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
+			FaceBookGetLog.LogFinishLevel1Event();
+		}
 	}
 
 	void ChangeUIWithGoldNet(Transform popBG){
@@ -426,7 +435,7 @@ public class SubmarineController : MonoBehaviour {
 		});
 	}
 
-	void ScoreGenerate(Transform fish){
+	void ScoreGenerate(Transform fish,float time){
 		Text text = score;
 		if (fish.name.StartsWith ("fish")) {
 			text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
@@ -436,10 +445,11 @@ public class SubmarineController : MonoBehaviour {
 		//text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
 		text.text ="$"+(fishDic [fish.name]/2).ToString();
 		goldSum += (fishDic [fish.name]/2);
-		text.transform.position = Camera.main.WorldToScreenPoint (fish.position);
-		text.DOFade (1f, 0.3f);
-		text.transform.DOMoveY (text.transform.position.y+250f, 0.3f, false);
-		text.transform.DOScale (1.5f, 0.3f).OnComplete(()=>{Destroy(text.gameObject);});
+		text.transform.position = Camera.main.WorldToScreenPoint (transform.position+Vector3.down*2);
+		text.DOFade (0.1f, time*12);
+		text.transform.DOMoveY (text.transform.position.y+600f, time*12, false);
+		text.transform.localScale = Vector3.one*1.5f;
+		text.transform.DOScale (1.65f, time*12).OnComplete(()=>{Destroy(text.gameObject);});
 	}
 
 	void InitFishDic(){
@@ -505,8 +515,8 @@ public class SubmarineController : MonoBehaviour {
 			skin1.material = goldNet;
 			skin2.material = goldNet;
 			doubleImage.SetActive (true);
-				//skin1.transform.GetChild (0).gameObject.SetActive (true);
-				//skin2.transform.GetChild (0).gameObject.SetActive (true);			
+			//skin1.transform.GetChild (0).gameObject.SetActive (true);
+			//skin2.transform.GetChild (0).gameObject.SetActive (true);			
 		}
 		if (PlayerPrefs.GetInt ("golden_net", 0) == 0) {
 			goldMultiple = 1;

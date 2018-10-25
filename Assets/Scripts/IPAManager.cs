@@ -60,6 +60,16 @@ public class IPAManager : MonoBehaviour
 	}
 
 	void UpdateIAPState(){
+		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
+			transform.Find ("goldNet").gameObject.SetActive (false);
+			transform.Find ("Daily").position = transform.Find ("Vip").position;
+			transform.Find ("Vip").position = transform.Find ("goldNet").position;
+
+		}
+		if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
+			transform.Find ("ClamPass").GetComponent<Button> ().onClick.AddListener (OnVipBtn);
+			transform.Find ("Vip").GetComponent<Button> ().onClick.AddListener (OnVipBtn);
+		}
 		if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
 			Transform ClamPass = transform.Find ("ClamPass");
 			Destroy (ClamPass.GetComponent<IAPButton> ());
@@ -69,13 +79,8 @@ public class IPAManager : MonoBehaviour
 			transform.Find ("Daily").position = transform.Find ("Vip").position;
 			transform.Find ("Vip").gameObject.SetActive (false);
 		}
-		if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
-			transform.Find ("ClamPass").GetComponent<Button> ().onClick.AddListener (OnVipBtn);
-			transform.Find ("Vip").GetComponent<Button> ().onClick.AddListener (OnVipBtn);
-		}
-		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
-			transform.Find ("goldNet").gameObject.SetActive (false);
-		}
+
+
 	}
 
 	void OnCollectClick(){
@@ -150,9 +155,11 @@ public class IPAManager : MonoBehaviour
 	public void UpdateDailyState(){
 		if (PlayerPrefs.GetInt ("NewDay", 0) == 1) {
 			transform.Find ("Daily").gameObject.SetActive (true);
+			Debug.Log ("newday");
 		}
 		if (PlayerPrefs.GetInt ("NewDay", 0) == 0) {
 			transform.Find ("Daily").gameObject.SetActive (false);
+			Debug.Log ("notnewday");
 		}
 	}
 

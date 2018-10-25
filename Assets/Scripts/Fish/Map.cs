@@ -100,6 +100,7 @@ public class Map : MonoBehaviour {
 					UpgradingOffline.Instance.CheckGold ();
 					PlayerPrefs.SetInt ("Lock2",1);
 					transform.Find("Level2").Find("lock").gameObject.SetActive(false);
+					FaceBookGetLog.LogFirstLevel2Event();
 				}else{
 					GenerateText (lv4, "Not enough money！");
 				}					
@@ -148,6 +149,7 @@ public class Map : MonoBehaviour {
 					UpgradingOffline.Instance.CheckGold ();
 					PlayerPrefs.SetInt ("Lock3",1);
 					transform.Find("Level3").Find("lock").gameObject.SetActive(false);
+					FaceBookGetLog.LogFirstLevel3Event();
 				}else{
 					GenerateText (lv4, "Not enough money！");
 				}					

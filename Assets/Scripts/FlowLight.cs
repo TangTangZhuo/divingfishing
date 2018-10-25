@@ -26,7 +26,7 @@ public class FlowLight : MonoBehaviour
 			Image image = maskableGraphic as Image;
 			if (image)
 			{
-				image.material = new Material(Shader.Find("UI/Unlit/AddFlowTex"));
+				//image.material = new Material(Shader.Find("UI/Unlit/AddFlowTex"));
 				widthRate = image.sprite.textureRect.width * 1.0f / image.sprite.texture.width;
 				heightRate = image.sprite.textureRect.height * 1.0f / image.sprite.texture.height;
 				xOffsetRate = (image.sprite.textureRect.xMin) * 1.0f / image.sprite.texture.width;
