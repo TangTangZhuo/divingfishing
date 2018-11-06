@@ -152,10 +152,10 @@ namespace UnityEngine.Purchasing
         }
 
 		void IRestore(PurchaseEventArgs e){
-			if (string.Equals (e.purchasedProduct.definition.id, "fishingpass", System.StringComparison.Ordinal)) {
+			if (string.Equals (e.purchasedProduct.definition.id, "marine_vip", System.StringComparison.Ordinal)) {
 				PlayerPrefs.SetInt ("fishingpass", 1);
 			}
-			if (string.Equals (e.purchasedProduct.definition.id, "golden_net", System.StringComparison.Ordinal)) {
+			if (string.Equals (e.purchasedProduct.definition.id, "gold_net", System.StringComparison.Ordinal)) {
 				PlayerPrefs.SetInt ("golden_net", 1);
 			}
 			waiting.SetActive (false);
