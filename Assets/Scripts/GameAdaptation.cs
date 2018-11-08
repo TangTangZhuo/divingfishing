@@ -15,9 +15,9 @@ public class GameAdaptation : MonoBehaviour {
 			orthographicSize = devWidth / (2 * aspectRatio);
 			this.GetComponent<Camera> ().orthographicSize = orthographicSize / 1.92f;
 		}	
-		if (UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPhoneX) {
+		if (((Screen.currentResolution.height/Screen.currentResolution.width*1f)-2.16f)<0.01f) {
 			for (int i = 0; i < uis.Length; i++) {
-				uis[i].localPosition -= new Vector3 (0, 150, 0);
+				uis[i].localPosition -= new Vector3 (0, Screen.currentResolution.height*0.06f, 0);
 			}
 		}
 	}

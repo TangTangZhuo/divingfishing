@@ -3,6 +3,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.Purchasing.Security;
+using System;
 
 namespace UnityEngine.Purchasing
 {
@@ -55,12 +57,35 @@ namespace UnityEngine.Purchasing
         [Tooltip("[Optional] Displays the localized price from the app store")]
         public Text priceText;
 
-		void Awake(){
-			Restore ();
+		void CheckIfSubscriptionIsActive(){
+			ConfigurationBuilder builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+			// Get a reference to IAppleConfiguration during IAP initialization.
+			IAppleConfiguration appleConfig = builder.Configure<IAppleConfiguration>();
+			if (!string.IsNullOrEmpty (appleConfig.appReceipt)) {
+				Debug.Log (appleConfig.appReceipt);
+				//            InstantiateDebugText (DebugInfoPanel, "APP Receipt Base64 " + appleConfig.appReceipt);
+				var receiptData = System.Convert.FromBase64String (appleConfig.appReceipt);
+				//            InstantiateDebugText (DebugInfoPanel, "receipt Data "+ receiptData);
+				AppleReceipt receipt = new AppleValidator (AppleTangle.Data ()).Validate (receiptData);
+
+
+				foreach (AppleInAppPurchaseReceipt productReceipt in receipt.inAppPurchaseReceipts) {
+//					Debug.Log ("PRODUCTID: " + productReceipt.productID);
+//					Debug.Log ("PURCHASE DATE: " + productReceipt.purchaseDate);
+//					Debug.Log ("EXPIRATION DATE: " + productReceipt.subscriptionExpirationDate);
+//					Debug.Log ("CANCELDATE DATE: " + productReceipt.cancellationDate);
+					if (productReceipt.productID == "marine_vip" && productReceipt.subscriptionExpirationDate > DateTime.Now.ToUniversalTime ()) {
+						PlayerPrefs.SetInt ("fishingpass", 1);
+					}
+				}
+			}
 		}
 
         void Start()
         {
+			//检查订阅是否有效
+			CheckIfSubscriptionIsActive ();
+
             Button button = GetComponent<Button>();
 
             if (buttonType == ButtonType.Purchase)
@@ -123,6 +148,7 @@ namespace UnityEngine.Purchasing
         void Restore()
 		{
 			if (!restoring) {
+
 				restoring = true;
 				if (buttonType == ButtonType.Restore) {
 					if (Application.platform == RuntimePlatform.WSAPlayerX86 ||
@@ -133,8 +159,10 @@ namespace UnityEngine.Purchasing
 					} else if (Application.platform == RuntimePlatform.IPhonePlayer ||
 					                    Application.platform == RuntimePlatform.OSXPlayer ||
 					                    Application.platform == RuntimePlatform.tvOS) {
+
 						CodelessIAPStoreListener.Instance.ExtensionProvider.GetExtension<IAppleExtensions> ()
                         .RestoreTransactions (OnTransactionsRestored);
+						
 					} else if (Application.platform == RuntimePlatform.Android &&
 					                    StandardPurchasingModule.Instance ().appStore == AppStore.SamsungApps) {
 						CodelessIAPStoreListener.Instance.ExtensionProvider.GetExtension<ISamsungAppsExtensions> ()
@@ -173,6 +201,7 @@ namespace UnityEngine.Purchasing
 				restoring = false;
 			}
         }
+			
 
         /**
          *  Invoked to process a purchase of the product associated with this button

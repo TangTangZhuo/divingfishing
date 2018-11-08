@@ -41,10 +41,10 @@ public class IPAManager : MonoBehaviour
 
 		if (product != null) {
 			Debug.Log ("success:" + product.definition.id);
-			if (product.definition.id == "fishingpass") {
+			if (product.definition.id == "marine_vip") {
 				PlayerPrefs.SetInt ("fishingpass", 1);
 			}
-			if (product.definition.id == "golden_net") {
+			if (product.definition.id == "gold_net") {
 				PlayerPrefs.SetInt ("golden_net", 1);
 				SubmarineController.Instance.UpdateGoldMutiple ();
 				transform.Find ("goldNet").gameObject.SetActive (false);
@@ -124,6 +124,7 @@ public class IPAManager : MonoBehaviour
 
 	public void OnRestoreClick ()
 	{
+		
 
 	}
 		
