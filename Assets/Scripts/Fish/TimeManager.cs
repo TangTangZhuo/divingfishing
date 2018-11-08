@@ -42,6 +42,7 @@ public class TimeManager : MonoBehaviour {
 		PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
 		PlayerPrefs.SetInt ("quitGame", 1);
 		PlayerPrefs.SetInt ("foreGold", PlayerPrefs.GetInt("gold",0));	
+		PlayerPrefs.SetInt ("fishingpass", 0);
 	}
 
 	void OnApplicationPause(bool isPause){

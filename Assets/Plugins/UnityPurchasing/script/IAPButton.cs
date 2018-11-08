@@ -55,6 +55,10 @@ namespace UnityEngine.Purchasing
         [Tooltip("[Optional] Displays the localized price from the app store")]
         public Text priceText;
 
+		void Awake(){
+			Restore ();
+		}
+
         void Start()
         {
             Button button = GetComponent<Button>();
@@ -117,7 +121,7 @@ namespace UnityEngine.Purchasing
         }
 
         void Restore()
-        {
+		{
 			if (!restoring) {
 				restoring = true;
 				if (buttonType == ButtonType.Restore) {
