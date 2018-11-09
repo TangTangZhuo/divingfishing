@@ -22,7 +22,7 @@ public class DailyReward : MonoBehaviour {
 		
 	}
 
-	public void GetPassDailyReward(){		
+	public void GetPassDailyReward(){	
 		if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {			
 			iPAManager.OnDailyBackBtn ();
 			iPAManager.OnVipBtn ();

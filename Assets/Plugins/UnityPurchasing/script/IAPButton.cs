@@ -76,16 +76,20 @@ namespace UnityEngine.Purchasing
 //					Debug.Log ("CANCELDATE DATE: " + productReceipt.cancellationDate);
 					if (productReceipt.productID == "marine_vip" && productReceipt.subscriptionExpirationDate > DateTime.Now.ToUniversalTime ()) {
 						PlayerPrefs.SetInt ("fishingpass", 1);
+						Debug.Log (productReceipt.subscriptionExpirationDate);
 					}
 				}
 			}
 		}
 
-        void Start()
-        {
+		void Awake(){
 			//检查订阅是否有效
 			CheckIfSubscriptionIsActive ();
+		}
 
+        void Start()
+        {
+			
             Button button = GetComponent<Button>();
 
             if (buttonType == ButtonType.Purchase)
