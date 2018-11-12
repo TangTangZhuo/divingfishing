@@ -17,14 +17,8 @@ public class TimeManager : MonoBehaviour {
 	void Awake(){
 		StartCoroutine (GetNetWorkTime ());
 		messageCount = 0;
-		int gold = PlayerPrefs.GetInt ("gold", 0)/2;
-		if(gold>=1000000){
-			if (gold / 1000 > 1000) {
-				UIManager.Instance.goldT.text = (gold / 1000).ToString ().Insert ((gold / 1000000).ToString ().Length, ",") + "K";
-			} else {
-				UIManager.Instance.goldT.text = gold/1000+"K";
-			}
-		}
+		long gold = long.Parse( PlayerPrefs.GetString ("gold", "0"))/2;
+		UIManager.Instance.goldT.text = UIManager.UnitChange (gold);
 
 	}
 
@@ -41,7 +35,7 @@ public class TimeManager : MonoBehaviour {
 		//Savee the current system time as a string in the player prefs class
 		PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
 		PlayerPrefs.SetInt ("quitGame", 1);
-		PlayerPrefs.SetInt ("foreGold", PlayerPrefs.GetInt("gold",0));	
+		PlayerPrefs.SetString ("foreGold", PlayerPrefs.GetString("gold","0"));	
 		PlayerPrefs.SetInt ("fishingpass", 0);
 	}
 
@@ -92,10 +86,10 @@ public class TimeManager : MonoBehaviour {
 					return;
 				
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
-					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*(1+goldMutiple))));
+					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
 				}
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
-					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * PlayerPrefs.GetInt ("valueOffline", 40)));
+					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
 				}
 				ChangeUIWithVip (GameObject.Find ("PopBG(Clone)").transform, min);
 
@@ -104,7 +98,7 @@ public class TimeManager : MonoBehaviour {
 
 				MessageBox.confim = () => {
 					TGSDK.ReportAdRejected(TGSDKManager.doubleID);
-					int gold = PlayerPrefs.GetInt ("gold", 0) + (int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*(1+goldMutiple));
+					long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple));
 					OnMessageBoxBtn(gold);
 					PlayerPrefs.SetInt ("quitGame", 0);
 				};
@@ -119,11 +113,11 @@ public class TimeManager : MonoBehaviour {
 					doubleTrans.DOScale(1,2).OnComplete(()=>{
 						GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
 
-						int gold = PlayerPrefs.GetInt ("gold", 0) + (int)(min * PlayerPrefs.GetInt ("valueOffline", 40)*2*(1+goldMutiple));
+						long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*2*(1+goldMutiple));
 
 
 						Button btn = adPop.transform.Find("sure").GetComponent<Button>();
-						adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((int)(((gold-PlayerPrefs.GetInt ("gold", 0))/(2*(1+goldMutiple)))*(1+goldMutiple))).ToString();
+						adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((long)(((gold-long.Parse( PlayerPrefs.GetString ("gold", "0")))/(2*(1+goldMutiple)))*(1+goldMutiple))).ToString();
 						btn.onClick.AddListener(()=>{
 							OnMessageBoxBtn(gold);
 							PlayerPrefs.SetInt ("quitGame", 0);
@@ -141,8 +135,8 @@ public class TimeManager : MonoBehaviour {
 		}
 	}
 
-	void OnMessageBoxBtn(int gold){
-		PlayerPrefs.SetInt ("gold", gold);
+	void OnMessageBoxBtn(long gold){
+		PlayerPrefs.SetString ("gold", gold.ToString());
 		flyGold.FlyGoldGenerate (flyGold.targetPos);
 
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);

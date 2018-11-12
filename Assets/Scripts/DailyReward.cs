@@ -43,8 +43,8 @@ public class DailyReward : MonoBehaviour {
 	void ClamReward(){
 		iPAManager.OnDailyBackBtn ();
 		iPAManager.UpdateDailyState ();
-		int gold = PlayerPrefs.GetInt ("gold", 0) + 1000000;
-		PlayerPrefs.SetInt ("gold", gold);
+		long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + 1000000;
+		PlayerPrefs.SetString ("gold", gold.ToString());
 		flyGold.FlyGoldGenerate (flyGold.targetPos);
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);
 		Upgrading.Instance.CheckGold (gold);

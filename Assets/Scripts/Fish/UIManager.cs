@@ -8,15 +8,29 @@ public class UIManager : MonoBehaviour {
 	public GameObject upgrading;
 	public int diveDepth;
 	public Text goldT;
-	public int offlineGold;
+	public long offlineGold;
 
 	private static UIManager instance;
 	public static UIManager Instance{
 		get{return instance;}
 	}
 
-	public static string UnitChange(int value){
-		if (value >= 1000000000) {
+	public static string UnitChange(long value){
+		if (value >= 1000000000000000) {
+			if (value / 1000000000000 > 1000) {
+				return (value / 1000000000000).ToString ().Insert ((value / 1000000000000000).ToString ().Length, ",") + "T";
+			} else {
+				return value/1000000000000+"T";
+			}
+		}
+		else if (value >= 1000000000000) {
+			if (value / 1000000000 > 1000) {
+				return (value / 1000000000).ToString ().Insert ((value / 1000000000000).ToString ().Length, ",") + "B";
+			} else {
+				return value/1000000000+"B";
+			}
+		}
+		else if (value >= 1000000000) {
 			if (value / 1000000 > 1000) {
 				return (value / 1000000).ToString ().Insert ((value / 1000000000).ToString ().Length, ",") + "M";
 			} else {
@@ -37,6 +51,7 @@ public class UIManager : MonoBehaviour {
 			}
 		}
 	}
+		
 
 	void Awake(){
 		instance = this;	

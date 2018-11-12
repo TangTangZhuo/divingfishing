@@ -8,9 +8,9 @@ public class UpgradingOffline : MonoBehaviour {
 	private Text valueT;
 	private Text priceT;
 
-	private int value;
-	private int price;
-	private int gold;
+	private long value;
+	private long price;
+	private long gold;
 
 	private static UpgradingOffline instance;
 	public static UpgradingOffline Instance{
@@ -36,20 +36,20 @@ public class UpgradingOffline : MonoBehaviour {
 
 	void UpdateData(float dalay){
 		
-		UIManager.Instance.offlineGold = PlayerPrefs.GetInt ("valueOffline", 40);
+		UIManager.Instance.offlineGold = long.Parse( PlayerPrefs.GetString ("valueOffline", "40"));
 
-		value = PlayerPrefs.GetInt ("valueOffline", UIManager.Instance.offlineGold);
-		price = PlayerPrefs.GetInt ("priceOffline", 2810);
+		value = long.Parse( PlayerPrefs.GetString ("valueOffline", UIManager.Instance.offlineGold.ToString()));
+		price = long.Parse( PlayerPrefs.GetString ("priceOffline", "2810"));
 		valueT.text = "+$" + UIManager.UnitChange(value) + "/Min";
 		priceT.text = "$" + UIManager.UnitChange(price);
 
-		gold = PlayerPrefs.GetInt ("gold", 0);
-		UIManager.Instance.goldT.text = UIManager.UnitChange(PlayerPrefs.GetInt ("foreGold", PlayerPrefs.GetInt("gold",0)));	
+		gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
+		UIManager.Instance.goldT.text = UIManager.UnitChange(long.Parse( PlayerPrefs.GetString ("foreGold", PlayerPrefs.GetString("gold","0"))));	
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(dalay);
 	}
 
 	public void OnOfflineClick(){
-		gold = PlayerPrefs.GetInt ("gold", 0);
+		gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
 		if (gold > price) {
 			MultiHaptic.HapticMedium ();
 			gold -= price;
@@ -57,20 +57,20 @@ public class UpgradingOffline : MonoBehaviour {
 			if (UIManager.Instance.offlineGold < 400) {
 				UIManager.Instance.offlineGold += 40;
 			} else {
-				UIManager.Instance.offlineGold = (int)(UIManager.Instance.offlineGold*1.25f);
+				UIManager.Instance.offlineGold = (long)(UIManager.Instance.offlineGold*1.25f);
 			}
 
-			price = (int)(price * 1.25f);
-			PlayerPrefs.SetInt ("valueOffline", UIManager.Instance.offlineGold);
-			PlayerPrefs.SetInt ("priceOffline", price);
-			PlayerPrefs.SetInt ("gold", gold);
+			price = (long)(price * 1.25f);
+			PlayerPrefs.SetString ("valueOffline", UIManager.Instance.offlineGold.ToString());
+			PlayerPrefs.SetString ("priceOffline", price.ToString());
+			PlayerPrefs.SetString ("gold", gold.ToString());
 			UpdateData (0);
 			CheckGold (gold);
 			Upgrading.Instance.CheckGold (gold);
 		}
 	}
 
-	public void CheckGold(int curGold){
+	public void CheckGold(long curGold){
 		if (curGold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);

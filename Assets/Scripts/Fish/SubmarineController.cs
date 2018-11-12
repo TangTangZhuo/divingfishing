@@ -27,9 +27,9 @@ public class SubmarineController : MonoBehaviour {
 	[HideInInspector]
 	public bool isSettle;
 	int fishIndex;
-	int goldSum;
+	long goldSum;
 	int settleCount;
-	int curAccumulation = 0;
+	long curAccumulation = 0;
 	float settleTime;
 	//FlyGold flyGod;
 	[HideInInspector]
@@ -46,7 +46,7 @@ public class SubmarineController : MonoBehaviour {
 		instance = this;
 
 		//PlayerPrefs.DeleteAll ();
-		//PlayerPrefs.SetInt ("gold", 1999999999);
+		PlayerPrefs.SetString ("gold", "1999999999999");
 
 	}
 
@@ -104,7 +104,7 @@ public class SubmarineController : MonoBehaviour {
 			progressSlider.value = transform.position.y;
 		}
 		if (isSettle) {	
-			PlayerPrefs.SetInt ("foreGold", PlayerPrefs.GetInt("gold",0));	
+			PlayerPrefs.SetString ("foreGold", PlayerPrefs.GetString("gold","0"));	
 			if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
 				HidePopUI (false);
 			} else {
@@ -186,12 +186,12 @@ public class SubmarineController : MonoBehaviour {
 						MessageBox.confim =()=>{
 							FBLogWithLevel();
 
-							int gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*goldMultiple;
+							long gold =long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*goldMultiple;
 
 							curAccumulation = goldSum*goldMultiple;
-							PlayerPrefs.SetInt ("accumulation", PlayerPrefs.GetInt ("accumulation", 0)+curAccumulation);
+							PlayerPrefs.SetString ("accumulation", (long.Parse( PlayerPrefs.GetString ("accumulation", "0"))+curAccumulation).ToString());
 
-							PlayerPrefs.SetInt ("gold", gold);
+							PlayerPrefs.SetString ("gold", gold.ToString());
 							Upgrading.Instance.CheckGold(gold);
 							UpgradingOffline.Instance.CheckGold(gold);
 
@@ -221,15 +221,15 @@ public class SubmarineController : MonoBehaviour {
 
 
 								string doubleName = doubleTrans.GetComponentInChildren<Text>().text;
-								int gold = PlayerPrefs.GetInt ("gold", 0);
+								long gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
 								goldSum*=goldMultiple;
 								curAccumulation = goldSum;
 								Button btn = adPop.transform.Find("sure").GetComponent<Button>();
 								adPop.transform.Find("content").GetComponent<Text>().text ="$" + 0.ToString();
 								btn.onClick.AddListener(()=>{
 									PlayerPrefs.SetInt ("ClamGold", 1);
-									PlayerPrefs.SetInt ("gold", gold+goldSum);
-									PlayerPrefs.SetInt ("accumulation", PlayerPrefs.GetInt ("accumulation", 0)+curAccumulation);
+									PlayerPrefs.SetString ("gold", (gold+goldSum).ToString());
+									PlayerPrefs.SetString ("accumulation", (long.Parse( PlayerPrefs.GetString ("accumulation", "0"))+curAccumulation).ToString());
 									Upgrading.Instance.CheckGold(gold);
 									UpgradingOffline.Instance.CheckGold(gold);
 									ProgressManager.Instance.GameWin ();	
@@ -242,19 +242,19 @@ public class SubmarineController : MonoBehaviour {
 										PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
 									}
 									if(doubleName == "Bonus×3"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*3;
+										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*3;
 										curAccumulation = goldSum*3;
 									}else if(doubleName == "Bonus×4"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*4;
+										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*4;
 										curAccumulation = goldSum*4;
 									}else if(doubleName == "Bonus×5"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*5;
+										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*5;
 										curAccumulation = goldSum*5;
 									}else if(doubleName == "Bonus×2"){
-										gold = PlayerPrefs.GetInt ("gold", 0) + goldSum*2;
+										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*2;
 										curAccumulation = goldSum*2;
 									}
-									adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-PlayerPrefs.GetInt ("gold", 0)-goldSum)*2).ToString();
+									adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-long.Parse( PlayerPrefs.GetString ("gold", "0"))-goldSum)*2).ToString();
 								};
 
 							});

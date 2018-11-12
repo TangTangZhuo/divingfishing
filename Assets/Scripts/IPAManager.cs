@@ -30,7 +30,7 @@ public class IPAManager : MonoBehaviour
 	}
 
 	void Start(){
-		accumulation.text = "$"+UIManager.UnitChange(PlayerPrefs.GetInt ("accumulation", 0));
+		accumulation.text = "$"+UIManager.UnitChange(long.Parse( PlayerPrefs.GetString ("accumulation", "0")));
 		UpdateIAPState ();
 		UpdateDailyState ();
 		//targetGoldPos = transform.parent.Find ("gold").Find ("Image");
@@ -84,19 +84,19 @@ public class IPAManager : MonoBehaviour
 	}
 
 	void OnCollectClick(){
-		int gold = 0;
+		long gold = 0;
 		//UIManager.Instance.goldT.text = PlayerPrefs.GetInt ("gold", 0).ToString ();
-		gold = PlayerPrefs.GetInt ("gold", 0) + PlayerPrefs.GetInt ("accumulation", 0);
-		PlayerPrefs.SetInt ("gold", gold);
+		gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + long.Parse( PlayerPrefs.GetString ("accumulation", "0"));
+		PlayerPrefs.SetString ("gold", gold.ToString());
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.None, null);
-		if (PlayerPrefs.GetInt ("accumulation", 0) != 0) {
+		if (PlayerPrefs.GetString ("accumulation", "0") != "0") {
 			for (int i = 0; i < 10; i++) {
 				FlyGold (Random.Range (0.1f, 0.8f));
 			}
 		}
 		Upgrading.Instance.CheckGold(gold);
 		UpgradingOffline.Instance.CheckGold(gold);
-		PlayerPrefs.SetInt ("accumulation", 0);
+		PlayerPrefs.SetString ("accumulation", "0");
 		accumulation.text = "$0";
 
 	}

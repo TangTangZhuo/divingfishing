@@ -9,8 +9,8 @@ public class Upgrading : MonoBehaviour {
 	private Text priceT;
 
 	private int value;
-	private int price;
-	private int gold;
+	private long price;
+	private long gold;
 
 	private static Upgrading instance;
 	public static Upgrading Instance{
@@ -39,46 +39,46 @@ public class Upgrading : MonoBehaviour {
 		if (PlayerPrefs.GetInt ("Level", 1) == 1) {
 			UIManager.Instance.diveDepth = PlayerPrefs.GetInt ("valueDepth", -17);
 			value = PlayerPrefs.GetInt ("valueDepth", UIManager.Instance.diveDepth);
-			price = PlayerPrefs.GetInt ("priceDepth", 2810);
+			price = long.Parse( PlayerPrefs.GetString ("priceDepth", "2810"));
 		}else if (PlayerPrefs.GetInt ("Level", 1) == 2) {
 			UIManager.Instance.diveDepth = PlayerPrefs.GetInt ("valueDepth2", -17);
 			value = PlayerPrefs.GetInt ("valueDepth2", UIManager.Instance.diveDepth);
-			price = PlayerPrefs.GetInt ("priceDepth2", 1240000);
+			price = long.Parse( PlayerPrefs.GetString ("priceDepth2", "1240000"));
 		}else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
 			UIManager.Instance.diveDepth = PlayerPrefs.GetInt ("valueDepth3", -17);
 			value = PlayerPrefs.GetInt ("valueDepth3", UIManager.Instance.diveDepth);
-			price = PlayerPrefs.GetInt ("priceDepth3", 31400000);
+			price = long.Parse( PlayerPrefs.GetString ("priceDepth3", "31400000"));
 		}
 
 		valueT.text = (UIManager.UnitChange(value)) + "M";
 		priceT.text = "$" + UIManager.UnitChange(price);
 		
-		gold = PlayerPrefs.GetInt ("gold", 0);
+		gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
 
-		UIManager.Instance.goldT.text = UIManager.UnitChange(PlayerPrefs.GetInt ("foreGold", PlayerPrefs.GetInt("gold",0)));	
+		UIManager.Instance.goldT.text = UIManager.UnitChange(long.Parse( PlayerPrefs.GetString ("foreGold",PlayerPrefs.GetString("gold","0"))));	
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay(delay);
 	}
 
 	public void OnDepthClick(){
-		gold = PlayerPrefs.GetInt ("gold", 0);
+		gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
 		if (gold > price) {
 			MultiHaptic.HapticMedium ();
 			gold -= price;
 			UIManager.Instance.diveDepth -= 7;
-			price = (int)(price*1.35f);
+			price = (long)(price*1.35f);
 
 			if (PlayerPrefs.GetInt ("Level", 1) == 1) {
 				PlayerPrefs.SetInt ("valueDepth", UIManager.Instance.diveDepth);
-				PlayerPrefs.SetInt ("priceDepth", price);
+				PlayerPrefs.SetString ("priceDepth", price.ToString());
 			} else if (PlayerPrefs.GetInt ("Level", 1) == 2) {
 				PlayerPrefs.SetInt ("valueDepth2", UIManager.Instance.diveDepth);
-				PlayerPrefs.SetInt ("priceDepth2", price);
+				PlayerPrefs.SetString ("priceDepth2", price.ToString());
 			}else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
 				PlayerPrefs.SetInt ("valueDepth3", UIManager.Instance.diveDepth);
-				PlayerPrefs.SetInt ("priceDepth3", price);
+				PlayerPrefs.SetString ("priceDepth3", price.ToString());
 			}
 
-			PlayerPrefs.SetInt ("gold", gold);
+			PlayerPrefs.SetString ("gold", gold.ToString());
 			UpdateData (0);
 			CheckGold (gold);
 			UpgradingOffline.Instance.CheckGold (gold);
@@ -86,7 +86,7 @@ public class Upgrading : MonoBehaviour {
 		}
 	}
 
-	public void CheckGold(int curGold){
+	public void CheckGold(long curGold){
 		if (curGold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
