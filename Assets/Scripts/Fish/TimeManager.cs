@@ -146,8 +146,8 @@ public class TimeManager : MonoBehaviour {
 		flyGold.FlyGoldGenerate (flyGold.targetPos);
 
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);
-		Upgrading.Instance.CheckGold ();
-		UpgradingOffline.Instance.CheckGold ();
+		Upgrading.Instance.CheckGold (gold);
+		UpgradingOffline.Instance.CheckGold (gold);
 		//PlayerPrefs.SetString ("sysString", System.DateTime.Now.ToBinary ().ToString ());	
 		PlayerPrefs.SetInt ("offlineOnClick", 2);
 		messageCount=0;

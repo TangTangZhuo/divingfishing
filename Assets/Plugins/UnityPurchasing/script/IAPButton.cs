@@ -84,7 +84,9 @@ namespace UnityEngine.Purchasing
 
 		void Awake(){
 			//检查订阅是否有效
-			CheckIfSubscriptionIsActive ();
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				CheckIfSubscriptionIsActive ();
+			}
 		}
 
         void Start()

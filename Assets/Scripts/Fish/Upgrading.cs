@@ -26,7 +26,7 @@ public class Upgrading : MonoBehaviour {
 		priceT = transform.Find ("price").GetComponent<Text> ();
 
 		UpdateData (1);
-		CheckGold ();
+		CheckGold (gold);
 	}
 	
 	// Update is called once per frame
@@ -80,14 +80,14 @@ public class Upgrading : MonoBehaviour {
 
 			PlayerPrefs.SetInt ("gold", gold);
 			UpdateData (0);
-			CheckGold ();
-			UpgradingOffline.Instance.CheckGold ();
+			CheckGold (gold);
+			UpgradingOffline.Instance.CheckGold (gold);
 
 		}
 	}
 
-	public void CheckGold(){
-		if (gold >= price) {
+	public void CheckGold(int curGold){
+		if (curGold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
 		} else {

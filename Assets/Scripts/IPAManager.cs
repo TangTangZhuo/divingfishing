@@ -94,8 +94,8 @@ public class IPAManager : MonoBehaviour
 				FlyGold (Random.Range (0.1f, 0.8f));
 			}
 		}
-		Upgrading.Instance.CheckGold();
-		UpgradingOffline.Instance.CheckGold();
+		Upgrading.Instance.CheckGold(gold);
+		UpgradingOffline.Instance.CheckGold(gold);
 		PlayerPrefs.SetInt ("accumulation", 0);
 		accumulation.text = "$0";
 

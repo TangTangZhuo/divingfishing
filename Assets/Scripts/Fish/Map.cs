@@ -96,8 +96,8 @@ public class Map : MonoBehaviour {
 					gold -=cost;
 					PlayerPrefs.SetInt ("gold", gold);
 					UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.Numerals, null);
-					Upgrading.Instance.CheckGold ();
-					UpgradingOffline.Instance.CheckGold ();
+					Upgrading.Instance.CheckGold (gold);
+					UpgradingOffline.Instance.CheckGold (gold);
 					PlayerPrefs.SetInt ("Lock2",1);
 					transform.Find("Level2").Find("lock").gameObject.SetActive(false);
 					FaceBookGetLog.LogFirstLevel2Event();
@@ -145,8 +145,8 @@ public class Map : MonoBehaviour {
 					gold -=cost;
 					PlayerPrefs.SetInt ("gold", gold);
 					UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.Numerals, null);
-					Upgrading.Instance.CheckGold ();
-					UpgradingOffline.Instance.CheckGold ();
+					Upgrading.Instance.CheckGold (gold);
+					UpgradingOffline.Instance.CheckGold (gold);
 					PlayerPrefs.SetInt ("Lock3",1);
 					transform.Find("Level3").Find("lock").gameObject.SetActive(false);
 					FaceBookGetLog.LogFirstLevel3Event();

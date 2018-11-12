@@ -47,8 +47,8 @@ public class DailyReward : MonoBehaviour {
 		PlayerPrefs.SetInt ("gold", gold);
 		flyGold.FlyGoldGenerate (flyGold.targetPos);
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);
-		Upgrading.Instance.CheckGold ();
-		UpgradingOffline.Instance.CheckGold ();
+		Upgrading.Instance.CheckGold (gold);
+		UpgradingOffline.Instance.CheckGold (gold);
 	}
 
 	public void UpdateDailyState(){
