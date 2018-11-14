@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FishGenerate : MonoBehaviour {
 	public Transform startPosition;
+	public GameObject epicTip;
 	public Transform[] fish;
 	public Transform[] unusual;
 
@@ -78,9 +79,13 @@ public class FishGenerate : MonoBehaviour {
 					}
 				}
 				ChangeFishEye (fishNormal);
-				if (Random.Range (0, 60) == 10) {
+				if (Random.Range (0, 100) == 10) {
 					Transform fishUnusual = Transform.Instantiate (unusual[fishIndex], new Vector3 (screenMid + Random.Range (-2, 3), baseGeneratePosy + Random.Range (-5, 6)), 
 						Quaternion.Euler (0, euler [Random.Range (0, 2)], 0), transform);
+					if (PlayerPrefs.GetInt (fishUnusual.name.Split (new char[]{ '(' }) [0], 0) == 0) {
+						epicTip.SetActive (true);
+						Destroy (epicTip, 8);
+					}
 					fishUnusual.GetComponent<GhostSprites> ().TrailSize = 70;
 					fishUnusual.GetComponent<GhostSprites> ().spacing = 1;
 					//ChangeFishEye (fishUnusual);

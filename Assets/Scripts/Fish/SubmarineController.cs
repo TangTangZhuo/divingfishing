@@ -21,7 +21,21 @@ public class SubmarineController : MonoBehaviour {
 	public Transform scoreParent;
 	public Slider progressSlider;
 	public GameObject settleView;
+	//史诗鱼拍立得
+	public GameObject epicPop;
+	//重生倍数
+	[HideInInspector]
+	public float rebirthMulti = 1;
+
+	[HideInInspector]
 	public float force;
+
+	//转盘倍数
+	[HideInInspector]
+	public float turnMulti = 1;
+
+	//发现新的史诗鱼
+	List<string> epicFish;
 
 	float time;
 	[HideInInspector]
@@ -35,7 +49,17 @@ public class SubmarineController : MonoBehaviour {
 	[HideInInspector]
 	int goldMultiple = 1;
 
+	////重生////
+	//重生等级
+	int rebirthLvl = 1;
+	//当前重生经验
+	int curRebirthExp = 0;
+	//升级所需经验
+	int rebirthExp = 0;
+
+
 	public Dictionary<string,int> fishDic = new Dictionary<string, int>();
+	Dictionary<string,int> expDic = new Dictionary<string, int>();
 
 	private static SubmarineController instance;
 	public static SubmarineController Instance{
@@ -46,7 +70,7 @@ public class SubmarineController : MonoBehaviour {
 		instance = this;
 
 		//PlayerPrefs.DeleteAll ();
-		PlayerPrefs.SetString ("gold", "1999999999999");
+		//PlayerPrefs.SetString ("gold", "1999999999999");
 
 	}
 
@@ -68,10 +92,17 @@ public class SubmarineController : MonoBehaviour {
 		}
 		playerRig.gravityScale = 0;
 		InitFishDic ();
+		InitExpDic ();
+		curRebirthExp = PlayerPrefs.GetInt ("curRebirthExp", 0);
 		goldSum = 0;
 		InitProgressSlider ();
 		UpdateGoldMutiple ();
 //		flyGod = (FlyGold)Object.FindObjectOfType(typeof(FlyGold));
+
+		epicFish = new List<string>();
+
+		rebirthMulti = 1+PlayerPrefs.GetInt ("star", 0)*(PlayerPrefs.GetInt ("rebirthLevel", 1)-1)/100f;
+		turnMulti = PlayerPrefs.GetFloat ("turnMuti", 1);
 	}
 	
 	// Update is called once per frame
@@ -115,7 +146,15 @@ public class SubmarineController : MonoBehaviour {
 				if (fishIndex < settleCount) {
 					Transform fish = netParent.GetChild (fishIndex);
 					Settlement (fish, 0.3f);
-					if (PlayerPrefs.GetInt (fish.name.Split (new char[]{ '(' }) [0], 0)==0) {
+					string fishName = fish.name.Split (new char[]{ '(' }) [0];
+					if (PlayerPrefs.GetInt (fishName, 0)==0) {
+						
+						//添加新史诗鱼
+						if(fishName.StartsWith("unusual")){
+							epicFish.Add (fishName);
+							PlayerPrefs.SetInt ("star", PlayerPrefs.GetInt ("star", 0) + 1);
+						}
+
 						PlayerPrefs.SetInt ("illNew", 1);
 					}
 					PlayerPrefs.SetInt (fish.name.Split (new char[]{'('}) [0], 1);
@@ -168,6 +207,8 @@ public class SubmarineController : MonoBehaviour {
 								doubleTrans.GetComponent<Button> ().interactable = true;
 							}
 						}
+
+						//弹出结算窗口
 						if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
 							MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum*2));
 						}
@@ -175,6 +216,8 @@ public class SubmarineController : MonoBehaviour {
 							MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
 						}
 						ChangeUIWithGoldNet(GameObject.Find("PopBG(Clone)").transform);
+
+						StartCoroutine( FindEpicFish (1));
 
 						if(PlayerPrefs.GetInt("double",0)>=2){							
 							Transform doubleTrans1 = GameObject.Find("PopBG(Clone)").transform.Find("double");
@@ -194,6 +237,15 @@ public class SubmarineController : MonoBehaviour {
 							PlayerPrefs.SetString ("gold", gold.ToString());
 							Upgrading.Instance.CheckGold(gold);
 							UpgradingOffline.Instance.CheckGold(gold);
+
+							//重生
+							PlayerPrefs.SetInt ("curRebirthExp", curRebirthExp);
+							rebirthLvl = PlayerPrefs.GetInt("exp",1);
+							rebirthExp = rebirthLvl*2000;
+							if(curRebirthExp>rebirthExp){
+								PlayerPrefs.SetInt("exp",rebirthLvl+1);
+								PlayerPrefs.SetInt ("curRebirthExp", 0);
+							}
 
 							ProgressManager.Instance.GameWin ();
 							PlayerPrefs.SetInt ("double", PlayerPrefs.GetInt ("double", 0) + 1);
@@ -265,11 +317,17 @@ public class SubmarineController : MonoBehaviour {
 						};							
 							
 					});						
+					string fishName = fish.name.Split (new char[]{ '(' }) [0];
+					if (PlayerPrefs.GetInt (fishName, 0)==0) {
+						//添加新史诗鱼
+						if(fishName.StartsWith("unusual")){
+							epicFish.Add (fishName);
+							PlayerPrefs.SetInt ("star", PlayerPrefs.GetInt ("star", 0) + 1);
+						}
 
-					if (PlayerPrefs.GetInt (fish.name.Split (new char[]{ '(' }) [0], 0)==0) {
 						PlayerPrefs.SetInt ("illNew", 1);
 					}
-					PlayerPrefs.SetInt (fish.name.Split (new char[]{'('}) [0], 1);
+					PlayerPrefs.SetInt (fishName, 1);
 					ScoreGenerate (fish,settleTime);
 
 
@@ -394,6 +452,12 @@ public class SubmarineController : MonoBehaviour {
 		
 	}
 
+	void OnTriggerExit2D(Collider2D coll){
+		if (coll.tag == "BoundaryL"||coll.tag == "BoundaryR") {
+			moveSpeed = maxSpeed;
+		}
+	}
+
 	void OnTriggerStay2D(Collider2D collider){
 		if (collider.tag == "BoundaryL") {
 			if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android) {
@@ -454,13 +518,44 @@ public class SubmarineController : MonoBehaviour {
 			text = Text.Instantiate (specialScore, netParent.position, score.transform.rotation, scoreParent);
 		}
 		//text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
-		text.text ="$"+(fishDic [fish.name]/2).ToString();
-		goldSum += (fishDic [fish.name]/2);
+
+		int fishgold = (int)(fishDic [fish.name]/2*rebirthMulti*turnMulti);
+		text.text ="$"+(fishgold).ToString();
+		goldSum += fishgold;
+
+		//增加重生经验
+		curRebirthExp += expDic [fish.name];
+
 		text.transform.position = Camera.main.WorldToScreenPoint (transform.position+Vector3.down*2);
 		text.DOFade (0.1f, time*12);
 		text.transform.DOMoveY (text.transform.position.y+600f, time*12, false);
 		text.transform.localScale = Vector3.one*1.5f;
 		text.transform.DOScale (1.65f, time*12).OnComplete(()=>{Destroy(text.gameObject);});
+	}
+		
+	//在结算分数弹出完毕播放史诗鱼动画
+	IEnumerator FindEpicFish(float time){
+		bool isDoing = false;
+		while (epicFish.Count!=0) {
+			if (!isDoing) {
+				isDoing = true;
+				Transform epicTrans = Instantiate (epicPop, GameObject.Find ("Canvas").transform).transform;
+				FindEpic findEpic = epicTrans.GetComponent<FindEpic> ();
+
+				int index = int.Parse (epicFish [0].Split (new char[]{ 'l' }) [1]) - 1;
+				findEpic.EpicPicture (FishManager.Instance.epicNames [index], FishManager.Instance.epicSprites [index], time);
+
+				epicTrans.DOScale (1, time);
+				epicTrans.DORotate (new Vector3 (0, 0, Random.Range(14,21)), time, 0).OnComplete (() => {
+					epicFish.Remove(epicFish[0]);
+					isDoing = false;
+				});
+			}
+			yield return null;
+		}
+
+		//"unusual"
+
 	}
 
 	void InitFishDic(){
@@ -498,9 +593,51 @@ public class SubmarineController : MonoBehaviour {
 		AddUnusual (30);
 	}
 
+	void InitExpDic(){
+		expDic.Add ("fish1(Clone)", 1);
+		expDic.Add ("fish2(Clone)", 2);
+		expDic.Add ("fish3(Clone)", 3);
+		expDic.Add ("fish4(Clone)", 4);
+		expDic.Add ("fish5(Clone)", 5);
+		expDic.Add ("fish6(Clone)", 6);
+		expDic.Add ("fish7(Clone)", 7);
+		expDic.Add ("fish8(Clone)", 8*3);
+		expDic.Add ("fish9(Clone)", 9);
+		expDic.Add ("fish10(Clone)", 10*3);
+		expDic.Add ("fish11(Clone)", 11);
+		expDic.Add ("fish12(Clone)", 12);
+		expDic.Add ("fish13(Clone)", 13);
+		expDic.Add ("fish14(Clone)", 14);
+		expDic.Add ("fish15(Clone)", 15*3);
+		expDic.Add ("fish16(Clone)", 16);
+		expDic.Add ("fish17(Clone)", 17);
+		expDic.Add ("fish18(Clone)", 18);
+		expDic.Add ("fish19(Clone)", 19);
+		expDic.Add ("fish20(Clone)", 20*3);
+		expDic.Add ("fish21(Clone)", 21);
+		expDic.Add ("fish22(Clone)", 22);
+		expDic.Add ("fish23(Clone)", 23);
+		expDic.Add ("fish24(Clone)", 24);
+		expDic.Add ("fish25(Clone)", 25);
+		expDic.Add ("fish26(Clone)", 26);
+		expDic.Add ("fish27(Clone)", 27);
+		expDic.Add ("fish28(Clone)", 28);
+		expDic.Add ("fish29(Clone)", 29);
+		expDic.Add ("fish30(Clone)", 30);
+
+		AddUnusualExp (30);
+	}
+
+
 	void AddUnusual(int number){
 		for (int i = 1; i <= number; i++) {
 			fishDic.Add ("unusual"+i+"(Clone)", fishDic["fish"+i+"(Clone)"]*2);
+		}
+	}
+
+	void AddUnusualExp(int number){
+		for (int i = 1; i <= number; i++) {
+			expDic.Add ("unusual"+i+"(Clone)", expDic["fish"+i+"(Clone)"]*2);
 		}
 	}
 

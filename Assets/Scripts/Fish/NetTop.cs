@@ -65,7 +65,7 @@ public class NetTop : MonoBehaviour {
 		} else {
 			text = Text.Instantiate (specialScore, fish.position, score.transform.rotation, scoreParent);
 		}
-		text.text = "$"+(submarine.fishDic [fish.name]/2).ToString();
+		text.text = "$"+((int)((submarine.fishDic [fish.name]/2)*submarine.rebirthMulti*submarine.turnMulti)).ToString();
 		text.transform.position = Camera.main.WorldToScreenPoint (fish.position)+offset;
 		GameObject scoreParticleObj = Instantiate (scoreParticle, Camera.main.ScreenToWorldPoint(text.transform.position), scoreParticle.transform.rotation);
 		StartCoroutine (ScoreWithParticle (text.transform, scoreParticleObj.transform));
