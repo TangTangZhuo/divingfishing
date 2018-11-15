@@ -43,6 +43,14 @@ public class Timer : MonoBehaviour {
 		ADTimeFinish += () => {
 			PlayerPrefs.SetInt("ForceReady",1);
 		};
+
+		TurnTimeFinish += () => {
+			PlayerPrefs.SetFloat ("turnMuti", 1);
+			if(FindObjectOfType<RotateSelf>()){
+				FindObjectOfType<RotateSelf>().turnTable.GetComponent<TurnTable>().UpdateBoost();
+			}
+
+		};
 	}
 
 	//开始转盘倒计时

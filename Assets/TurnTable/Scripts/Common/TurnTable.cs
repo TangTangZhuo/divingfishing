@@ -51,10 +51,10 @@ public class TurnTable : MonoBehaviour {
 			CheckNeedle(coll);
 		};
 			
-		Timer.Instance.TurnTimeFinish += () => {
-			PlayerPrefs.SetFloat ("turnMuti", 1);
-			UpdateBoost();
-		};
+//		Timer.Instance.TurnTimeFinish += () => {
+//			PlayerPrefs.SetFloat ("turnMuti", 1);
+//			UpdateBoost();
+//		};
 //		InitTable (curGold);
 	}
 
@@ -69,11 +69,25 @@ public class TurnTable : MonoBehaviour {
 
 	//点击广告旋转按钮
 	public void OnTurnBtn(){
+		bool completeAD = false;
 		if (TGSDK.CouldShowAd (TGSDKManager.turnID)) {
 			TGSDK.ShowAd (TGSDKManager.turnID);
 
+			turnBtn.SetActive (false);
+			backBtn.SetActive (false);
+
 			TGSDK.AdCloseCallback = (string obj) => {
-				rotation.RotateThis();
+				if(completeAD){
+					rotation.RotateThis();
+
+					if (PlayerPrefs.GetInt ("FreeRward", 0) < 5) {
+						PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
+					}
+
+				}
+			};
+			TGSDK.AdCompleteCallback = (string obj) => {
+				completeAD = true;
 			};
 			TGSDK.AdRewardFailedCallback = (string obj) => {
 				OnBackBtn();
@@ -86,8 +100,9 @@ public class TurnTable : MonoBehaviour {
 			TipPop.GenerateTip ("no ads", 0.5f);
 		}
 
-	//	rotation.RotateThis();
-	//	HideBtn ();
+//		rotation.RotateThis();
+//		turnBtn.SetActive (false);
+//		backBtn.SetActive (false);
 	}
 
 	//点击金币旋转按钮
@@ -103,7 +118,10 @@ public class TurnTable : MonoBehaviour {
 
 	//点击返回按钮
 	public void OnBackBtn(){
+		turnBtn.SetActive (true);
+		backBtn.SetActive (true);
 		gameObject.SetActive (false);
+
 	//	HideBtn ();
 	//	PlayerControllerSky.GameEnd ();
 	}
@@ -119,6 +137,7 @@ public class TurnTable : MonoBehaviour {
 			if (coll.name.StartsWith ("item")) {
 				int index = int.Parse(coll.name.Split (new char[]{ 'm' }) [1]);
 				PlayerPrefs.SetFloat ("turnMuti", multiple[index]);
+				SubmarineController.Instance.turnMulti = multiple [index];
 				UpdateBoost ();
 
 				isFinish = false;

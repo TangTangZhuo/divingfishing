@@ -31,6 +31,12 @@ public class Map : MonoBehaviour {
 		}
 	}
 
+	void OnEnable(){
+		if (PlayerPrefs.GetInt ("ReBirthGuide", 0) == 0) {
+			transform.Find ("ReBirthGuide").gameObject.SetActive (true);
+		}
+	}
+
 	public void OnBackBtn(){
 		gameObject.SetActive (false);
 
