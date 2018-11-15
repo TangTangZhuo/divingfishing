@@ -31,8 +31,21 @@ public class Timer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad (gameObject);
+
+		//新用户第一次进游戏5分钟免广告，之后超90秒单倍领取需要播放广告
+		if (PlayerPrefs.GetInt ("NewUser", 0) == 0) {
+			StartCountDownForce (300);
+			PlayerPrefs.SetInt ("NewUser", 1);
+		} else {
+			StartCountDownForce (90);
+		}
+
+		ADTimeFinish += () => {
+			PlayerPrefs.SetInt("ForceReady",1);
+		};
 	}
 
+	//开始转盘倒计时
 	IEnumerator coroutine;
 	public void StartCountDownTurn(float time){
 		if (coroutine!=null) {
@@ -42,10 +55,17 @@ public class Timer : MonoBehaviour {
 		StartCoroutine (coroutine);
 	}
 
+	//开始插屏倒计时
+	IEnumerator coroutineForce;
 	public void StartCountDownForce(float time){
-		StartCoroutine (CountDownForce (time));
+		if (coroutineForce != null) {
+			StopCoroutine (coroutineForce);
+		}
+		coroutineForce = CountDownForce (time);
+		StartCoroutine (coroutineForce);
 	}
 
+	//转盘倒计时及回调
 	IEnumerator CountDownTurn(float time){
 		float timee = time;
 		while (timee > 0) {
@@ -61,6 +81,7 @@ public class Timer : MonoBehaviour {
 		}
 	}
 
+	//分钟转小时：分钟
 	public string FormatTwoTime(int totalSeconds)
 	{
 		int minutes = totalSeconds / 60;
@@ -70,7 +91,7 @@ public class Timer : MonoBehaviour {
 		return string.Format("{0}:{1}", mm, ss);
 	}
 
-
+	//插屏广告倒计时
 	IEnumerator CountDownForce(float time){
 		while (time > 0) {
 			time -= Time.deltaTime;

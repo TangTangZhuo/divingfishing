@@ -226,8 +226,22 @@ public class SubmarineController : MonoBehaviour {
 							}
 						}
 
-						MessageBox.confim =()=>{
+						MessageBox.confim =()=>{							
 							FBLogWithLevel();
+
+							//如果倒计时结束则播放插屏
+							if(PlayerPrefs.GetInt("ForceReady",0)==1){
+								if(TGSDK.CouldShowAd(TGSDKManager.forceID)){
+									TGSDK.ShowAd(TGSDKManager.forceID);
+									TGSDK.AdCloseCallback = (string obj) => {
+										PlayerPrefs.SetInt("ForceReady",0);
+										Timer.Instance.StartCountDownForce(90);
+									};
+								}else{
+									Debug.Log("can't play forceAD");
+								}
+							}
+
 
 							long gold =long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*goldMultiple;
 

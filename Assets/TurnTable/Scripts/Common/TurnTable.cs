@@ -86,7 +86,7 @@ public class TurnTable : MonoBehaviour {
 			TipPop.GenerateTip ("no ads", 0.5f);
 		}
 
-		rotation.RotateThis();
+	//	rotation.RotateThis();
 	//	HideBtn ();
 	}
 
