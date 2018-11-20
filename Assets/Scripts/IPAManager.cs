@@ -13,6 +13,8 @@ public class IPAManager : MonoBehaviour
 	public Text accumulation;
 	public GameObject goldImage;
 
+	public GameObject VIP;
+
 	public Transform targetGoldPos;
 	public Transform curGoldPos;
 	//Transform targetGoldPos;
@@ -33,8 +35,22 @@ public class IPAManager : MonoBehaviour
 		accumulation.text = "$"+UIManager.UnitChange(long.Parse( PlayerPrefs.GetString ("accumulation", "0")));
 		UpdateIAPState ();
 		UpdateDailyState ();
+		AutoPopVIP ();
 		//targetGoldPos = transform.parent.Find ("gold").Find ("Image");
 	}
+
+	void AutoPopVIP(){
+		
+		if (PlayerPrefs.GetInt ("AutoPop", 0) == 0) {
+			PlayerPrefs.SetInt ("AutoPop", 1); 
+		} else {
+			if (PlayerPrefs.GetInt ("EnterGame", 0) == 1) {
+				VIP.SetActive (true);
+				PlayerPrefs.SetInt ("EnterGame", 0);
+			}
+		}
+	}
+
 
 	public void OnPurchaseFinish (Product product)
 	{

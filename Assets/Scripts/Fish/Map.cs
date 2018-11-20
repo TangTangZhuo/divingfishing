@@ -60,6 +60,7 @@ public class Map : MonoBehaviour {
 			Destroy (point.gameObject);
 			shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete(()=>{
 				PlayerPrefs.SetInt ("Level", 1);
+				PlayerPrefs.SetInt ("EnterGame", 1);
 				SceneManager.LoadScene ("Level1");
 			});
 		}
@@ -90,6 +91,7 @@ public class Map : MonoBehaviour {
 				Destroy (point.gameObject);
 				shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
 					PlayerPrefs.SetInt ("Level", 2);
+					PlayerPrefs.SetInt ("EnterGame", 1);
 					SceneManager.LoadScene ("Level2");
 				});
 			}
@@ -139,6 +141,7 @@ public class Map : MonoBehaviour {
 				Destroy (point.gameObject);
 				shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
 					PlayerPrefs.SetInt ("Level", 3);
+					PlayerPrefs.SetInt ("EnterGame", 1);
 					SceneManager.LoadScene ("Level3");
 				});
 			}
