@@ -38,8 +38,8 @@ public class GoldCollect : MonoBehaviour {
 			});
 		}
 		if (col.tag == "extraCollider") {
-			extraImage.DOScale (new Vector3 (3f, 3f, 3f), 0.2f).OnComplete(()=>{
-				extraImage.DOScale (2.5f, 0.2f);
+			extraImage.DOScale (new Vector3 (1.2f, 1.2f, 1.2f), 0.2f).OnComplete(()=>{
+				extraImage.DOScale (1f, 0.2f);
 				Destroy(gameObject);
 			});
 		}

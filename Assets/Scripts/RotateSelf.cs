@@ -7,10 +7,17 @@ using UnityEngine.UI;
 public class RotateSelf : MonoBehaviour {
 
 	public GameObject turnTable;
+    public GameObject turnTip;
 	public Text CountDown;
 
 	// Use this for initialization
 	void OnEnable () {
+
+        if(Timer.Instance && Timer.Instance.timeInt<=60&&(PlayerPrefs.GetInt("TurnTip",0)==1)){
+            turnTip.SetActive(true);
+            PlayerPrefs.SetInt("TurnTip", 0);
+        }
+
 		StartCoroutine (Rotate ());
 		Invoke ("GetCountDownText", 0.1f);
 
@@ -32,4 +39,5 @@ public class RotateSelf : MonoBehaviour {
 	public void OnTurnBtn(){
 		turnTable.SetActive (true);
 	}
+
 }

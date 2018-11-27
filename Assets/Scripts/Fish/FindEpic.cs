@@ -11,9 +11,11 @@ public class FindEpic : MonoBehaviour {
 	public Image writeMask;
 	public Button backBtn;
 
+    string epicStr = "";
 
 	public void EpicPicture(string name,Sprite image,float time){
-		epicName.text = name;	
+		epicName.text = name;
+        epicStr = name;
 		epicImage.sprite = image;
 		writeMask.DOFade (0, time*0.8f).OnComplete (()=>{
 			backBtn.interactable = true;
@@ -21,6 +23,13 @@ public class FindEpic : MonoBehaviour {
 	}
 
 	public void OnBackBtn(){
-		Destroy (gameObject);
-	}
+        if (epicStr == SubmarineController.Instance.lastEpicFishName)
+        {
+            SubmarineController.Instance.settlePop.SetActive(true);
+        }
+        Destroy (gameObject);       
+    }
+
+
 }
+

@@ -9,9 +9,10 @@ public class TGSDKManager : MonoBehaviour {
 	public static string tripleID = "eS8dNITBKtMrwUjjJCp";
 	public static string forceID = "m8crylWHjGPrpRq4zeH";
 	public static string turnID = "T3BwzKomNvymsuu2EsN";
+    public static string DailyID = "hJu8Jvwm9LxtRmSWRXJ";
 
 
-	void Awake(){
+    void Awake(){
 		TGSDK.Initialize ("Hn4Xb1am9p7ZJ5CLu932");
 		TGSDK.PreloadAd ();
 	}

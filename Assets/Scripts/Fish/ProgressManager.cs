@@ -60,7 +60,8 @@ public class ProgressManager : MonoBehaviour {
 	void InitScene(){
 		string levelIndex = PlayerPrefs.GetInt ("Level", 1).ToString();
 		if (!SceneManager.GetActiveScene ().name.EndsWith (levelIndex)) {
-			LoadScene ();
+            PlayerPrefs.SetInt("EnterGame", 1);
+            LoadScene ();            
 		}
 
 	}

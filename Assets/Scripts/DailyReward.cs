@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Together;
 
 public class DailyReward : MonoBehaviour {
 
@@ -11,11 +12,15 @@ public class DailyReward : MonoBehaviour {
 	IPAManager iPAManager;
 	FlyGold flyGold;
 
-	// Use this for initialization
-	void Start () {
+    //看广告次数
+    int freeRward = 0;
+
+    // Use this for initialization
+    void Start () {
 		iPAManager = transform.parent.GetComponent<IPAManager> ();
 		flyGold = (FlyGold)UnityEngine.Object.FindObjectOfType (typeof(FlyGold));
-	}
+        freeRward = PlayerPrefs.GetInt("FreeRward", 0);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -34,10 +39,29 @@ public class DailyReward : MonoBehaviour {
 		}
 	}
 
-	public void GetFreeDailyReward(){
-		PlayerPrefs.SetInt ("FreeRward", 0);
-		PlayerPrefs.SetInt ("NewDay", 0);
-		ClamReward ();
+
+    public void GetFreeDailyReward()
+    {
+        freeRward = PlayerPrefs.GetInt("FreeRward", 0);
+        if (freeRward >= 10)
+        {
+            PlayerPrefs.SetInt("FreeRward", 0);
+            PlayerPrefs.SetInt("NewDay", 0);
+            ClamReward();
+        }else{
+            if (TGSDK.CouldShowAd(TGSDKManager.DailyID))
+            {
+                TGSDK.ShowAd(TGSDKManager.DailyID);
+                TGSDK.AdCompleteCallback = (string msg) =>
+                {
+                    PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
+                    UpdateDailyState();
+                };
+                
+            }else{
+                TipPop.GenerateTip("no ads", 0.5f);
+            }
+        }
 	}
 
 	void ClamReward(){
@@ -56,14 +80,15 @@ public class DailyReward : MonoBehaviour {
 		passBtn = transform.Find("BG").Find("Pass").GetComponent<Button>();
 		freeBtn = transform.Find("BG").Find("Free").GetComponent<Button>();
 
-		int freeRward = PlayerPrefs.GetInt ("FreeRward", 0);
-		freeBtn.transform.Find("Text").GetComponent<Text>().text = freeRward+"/5";
+		freeRward = PlayerPrefs.GetInt ("FreeRward", 0);
 
-		if (freeRward < 5) {
-			freeBtn.interactable = false;
-		}
-		if (freeRward >= 5) {
-			freeBtn.interactable = true;
-		}
+		freeBtn.transform.Find("Text").GetComponent<Text>().text = freeRward+"/10";
+
+		//if (freeRward < 5) {
+		//	freeBtn.interactable = false;
+		//}
+		//if (freeRward >= 5) {
+		//	freeBtn.interactable = true;
+		//}
 	}
 }

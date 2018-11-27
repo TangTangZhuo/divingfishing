@@ -20,7 +20,10 @@ public class TurnTable : MonoBehaviour {
 	//获取按钮
 	public GameObject turnBtn;
 	public GameObject backBtn;
-
+    //获取确认弹窗
+    public GameObject turnClam;
+    //获取持续弹窗
+    public GameObject turnContinue;
 
 	//获取倍数显示
 	public Text multiText;
@@ -80,7 +83,7 @@ public class TurnTable : MonoBehaviour {
 				if(completeAD){
 					rotation.RotateThis();
 
-					if (PlayerPrefs.GetInt ("FreeRward", 0) < 5) {
+					if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
 						PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
 					}
 
@@ -105,8 +108,53 @@ public class TurnTable : MonoBehaviour {
 //		backBtn.SetActive (false);
 	}
 
-	//点击金币旋转按钮
-	public void OnGoldBtn(){
+    //延长转盘奖励时间
+    public void OnContinueBtn(){
+        bool completeAD = false;
+        if (TGSDK.CouldShowAd(TGSDKManager.turnID))
+        {
+            gameObject.SetActive(true);
+            turnContinue.SetActive(false);
+
+            TGSDK.ShowAd(TGSDKManager.turnID);
+
+            turnBtn.SetActive(false);
+            backBtn.SetActive(false);
+
+            TGSDK.AdCloseCallback = (string obj) => {
+                if (completeAD)
+                {
+                    rotation.RotateThis();
+
+                    if (PlayerPrefs.GetInt("FreeRward", 0) < 10)
+                    {
+                        PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
+                    }
+
+                }
+            };
+            TGSDK.AdCompleteCallback = (string obj) => {
+                completeAD = true;
+            };
+            TGSDK.AdRewardFailedCallback = (string obj) => {
+                OnBackBtn();
+            };
+            TGSDK.AdShowFailedCallback = (string obj) => {
+                OnBackBtn();
+            };
+
+        }
+        else
+        {
+            TipPop.GenerateTip("no ads", 0.5f,Color.gray);
+        }
+        //gameObject.SetActive(true);
+        //turnContinue.SetActive(false);
+        //rotation.RotateThis();
+    }
+
+    //点击金币旋转按钮
+    public void OnGoldBtn(){
 //		if (holdGold >= curGold) {
 //			PlayerPrefs.SetInt ("gold", holdGold - curGold);
 //			rotation.RotateThis ();
@@ -142,11 +190,18 @@ public class TurnTable : MonoBehaviour {
 
 				isFinish = false;
 
-				Invoke ("OnBackBtn", 0.5f);
+                turnClam.SetActive(true);
+                turnClam.transform.Find("Extra").Find("ExtraText").GetComponent<Text>().text = multiple[index] * 100 + "%";
+                turnClam.transform.Find("Confirm").GetComponent<Button>().onClick.AddListener(() => {
+                    turnClam.SetActive(false);
+                    OnBackBtn();
+                });
+				//Invoke ("OnBackBtn", 0.5f);
 
 				Timer.Instance.StartCountDownTurn (600);
-
-			}else{
+                PlayerPrefs.SetInt("TurnTip", 1);
+            }
+            else{
 				rotation.RotateLittle ();
 			}
 

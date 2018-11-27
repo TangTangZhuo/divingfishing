@@ -15,6 +15,7 @@ public class IPAManager : MonoBehaviour
 
 	public GameObject VIP;
 
+
 	public Transform targetGoldPos;
 	public Transform curGoldPos;
 	//Transform targetGoldPos;
@@ -36,6 +37,7 @@ public class IPAManager : MonoBehaviour
 		UpdateIAPState ();
 		UpdateDailyState ();
 		AutoPopVIP ();
+        AutoPopNoads();
 		//targetGoldPos = transform.parent.Find ("gold").Find ("Image");
 	}
 
@@ -44,12 +46,23 @@ public class IPAManager : MonoBehaviour
 		if (PlayerPrefs.GetInt ("AutoPop", 0) == 0) {
 			PlayerPrefs.SetInt ("AutoPop", 1); 
 		} else {
-			if (PlayerPrefs.GetInt ("EnterGame", 0) == 1) {
-				VIP.SetActive (true);
-				PlayerPrefs.SetInt ("EnterGame", 0);
-			}
+            if (PlayerPrefs.GetInt("fishingpass", 0) == 0)
+            {
+                if (PlayerPrefs.GetInt("EnterGame", 0) == 1)
+                {
+                    VIP.SetActive(true);
+                    PlayerPrefs.SetInt("EnterGame", 0);
+                }
+            }
 		}
 	}
+
+    void AutoPopNoads(){
+        if(PlayerPrefs.GetInt("PopNoAds",0)==1){
+            OnGoldenNetBtn();
+            PlayerPrefs.SetInt("PopNoAds", 0);
+        }
+    }
 
 
 	public void OnPurchaseFinish (Product product)
@@ -59,12 +72,18 @@ public class IPAManager : MonoBehaviour
 			Debug.Log ("success:" + product.definition.id);
 			if (product.definition.id == "marine_vip") {
 				PlayerPrefs.SetInt ("fishingpass", 1);
-			}
-			if (product.definition.id == "gold_net") {
-				PlayerPrefs.SetInt ("golden_net", 1);
-				SubmarineController.Instance.UpdateGoldMutiple ();
-				transform.Find ("goldNet").gameObject.SetActive (false);
-			}
+                PlayerPrefs.SetInt("golden_net", 1);
+                SubmarineController.Instance.UpdateGoldMutiple();
+               // transform.Find("goldNet").gameObject.SetActive(false);
+            }
+			//if (product.definition.id == "gold_net") {
+			//	PlayerPrefs.SetInt ("golden_net", 1);
+			//	SubmarineController.Instance.UpdateGoldMutiple ();
+			//	transform.Find ("goldNet").gameObject.SetActive (false);
+			//}
+            if(product.definition.id == "no_ads"){
+                PlayerPrefs.SetInt("no_ads", 1);
+            }
 		}
 	}
 
@@ -77,12 +96,19 @@ public class IPAManager : MonoBehaviour
 
 	void UpdateIAPState(){
 		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
-			transform.Find ("goldNet").gameObject.SetActive (false);
-			transform.Find ("Daily").position = transform.Find ("Vip").position;
-			transform.Find ("Vip").position = transform.Find ("goldNet").position;
+			//transform.Find ("goldNet").gameObject.SetActive (false);
+			//transform.Find ("Daily").position = transform.Find ("Vip").position;
+			//transform.Find ("Vip").position = transform.Find ("goldNet").position;
 
 		}
-		if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
+        if (PlayerPrefs.GetInt("no_ads", 0) == 1)
+        {
+            transform.Find ("goldNet").gameObject.SetActive (false);
+            transform.Find ("Daily").position = transform.Find ("Vip").position;
+            transform.Find ("Vip").position = transform.Find ("goldNet").position;
+
+        }
+        if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
 			transform.Find ("ClamPass").GetComponent<Button> ().onClick.AddListener (OnVipBtn);
 			transform.Find ("Vip").GetComponent<Button> ().onClick.AddListener (OnVipBtn);
 		}

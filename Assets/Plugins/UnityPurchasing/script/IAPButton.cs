@@ -74,10 +74,19 @@ namespace UnityEngine.Purchasing
 //					Debug.Log ("PURCHASE DATE: " + productReceipt.purchaseDate);
 //					Debug.Log ("EXPIRATION DATE: " + productReceipt.subscriptionExpirationDate);
 //					Debug.Log ("CANCELDATE DATE: " + productReceipt.cancellationDate);
-					if (productReceipt.productID == "marine_vip" && productReceipt.subscriptionExpirationDate > DateTime.Now.ToUniversalTime ()) {
-						PlayerPrefs.SetInt ("fishingpass", 1);
-						Debug.Log (productReceipt.subscriptionExpirationDate);
+					if (productReceipt.productID == "marine_vip") {
+                        if (productReceipt.subscriptionExpirationDate > DateTime.Now.ToUniversalTime())
+                        {
+                            PlayerPrefs.SetInt("fishingpass", 1);
+                            PlayerPrefs.SetInt("golden_net", 1);
+                            Debug.Log(productReceipt.subscriptionExpirationDate);
+                        }else{
+                            PlayerPrefs.SetInt("fishingpass", 0);
+                            PlayerPrefs.SetInt("golden_net", 0);
+                            Debug.Log("marine_vip is expiried");
+                        }
 					}
+
 				}
 			}
 		}
@@ -86,8 +95,9 @@ namespace UnityEngine.Purchasing
 			//检查订阅是否有效
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
 				CheckIfSubscriptionIsActive ();
-			}
-		}
+			}       
+
+        }
 
         void Start()
         {
@@ -192,11 +202,16 @@ namespace UnityEngine.Purchasing
 		void IRestore(PurchaseEventArgs e){
 			if (string.Equals (e.purchasedProduct.definition.id, "marine_vip", System.StringComparison.Ordinal)) {
 				PlayerPrefs.SetInt ("fishingpass", 1);
-			}
+                PlayerPrefs.SetInt("golden_net", 1);
+            }
 			if (string.Equals (e.purchasedProduct.definition.id, "gold_net", System.StringComparison.Ordinal)) {
 				PlayerPrefs.SetInt ("golden_net", 1);
 			}
-			waiting.SetActive (false);
+            if (string.Equals(e.purchasedProduct.definition.id, "no_ads", System.StringComparison.Ordinal))
+            {
+                PlayerPrefs.SetInt("no_ads", 1);
+            }
+            waiting.SetActive (false);
 			SceneManagement.SceneManager.LoadScene (SceneManagement.SceneManager.GetActiveScene().name);
 		}
 

@@ -14,6 +14,9 @@ public class Timer : MonoBehaviour {
 	[HideInInspector]
 	public Text countDownText;
 
+    [HideInInspector]
+    public int timeInt = 0;
+
 	//Coroutine coroutineTurn;
 
 	static Timer instance;
@@ -32,16 +35,17 @@ public class Timer : MonoBehaviour {
 	void Start () {
 		DontDestroyOnLoad (gameObject);
 
-		//新用户第一次进游戏5分钟免广告，之后超90秒单倍领取需要播放广告
+		//新用户第一次进游戏5分钟免广告，之后超45秒单倍领取需要播放广告
 		if (PlayerPrefs.GetInt ("NewUser", 0) == 0) {
 			StartCountDownForce (300);
 			PlayerPrefs.SetInt ("NewUser", 1);
 		} else {
-			StartCountDownForce (90);
+			StartCountDownForce (45);
 		}
 
 		ADTimeFinish += () => {
 			PlayerPrefs.SetInt("ForceReady",1);
+            Debug.Log("ForceReady");
 		};
 
 		TurnTimeFinish += () => {
@@ -78,9 +82,17 @@ public class Timer : MonoBehaviour {
 		float timee = time;
 		while (timee > 0) {
 			timee -= Time.deltaTime;
+            timeInt = (int)timee;
 			if (countDownText) {
 				countDownText.text = FormatTwoTime((int)timee);
 			}
+            //if(timee<60){
+            //    GameObject turnTip = GameObject.Find("TurnTip");
+            //    if(turnTip && (PlayerPrefs.GetInt("TurnTip", 0)==0)){
+            //        turnTip.SetActive(true);
+            //        PlayerPrefs.SetInt("TurnTip", 1);
+            //    }
+            //}
 			yield return null;
 		}
 

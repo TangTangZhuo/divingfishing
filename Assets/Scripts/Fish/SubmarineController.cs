@@ -35,7 +35,10 @@ public class SubmarineController : MonoBehaviour {
 	public float turnMulti = 1;
 
 	//发现新的史诗鱼
-	List<string> epicFish;
+    [HideInInspector]
+    public List<string> epicFish;
+    //结算弹窗
+    public GameObject settlePop;
 
 	float time;
 	[HideInInspector]
@@ -217,7 +220,8 @@ public class SubmarineController : MonoBehaviour {
 						}
 						ChangeUIWithGoldNet(GameObject.Find("PopBG(Clone)").transform);
 
-						StartCoroutine( FindEpicFish (1));
+                       
+                        StartCoroutine( FindEpicFish (1));
 
 						if(PlayerPrefs.GetInt("double",0)>=2){							
 							Transform doubleTrans1 = GameObject.Find("PopBG(Clone)").transform.Find("double");
@@ -229,18 +233,28 @@ public class SubmarineController : MonoBehaviour {
 						MessageBox.confim =()=>{							
 							FBLogWithLevel();
 
-							//如果倒计时结束则播放插屏
-							if(PlayerPrefs.GetInt("ForceReady",0)==1){
-								if(TGSDK.CouldShowAd(TGSDKManager.forceID)){
-									TGSDK.ShowAd(TGSDKManager.forceID);
-									TGSDK.AdCloseCallback = (string obj) => {
-										PlayerPrefs.SetInt("ForceReady",0);
-										Timer.Instance.StartCountDownForce(90);
-									};
-								}else{
-									Debug.Log("can't play forceAD");
-								}
-							}
+                            //如果倒计时结束则播放插屏，（无VIP和Noads)
+                            if (PlayerPrefs.GetInt("fishingpass",0)==0 || PlayerPrefs.GetInt("no_ads", 0) == 0)
+                            {
+                                if (PlayerPrefs.GetInt("ForceReady", 0) == 1)
+                                {
+                                    if (TGSDK.CouldShowAd(TGSDKManager.forceID))
+                                    {
+                                        TGSDK.ShowAd(TGSDKManager.forceID);
+                                        TGSDK.AdCloseCallback = (string obj) =>
+                                        {
+                                            PlayerPrefs.SetInt("ForceReady", 0);
+                                            Timer.Instance.StartCountDownForce(45);
+                                            PlayerPrefs.SetInt("PopNoAds", 1);
+                                        };
+                                    }
+                                    else
+                                    {
+                                        Debug.Log("can't play forceAD");
+                                    }
+
+                                }
+                            }
 
 
 							long gold =long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*goldMultiple;
@@ -304,7 +318,7 @@ public class SubmarineController : MonoBehaviour {
 								TGSDK.AdCompleteCallback = (string msg) => {
 									Debug.Log("AdCompleteCallback");
 									PlayerPrefs.SetInt("double",0);
-									if (PlayerPrefs.GetInt ("FreeRward", 0) < 5) {
+									if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
 										PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
 									}
 									if(doubleName == "Bonus×3"){
@@ -328,9 +342,15 @@ public class SubmarineController : MonoBehaviour {
 
 
 						//	};
-						};							
-							
-					});						
+						};
+
+                        settlePop = GameObject.Find("PopBG(Clone)");
+                        if (epicFish.Count != 0)
+                        {
+                            //隐藏结算界面
+                            settlePop.SetActive(false);
+                        }
+                    });						
 					string fishName = fish.name.Split (new char[]{ '(' }) [0];
 					if (PlayerPrefs.GetInt (fishName, 0)==0) {
 						//添加新史诗鱼
@@ -546,18 +566,29 @@ public class SubmarineController : MonoBehaviour {
 		text.transform.localScale = Vector3.one*1.5f;
 		text.transform.DOScale (1.65f, time*12).OnComplete(()=>{Destroy(text.gameObject);});
 	}
-		
+
+    [HideInInspector]
+    public string lastEpicFishName = "";
 	//在结算分数弹出完毕播放史诗鱼动画
 	IEnumerator FindEpicFish(float time){
 		bool isDoing = false;
-		while (epicFish.Count!=0) {
-			if (!isDoing) {
-				isDoing = true;
-				Transform epicTrans = Instantiate (epicPop, GameObject.Find ("Canvas").transform).transform;
-				FindEpic findEpic = epicTrans.GetComponent<FindEpic> ();
 
-				int index = int.Parse (epicFish [0].Split (new char[]{ 'l' }) [1]) - 1;
-				findEpic.EpicPicture (FishManager.Instance.epicNames [index], FishManager.Instance.epicSprites [index], time);
+		while (epicFish.Count!=0) {
+            if (!isDoing)
+            {
+                isDoing = true;
+                Transform epicTrans = Instantiate(epicPop, GameObject.Find("Canvas").transform).transform;
+
+                FindEpic findEpic = epicTrans.GetComponent<FindEpic>();
+
+                int index = int.Parse(epicFish[0].Split(new char[] { 'l' })[1]) - 1;
+
+                if (lastEpicFishName == "")
+                {
+                    lastEpicFishName = FishManager.Instance.epicNames[index];
+                }
+
+                findEpic.EpicPicture (FishManager.Instance.epicNames [index], FishManager.Instance.epicSprites [index], time);
 
 				epicTrans.DOScale (1, time);
 				epicTrans.DORotate (new Vector3 (0, 0, Random.Range(14,21)), time, 0).OnComplete (() => {
@@ -566,11 +597,14 @@ public class SubmarineController : MonoBehaviour {
 				});
 			}
 			yield return null;
-		}
+           
+        }
+       
 
-		//"unusual"
 
-	}
+        //"unusual"
+
+    }
 
 	void InitFishDic(){
 		fishDic.Add ("fish1(Clone)", 510);

@@ -36,19 +36,24 @@ public class TimeManager : MonoBehaviour {
 		PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
 		PlayerPrefs.SetInt ("quitGame", 1);
 		PlayerPrefs.SetString ("foreGold", PlayerPrefs.GetString("gold","0"));	
-		PlayerPrefs.SetInt ("fishingpass", 0);
+		//PlayerPrefs.SetInt ("fishingpass", 0);
 
 		PlayerPrefs.SetFloat ("turnMuti", 1);
 
 		PlayerPrefs.SetInt ("EnterGame", 1);
-	}
+
+        PlayerPrefs.SetInt("TurnTip", 0);
+    }
 
 	void OnApplicationPause(bool isPause){
 		if (isPause) {
 			PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
 			PlayerPrefs.SetInt ("quitGame", 1);
-		} else {
+           // PlayerPrefs.SetInt("EnterGame", 1);
+            PlayerPrefs.SetInt("TurnTip", 0);
+        } else {
 			UpdateGold ();
+            IPAManager.Instance.VIP.SetActive(true);
 		}
 	}
 		
