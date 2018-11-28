@@ -86,6 +86,36 @@ public class Upgrading : MonoBehaviour {
 		}
 	}
 
+    //看广告免费升级
+    public void FreeClick()
+    {
+
+        MultiHaptic.HapticMedium();
+        UIManager.Instance.diveDepth -= 7;
+        price = (long)(price * 1.35f);
+
+        if (PlayerPrefs.GetInt("Level", 1) == 1)
+        {
+            PlayerPrefs.SetInt("valueDepth", UIManager.Instance.diveDepth);
+            PlayerPrefs.SetString("priceDepth", price.ToString());
+        }
+        else if (PlayerPrefs.GetInt("Level", 1) == 2)
+        {
+            PlayerPrefs.SetInt("valueDepth2", UIManager.Instance.diveDepth);
+            PlayerPrefs.SetString("priceDepth2", price.ToString());
+        }
+        else if (PlayerPrefs.GetInt("Level", 1) == 3)
+        {
+            PlayerPrefs.SetInt("valueDepth3", UIManager.Instance.diveDepth);
+            PlayerPrefs.SetString("priceDepth3", price.ToString());
+        }
+
+        UpdateData(0);
+        CheckGold(gold);
+        UpgradingOffline.Instance.CheckGold(gold);
+
+    }
+
 	public void CheckGold(long curGold){
 		if (curGold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
