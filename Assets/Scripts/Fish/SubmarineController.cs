@@ -161,6 +161,7 @@ public class SubmarineController : MonoBehaviour {
 						PlayerPrefs.SetInt ("illNew", 1);
 					}
 					PlayerPrefs.SetInt (fish.name.Split (new char[]{'('}) [0], 1);
+
 					ScoreGenerate (fish,settleTime);
 
 				}
@@ -246,6 +247,7 @@ public class SubmarineController : MonoBehaviour {
                                             PlayerPrefs.SetInt("ForceReady", 0);
                                             Timer.Instance.StartCountDownForce(45);
                                             PlayerPrefs.SetInt("PopNoAds", 1);
+                                            IPAManager.Instance.AutoPopNoads();
                                         };
                                     }
                                     else

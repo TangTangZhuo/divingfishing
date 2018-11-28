@@ -5,12 +5,21 @@ using UnityEngine;
 public class ReShape : MonoBehaviour {
 	Cloth readyCloth;
 	public GameObject runCloth;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    static ReShape instance;
+    public static ReShape Instance{
+        get { return instance; }
+    }
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    void Start () {
 		readyCloth = GetComponent<Cloth> ();
 	}
 
-	public void ChangeShape(){
+    public void ChangeShape(){
 		readyCloth.SetEnabledFading (false);
 		Invoke ("ShowReal", 0.5f);
 	}

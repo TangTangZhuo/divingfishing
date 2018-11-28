@@ -90,6 +90,10 @@ public class Upgrading : MonoBehaviour {
 		if (curGold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
+            if(PlayerPrefs.GetInt("DepthGuide", 0)==0){
+                NormalGuide.Instance.guide[0].SetActive(true);
+                PlayerPrefs.SetInt("DepthGuide", 1);
+            }
 		} else {
 			transform.GetComponent<Button> ().interactable = false;
 			transform.GetComponent<Image> ().color = new Color (200 / 255f, 200 / 255f, 200 / 255f, 0.5f);

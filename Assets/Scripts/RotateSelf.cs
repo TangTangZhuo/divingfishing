@@ -10,8 +10,18 @@ public class RotateSelf : MonoBehaviour {
     public GameObject turnTip;
 	public Text CountDown;
 
-	// Use this for initialization
-	void OnEnable () {
+    private static RotateSelf instance;
+    public static RotateSelf Instance
+    {
+        get { return instance; }
+    }
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Use this for initialization
+    void OnEnable () {
 
         if(Timer.Instance && Timer.Instance.timeInt<=60&&(PlayerPrefs.GetInt("TurnTip",0)==1)){
             turnTip.SetActive(true);

@@ -13,6 +13,8 @@ public class ProgressManager : MonoBehaviour {
 	public bool isOvering;
 	public GameObject[] UIs;
 
+    public GameObject fingerGuide;
+
 	private static ProgressManager instance;
 	public static ProgressManager Instance{
 		get{return instance;}
@@ -42,6 +44,7 @@ public class ProgressManager : MonoBehaviour {
 	public void GameOver(){
 		isOver = true;
 		isRunning = false;
+        DepthLine.Instance.gameObject.SetActive(false);
 	}
 
 	void LoadScene(){
@@ -67,23 +70,33 @@ public class ProgressManager : MonoBehaviour {
 	}
 
 	public void onStartButton(){
-		MultiHaptic.HapticMedium ();
-		isRunning = true;
-		isReady = false;
-		SubmarineController.Instance.gravityScale = 2;
-		if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
-			SubmarineController.Instance.moveSpeed = SubmarineController.Instance.maxSpeed;
-		else
-			SubmarineController.Instance.moveSpeed = SubmarineController.Instance.maxSpeed;
-		FishGenerate.Instance.GenerateFish ();
-		BGmanager.Instance.GenerateWaterF ();
-		BGmanager.Instance.GenerateParallx ();
-		BGmanager.Instance.GenerateBubble ();
-		SubmarineController.Instance.InitProgressSlider ();
-		HideUI ();
-		SubmarineController.Instance.progressSlider.gameObject.SetActive (true);
-		SubmarineController.Instance.SynDepth ();
-		PlayerPrefs.SetInt ("quitGame", 0);
+        if (PlayerPrefs.GetInt("fingerGuide", 0) == 1)
+        {
+            MultiHaptic.HapticMedium();
+            isRunning = true;
+            isReady = false;
+            SubmarineController.Instance.gravityScale = 2;
+            if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
+                SubmarineController.Instance.moveSpeed = SubmarineController.Instance.maxSpeed;
+            else
+                SubmarineController.Instance.moveSpeed = SubmarineController.Instance.maxSpeed;
+            FishGenerate.Instance.GenerateFish();
+            BGmanager.Instance.GenerateWaterF();
+            BGmanager.Instance.GenerateParallx();
+            BGmanager.Instance.GenerateBubble();
+            DepthLine.Instance.GenerateLine();
+            SubmarineController.Instance.InitProgressSlider();
+            HideUI();
+            SubmarineController.Instance.progressSlider.gameObject.SetActive(true);
+            SubmarineController.Instance.SynDepth();
+            PlayerPrefs.SetInt("quitGame", 0);
+            ReShape.Instance.ChangeShape();
+        }else{
+
+            HideUI();
+            fingerGuide.SetActive(true);
+        }
+
 	}
 
 	void HideUI(){

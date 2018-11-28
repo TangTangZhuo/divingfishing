@@ -16,8 +16,19 @@ public class Map : MonoBehaviour {
 	private Transform[] pathPoint;
 
 	public Transform shipMark;
-	// Use this for initialization
-	void Start () {		
+
+    private static Map instance;
+    public static Map Instance
+    {
+        get { return instance; }
+    }
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Use this for initialization
+    void Start () {		
 		shipMark.position = levelPos [PlayerPrefs.GetInt ("Level", 1) - 1].position;
 		pathPoint = new Transform[path.childCount];
 		for (int i = 0; i < path.childCount; i++) {

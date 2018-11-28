@@ -57,7 +57,7 @@ public class IPAManager : MonoBehaviour
 		}
 	}
 
-    void AutoPopNoads(){
+    public void AutoPopNoads(){
         if(PlayerPrefs.GetInt("PopNoAds",0)==1){
             OnGoldenNetBtn();
             PlayerPrefs.SetInt("PopNoAds", 0);

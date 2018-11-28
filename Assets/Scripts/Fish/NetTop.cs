@@ -26,6 +26,8 @@ public class NetTop : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!isOver) {
+           // Debug.Log("transform.parent.position.y:" + transform.parent.position.y);
+           // Debug.Log("UIManager.Instance.diveDepth" + UIManager.Instance.diveDepth);
 			if (transform.parent.position.y < UIManager.Instance.diveDepth) {
 				ProgressManager.Instance.GameOver ();
 				isOver = true;
