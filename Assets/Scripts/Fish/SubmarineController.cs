@@ -233,6 +233,7 @@ public class SubmarineController : MonoBehaviour {
 
 						MessageBox.confim =()=>{							
 							FBLogWithLevel();
+                            FreeDepthWithLevel();
 
                             //如果倒计时结束则播放插屏，（无VIP和Noads)
                             if (PlayerPrefs.GetInt("fishingpass",0)==0 || PlayerPrefs.GetInt("no_ads", 0) == 0)
@@ -283,10 +284,11 @@ public class SubmarineController : MonoBehaviour {
 						};
 						MessageBox.doubleR =()=>{	
 							FBLogWithLevel();
-							//GameObject popBG = (GameObject)Resources.Load("PopBG");
-							//Transform doubleTrans = popBG.transform.Find("double");
-																				
-							if(doubleText == "Bonus×2"){
+                            FreeDepthWithLevel();
+                            //GameObject popBG = (GameObject)Resources.Load("PopBG");
+                            //Transform doubleTrans = popBG.transform.Find("double");
+
+                            if (doubleText == "Bonus×2"){
 								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
 									TGSDK.ShowAd(TGSDKManager.doubleID);
 								}
@@ -386,6 +388,22 @@ public class SubmarineController : MonoBehaviour {
 			FaceBookGetLog.LogFinishLevel1Event();
 		}
 	}
+
+    //深度免费升级次数统计
+    void FreeDepthWithLevel(){
+        if (PlayerPrefs.GetInt("Level", 1) == 1)
+        {
+            PlayerPrefs.SetInt("freeDepth1", PlayerPrefs.GetInt("freeDepth1", 0) + 1);
+        }
+        else if (PlayerPrefs.GetInt("Level", 1) == 2)
+        {
+            PlayerPrefs.SetInt("freeDepth2", PlayerPrefs.GetInt("freeDepth2", 0) + 1);
+        }
+        else if (PlayerPrefs.GetInt("Level", 1) == 3)
+        {
+            PlayerPrefs.SetInt("freeDepth3", PlayerPrefs.GetInt("freeDepth3", 0) + 1);
+        }
+    }
 
 	void ChangeUIWithGoldNet(Transform popBG){
 		if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {

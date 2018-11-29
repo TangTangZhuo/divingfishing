@@ -27,6 +27,7 @@ public class Upgrading : MonoBehaviour {
 
 		UpdateData (1);
 		CheckGold (gold);
+        FreeUpdate.Instance.UpdateFree();
 	}
 	
 	// Update is called once per frame

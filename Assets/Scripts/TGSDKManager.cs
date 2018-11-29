@@ -10,6 +10,7 @@ public class TGSDKManager : MonoBehaviour {
 	public static string forceID = "m8crylWHjGPrpRq4zeH";
 	public static string turnID = "T3BwzKomNvymsuu2EsN";
     public static string DailyID = "hJu8Jvwm9LxtRmSWRXJ";
+    public static string FreeId = "OAFSiOsBR85xsi4wBmE";
 
 
     void Awake(){
