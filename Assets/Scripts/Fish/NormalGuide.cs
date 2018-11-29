@@ -18,7 +18,7 @@ public class NormalGuide : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    public void NormalGuideStart () {
         if(PlayerPrefs.GetInt("fish10", 0)==1 && PlayerPrefs.GetInt("Lock2", 0)==0){
             if(PlayerPrefs.GetInt("MapGuide", 0)==0){
                 guide[2].SetActive(true);
@@ -26,19 +26,23 @@ public class NormalGuide : MonoBehaviour {
             }
         }
 
-        if(PlayerPrefs.GetInt("DepthGuide", 0)==1){
+        if (PlayerPrefs.GetInt("IlluGuide", 0) == 1)
+        {
+            if (PlayerPrefs.GetInt("TurnGuide", 0) == 0)
+            {
+                guide[3].SetActive(true);
+                PlayerPrefs.SetInt("TurnGuide", 1);
+            }
+        }
+
+        if (PlayerPrefs.GetInt("DepthGuide", 0)==1){
             if(PlayerPrefs.GetInt("IlluGuide", 0)==0){
                 guide[1].SetActive(true);
                 PlayerPrefs.SetInt("IlluGuide", 1);
             }
         }
 
-        if(PlayerPrefs.GetInt("IlluGuide", 0)==1){
-            if(PlayerPrefs.GetInt("TurnGuide", 0)==0){
-                guide[3].SetActive(true);               
-                PlayerPrefs.SetInt("TurnGuide", 1);
-            }
-        }
+
 	}
 	
     

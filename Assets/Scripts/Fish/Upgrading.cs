@@ -18,15 +18,20 @@ public class Upgrading : MonoBehaviour {
 	}
 
 	void Awake(){
-		instance = this;	
-	}
+		instance = this;
+
+    }
 	// Use this for initialization
-	void Start () {		
-		valueT = transform.Find ("value").GetComponent<Text> ();
+	void Start () {
+       
+
+        valueT = transform.Find ("value").GetComponent<Text> ();
 		priceT = transform.Find ("price").GetComponent<Text> ();
 
 		UpdateData (1);
-		CheckGold (gold);
+        NormalGuide.Instance.NormalGuideStart();
+        CheckGuideGold(gold);
+        CheckGold (gold);
         FreeUpdate.Instance.UpdateFree();
 	}
 	
@@ -121,14 +126,20 @@ public class Upgrading : MonoBehaviour {
 		if (curGold >= price) {
 			transform.GetComponent<Button> ().interactable = true;
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
-            if(PlayerPrefs.GetInt("DepthGuide", 0)==0){
-                NormalGuide.Instance.guide[0].SetActive(true);
-                PlayerPrefs.SetInt("DepthGuide", 1);
-            }
+           
 		} else {
 			transform.GetComponent<Button> ().interactable = false;
 			transform.GetComponent<Image> ().color = new Color (200 / 255f, 200 / 255f, 200 / 255f, 0.5f);
 		}
 	}
 
+    void CheckGuideGold(long curGold){
+        if(curGold >= price){
+            if (PlayerPrefs.GetInt("DepthGuide", 0) == 0)
+            {
+                NormalGuide.Instance.guide[0].SetActive(true);
+                PlayerPrefs.SetInt("DepthGuide", 1);
+            }
+        }
+    }
 }

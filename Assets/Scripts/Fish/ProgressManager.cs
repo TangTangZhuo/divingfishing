@@ -44,7 +44,7 @@ public class ProgressManager : MonoBehaviour {
 	public void GameOver(){
 		isOver = true;
 		isRunning = false;
-        DepthLine.Instance.gameObject.SetActive(false);
+        //DepthLine.Instance.gameObject.SetActive(false);
 	}
 
 	void LoadScene(){
