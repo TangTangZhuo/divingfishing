@@ -36,12 +36,12 @@ public class IPAManager : MonoBehaviour
 		accumulation.text = "$"+UIManager.UnitChange(long.Parse( PlayerPrefs.GetString ("accumulation", "0")));
 		UpdateIAPState ();
 		UpdateDailyState ();
-		AutoPopVIP ();
+		//AutoPopVIP ();
         AutoPopNoads();
 		//targetGoldPos = transform.parent.Find ("gold").Find ("Image");
 	}
 
-	void AutoPopVIP(){
+    public void AutoPopVIP(){
 		
 		if (PlayerPrefs.GetInt ("AutoPop", 0) == 0) {
 			PlayerPrefs.SetInt ("AutoPop", 1); 
@@ -58,9 +58,13 @@ public class IPAManager : MonoBehaviour
 	}
 
     public void AutoPopNoads(){
-        if(PlayerPrefs.GetInt("PopNoAds",0)==1){
-            OnGoldenNetBtn();
-            PlayerPrefs.SetInt("PopNoAds", 0);
+        if (PlayerPrefs.GetInt("TurnGuideFinish", 0) == 1)
+        {
+            if (PlayerPrefs.GetInt("PopNoAds", 0) == 1)
+            {
+                OnGoldenNetBtn();
+                PlayerPrefs.SetInt("PopNoAds", 0);
+            }
         }
     }
 

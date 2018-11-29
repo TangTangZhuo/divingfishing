@@ -13,7 +13,9 @@ public class TimeManager : MonoBehaviour {
 	DateTime oldDate;
 	FlyGold flyGold;
 
-	int messageCount;
+    bool offlineShowing = false;
+
+    int messageCount;
 	void Awake(){
 		StartCoroutine (GetNetWorkTime ());
 		messageCount = 0;
@@ -28,9 +30,13 @@ public class TimeManager : MonoBehaviour {
 			UpdateGold ();
 		}
 		flyGold = (FlyGold)UnityEngine.Object.FindObjectOfType (typeof(FlyGold));
-	}
+        if (!offlineShowing && PlayerPrefs.GetInt("TurnGuideFinish", 0) == 1)
+        {
+            IPAManager.Instance.AutoPopVIP();
+        }
+    }
 
-	void OnApplicationQuit()
+    void OnApplicationQuit()
 	{
 		//Savee the current system time as a string in the player prefs class
 		PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
@@ -43,9 +49,14 @@ public class TimeManager : MonoBehaviour {
 		PlayerPrefs.SetInt ("EnterGame", 1);
 
         PlayerPrefs.SetInt("TurnTip", 0);
+
+        if (PlayerPrefs.GetInt("TurnGuide", 0) == 1)
+        {
+            PlayerPrefs.SetInt("TurnGuideFinish", 1);
+        }
     }
 
-	void OnApplicationPause(bool isPause){
+    void OnApplicationPause(bool isPause){
 		if (isPause) {
 			PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
 			PlayerPrefs.SetInt ("quitGame", 1);
@@ -53,9 +64,12 @@ public class TimeManager : MonoBehaviour {
             PlayerPrefs.SetInt("TurnTip", 0);
         } else {
 			UpdateGold ();
-            IPAManager.Instance.VIP.SetActive(true);
-		}
-	}
+            if (!offlineShowing && PlayerPrefs.GetInt("TurnGuideFinish", 0) == 1)
+            {
+                IPAManager.Instance.AutoPopVIP();
+            }
+        }
+    }
 		
 
 	int OfflineTime(){
@@ -96,10 +110,12 @@ public class TimeManager : MonoBehaviour {
 				
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
 					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
-				}
+                    offlineShowing = true;
+                }
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
 					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
-				}
+                    offlineShowing = true;
+                }
 				ChangeUIWithVip (GameObject.Find ("PopBG(Clone)").transform, min);
 
 				PlayerPrefs.SetInt ("offlineOnClick", 1);
@@ -110,8 +126,9 @@ public class TimeManager : MonoBehaviour {
 					long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple));
 					OnMessageBoxBtn(gold);
 					PlayerPrefs.SetInt ("quitGame", 0);
-				};
-				MessageBox.doubleR = () => {
+                    IPAManager.Instance.AutoPopVIP();
+                };
+                MessageBox.doubleR = () => {
 					TGSDK.ShowAdScene(TGSDKManager.doubleID);
 
 					if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
@@ -138,8 +155,8 @@ public class TimeManager : MonoBehaviour {
 //						PlayerPrefs.SetInt ("quitGame", 0);
 
 					});
-
-				};
+                    IPAManager.Instance.AutoPopVIP();
+                };
 			}
 		}
 	}

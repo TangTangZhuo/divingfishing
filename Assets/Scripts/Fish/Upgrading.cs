@@ -137,8 +137,16 @@ public class Upgrading : MonoBehaviour {
         if(curGold >= price){
             if (PlayerPrefs.GetInt("DepthGuide", 0) == 0)
             {
-                NormalGuide.Instance.guide[0].SetActive(true);
-                PlayerPrefs.SetInt("DepthGuide", 1);
+                if (PlayerPrefs.GetInt("valueDepth", -17) == -17)
+                {
+                    NormalGuide.Instance.guide[0].SetActive(true);
+                    PlayerPrefs.SetInt("DepthGuide", 1);
+                }
+                else
+                {
+                    PlayerPrefs.SetInt("DepthGuide", 1);
+                }
+
             }
         }
     }
