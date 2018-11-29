@@ -70,7 +70,7 @@ public class ProgressManager : MonoBehaviour {
 	}
 
 	public void onStartButton(){
-        if (PlayerPrefs.GetInt("fingerGuide", 0) == 1)
+        if (PlayerPrefs.GetInt("fingerGuide", 0) == 1 || (PlayerPrefs.GetInt("valueDepth", -17) != -17))
         {
             MultiHaptic.HapticMedium();
             isRunning = true;
@@ -91,8 +91,8 @@ public class ProgressManager : MonoBehaviour {
             SubmarineController.Instance.SynDepth();
             PlayerPrefs.SetInt("quitGame", 0);
             ReShape.Instance.ChangeShape();
-        }else{
-
+        }else
+        {
             HideUI();
             fingerGuide.SetActive(true);
         }

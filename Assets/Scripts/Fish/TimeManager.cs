@@ -13,6 +13,8 @@ public class TimeManager : MonoBehaviour {
 	DateTime oldDate;
 	FlyGold flyGold;
 
+    bool offlineShowing = false;
+
 	int messageCount;
 	void Awake(){
 		StartCoroutine (GetNetWorkTime ());
@@ -28,7 +30,11 @@ public class TimeManager : MonoBehaviour {
 			UpdateGold ();
 		}
 		flyGold = (FlyGold)UnityEngine.Object.FindObjectOfType (typeof(FlyGold));
-	}
+        if (!offlineShowing && PlayerPrefs.GetInt("TurnGuideFinish", 0) == 1)
+        {
+            IPAManager.Instance.AutoPopVIP();
+        }
+    }
 
 	void OnApplicationQuit()
 	{
@@ -43,6 +49,11 @@ public class TimeManager : MonoBehaviour {
 		PlayerPrefs.SetInt ("EnterGame", 1);
 
         PlayerPrefs.SetInt("TurnTip", 0);
+
+        if (PlayerPrefs.GetInt("TurnGuide", 0) == 1)
+        {
+            PlayerPrefs.SetInt("TurnGuideFinish", 1);
+        }
     }
 
 	void OnApplicationPause(bool isPause){
@@ -53,7 +64,10 @@ public class TimeManager : MonoBehaviour {
             PlayerPrefs.SetInt("TurnTip", 0);
         } else {
 			UpdateGold ();
-            IPAManager.Instance.VIP.SetActive(true);
+            if (!offlineShowing && PlayerPrefs.GetInt("TurnGuideFinish", 0)==1)
+            {
+                IPAManager.Instance.AutoPopVIP();
+            }
 		}
 	}
 		
@@ -96,9 +110,11 @@ public class TimeManager : MonoBehaviour {
 				
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
 					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
+                    offlineShowing = true;
 				}
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
 					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
+                    offlineShowing = true;
 				}
 				ChangeUIWithVip (GameObject.Find ("PopBG(Clone)").transform, min);
 
@@ -110,7 +126,8 @@ public class TimeManager : MonoBehaviour {
 					long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple));
 					OnMessageBoxBtn(gold);
 					PlayerPrefs.SetInt ("quitGame", 0);
-				};
+                    IPAManager.Instance.AutoPopVIP();
+                };
 				MessageBox.doubleR = () => {
 					TGSDK.ShowAdScene(TGSDKManager.doubleID);
 
@@ -138,8 +155,8 @@ public class TimeManager : MonoBehaviour {
 //						PlayerPrefs.SetInt ("quitGame", 0);
 
 					});
-
-				};
+                    IPAManager.Instance.AutoPopVIP();
+                };
 			}
 		}
 	}

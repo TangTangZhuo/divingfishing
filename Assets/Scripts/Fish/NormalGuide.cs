@@ -68,6 +68,6 @@ public class NormalGuide : MonoBehaviour {
     {
         guide[3].SetActive(false);
         RotateSelf.Instance.OnTurnBtn();
-       
+        PlayerPrefs.SetInt("TurnGuideFinish", 1);
     }
 }
