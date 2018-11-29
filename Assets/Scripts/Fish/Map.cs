@@ -190,5 +190,11 @@ public class Map : MonoBehaviour {
 		text.transform.DOScale (1.2f, 0.6f).OnComplete(()=>{Destroy(text.gameObject);});
 	} 
 		
-		
+    //地图全解锁
+    public void Map_Crack(){
+        PlayerPrefs.SetInt("Lock2", 1);
+        transform.Find("Level2").Find("lock").gameObject.SetActive(false);
+        PlayerPrefs.SetInt("Lock3", 1);
+        transform.Find("Level3").Find("lock").gameObject.SetActive(false);
+    }
 }

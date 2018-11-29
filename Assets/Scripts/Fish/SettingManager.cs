@@ -6,8 +6,12 @@ using DG.Tweening;
 
 public class SettingManager : MonoBehaviour {
 	bool onSetting = false;
-	// Use this for initialization
-	void Start () {
+    bool onHiding = false;
+    public GameObject map;
+    public GameObject inputDepth;
+    public GameObject[] hideObj;
+    // Use this for initialization
+    void Start () {
 		UpdateState ();
 	}
 	
@@ -28,6 +32,38 @@ public class SettingManager : MonoBehaviour {
 
 	}
 
+    public void OnMapCrackClick(){
+        map.SetActive(true);
+        Map.Instance.Map_Crack();
+        OnSettingClick();
+    }
+
+    public void OnDepthCrackClick(){
+        inputDepth.SetActive(true);
+        OnSettingClick();
+    }
+
+    public void OnHideClick(){
+        if (!onHiding)
+        {
+            foreach (GameObject obj in hideObj)
+            {
+                obj.SetActive(false);
+            }
+            OnSettingClick();
+            onHiding = true;
+        }
+        else{
+            foreach (GameObject obj in hideObj)
+            {
+                obj.SetActive(true);
+
+            }
+            OnSettingClick();
+            onHiding = false;
+        }
+    }
+
 	void UpdateState(){
 		int taptic = PlayerPrefs.GetInt ("Taptic", 1);
 		if (taptic == 0) {
@@ -46,8 +82,8 @@ public class SettingManager : MonoBehaviour {
 		RectTransform rect = transform.parent.GetComponent<RectTransform> ();
 		while(true){
 			if (!onSetting) {				
-				rect.sizeDelta = Vector2.Lerp(rect.sizeDelta,new Vector2(rect.sizeDelta.x,488),Time.deltaTime*10);
-				if (Mathf.Abs( rect.sizeDelta.y - 488)<0.1f) {
+				rect.sizeDelta = Vector2.Lerp(rect.sizeDelta,new Vector2(rect.sizeDelta.x,921),Time.deltaTime*10);
+				if (Mathf.Abs( rect.sizeDelta.y - 921)<0.1f) {
 					onSetting = true;
 					yield break;
 				}

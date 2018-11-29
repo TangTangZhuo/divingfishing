@@ -142,4 +142,28 @@ public class Upgrading : MonoBehaviour {
             }
         }
     }
+
+    public void ChangeDepth(int preDepth)
+    {
+
+        UIManager.Instance.diveDepth = -preDepth;
+
+        if (PlayerPrefs.GetInt("Level", 1) == 1)
+        {
+            PlayerPrefs.SetInt("valueDepth", UIManager.Instance.diveDepth);
+            PlayerPrefs.SetString("priceDepth", price.ToString());
+        }
+        else if (PlayerPrefs.GetInt("Level", 1) == 2)
+        {
+            PlayerPrefs.SetInt("valueDepth2", UIManager.Instance.diveDepth);
+            PlayerPrefs.SetString("priceDepth2", price.ToString());
+        }
+        else if (PlayerPrefs.GetInt("Level", 1) == 3)
+        {
+            PlayerPrefs.SetInt("valueDepth3", UIManager.Instance.diveDepth);
+            PlayerPrefs.SetString("priceDepth3", price.ToString());
+        }
+
+        UpdateData(0);
+    }
 }
