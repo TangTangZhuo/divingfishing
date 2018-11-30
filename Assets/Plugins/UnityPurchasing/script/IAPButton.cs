@@ -207,7 +207,7 @@ namespace UnityEngine.Purchasing
 			if (string.Equals (e.purchasedProduct.definition.id, "gold_net", System.StringComparison.Ordinal)) {
 				PlayerPrefs.SetInt ("golden_net", 1);
 			}
-            if (string.Equals(e.purchasedProduct.definition.id, "no_ads", System.StringComparison.Ordinal))
+            if (string.Equals(e.purchasedProduct.definition.id, "no_ad", System.StringComparison.Ordinal))
             {
                 PlayerPrefs.SetInt("no_ads", 1);
             }

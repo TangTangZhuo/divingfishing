@@ -85,7 +85,7 @@ public class IPAManager : MonoBehaviour
 			//	SubmarineController.Instance.UpdateGoldMutiple ();
 			//	transform.Find ("goldNet").gameObject.SetActive (false);
 			//}
-            if(product.definition.id == "no_ads"){
+            if(product.definition.id == "no_ad"){
                 PlayerPrefs.SetInt("no_ads", 1);
             }
 		}
