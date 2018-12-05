@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameAdaptation : MonoBehaviour {
 	public Transform[] uis;
+	public Transform[] guides;
 	float devWidth = 10.8f;
 	 
 	// Use this for initialization
@@ -20,7 +21,11 @@ public class GameAdaptation : MonoBehaviour {
 			for (int i = 0; i < uis.Length; i++) {
 				uis[i].localPosition -= new Vector3 (0, Screen.currentResolution.height*0.06f, 0);
 			}
+			for (int i = 0; i < guides.Length; i++) {
+				guides [i].localPosition -= new Vector3 (0, Screen.height * 0.0431f, 0);
+			}
 		}
+			
 	}
 	
 	// Update is called once per frame
