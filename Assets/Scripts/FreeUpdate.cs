@@ -46,6 +46,7 @@ public class FreeUpdate : MonoBehaviour {
     void UpdateFreeBtn(string level){
         coroutine = PunchSelf();
         depthButton.interactable = true;
+		Sprite curSprite = depthImage.sprite;
         depthImage.sprite = freePicture;
         depthImage.color = new Color(1, 1, 1, 1);
         price.text = "Free";
@@ -58,6 +59,7 @@ public class FreeUpdate : MonoBehaviour {
                 StopCoroutine(coroutine);
                 TGSDK.AdCloseCallback = (string obj) => {
                     Upgrading.Instance.FreeClick();
+					depthImage.sprite = curSprite;
 					depthButton.onClick.RemoveAllListeners();
 					depthButton.onClick.AddListener(Upgrading.Instance.OnDepthClick);
                 };
