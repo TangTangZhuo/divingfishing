@@ -110,6 +110,8 @@ public class FishGenerate : MonoBehaviour {
 			}
 
 		}
+		//生成下一个等级的鱼
+		GenerateNextFish ();
 	}
 
 	void ChangeFishEye(Transform fish){
@@ -131,6 +133,32 @@ public class FishGenerate : MonoBehaviour {
 				animator.runtimeAnimatorController	= wind5 [Random.Range (0, wind5.Length)];
 			}
 
+		}
+	}
+
+	void GenerateNextFish(){		
+		if (PlayerPrefs.GetInt ("Level", 1) == 1) {
+			int depth = PlayerPrefs.GetInt ("valueDepth", UIManager.Instance.diveDepth);
+			GenerateNextFishByDepth (depth);
+		}else if (PlayerPrefs.GetInt ("Level", 1) == 2) {
+			int depth = PlayerPrefs.GetInt ("valueDepth2", UIManager.Instance.diveDepth);
+			GenerateNextFishByDepth (depth);
+		}else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
+			int depth = PlayerPrefs.GetInt ("valueDepth3", UIManager.Instance.diveDepth);
+			GenerateNextFishByDepth (depth);
+		}
+
+	}
+
+	void GenerateNextFishByDepth(int depth){
+		float screenMid = startPosition.position.x;
+		bool canFindNew = (depth + 24) % (-21) == 0;
+		int indexNew = (depth + 24) / (-21)+1;
+		if (canFindNew) {
+			for (int i = 0; i < 2; i++) {
+				Transform.Instantiate (fish [indexNew], new Vector3 (screenMid + Random.Range (-2, 3), depth - Random.Range (5.0f, 5.5f)), 
+					Quaternion.Euler (0, euler [Random.Range (0, 2)], 0), transform);
+			}
 		}
 	}
 }
