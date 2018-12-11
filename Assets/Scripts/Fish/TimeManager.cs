@@ -99,7 +99,15 @@ public class TimeManager : MonoBehaviour {
 				VipReward ();
 				GameObject popBG = (GameObject)Resources.Load("PopBG");
 				Transform doubleTrans = popBG.transform.Find ("double");
-				doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
+
+				if (Application.systemLanguage == SystemLanguage.English) {
+					doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
+				} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+					doubleTrans.GetComponentInChildren<Text>().text = "双倍收益";
+				}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+					doubleTrans.GetComponentInChildren<Text>().text = "雙倍收益";
+				}
+				//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
 				if (!TGSDK.CouldShowAd (TGSDKManager.doubleID)) {
 					doubleTrans.GetComponent<Button> ().interactable = false;
 				} else {
@@ -109,11 +117,25 @@ public class TimeManager : MonoBehaviour {
 					return;
 				
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
-					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
+					if (Application.systemLanguage == SystemLanguage.English) {
+						MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						MessageBox.Show ("离线收益", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						MessageBox.Show ("離線收益", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
+					}
+					//MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange ((long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple))));
                     offlineShowing = true;
                 }
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 0) {
-					MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
+					//MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
+					if (Application.systemLanguage == SystemLanguage.English) {
+						MessageBox.Show ("OFFLINE", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						MessageBox.Show ("离线收益", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						MessageBox.Show ("離線收益", "$" + UIManager.UnitChange (min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))));
+					}
                     offlineShowing = true;
                 }
 				ChangeUIWithVip (GameObject.Find ("PopBG(Clone)").transform, min);

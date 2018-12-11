@@ -177,7 +177,15 @@ public class SubmarineController : MonoBehaviour {
 
 						GameObject popBG = (GameObject)Resources.Load("PopBG");
 						Transform doubleTrans = popBG.transform.Find("double");
-						doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
+
+						if (Application.systemLanguage == SystemLanguage.English) {
+							doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
+						} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+							doubleTrans.GetComponentInChildren<Text>().text = "双倍收益";
+						}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+							doubleTrans.GetComponentInChildren<Text>().text = "雙倍收益";
+						}
+						//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
 
 						if(PlayerPrefs.GetInt("double",0)>=2){
 							
@@ -186,19 +194,40 @@ public class SubmarineController : MonoBehaviour {
 							//MessageBox.Messagebox.transform.Find("double").DOPunchRotation(new Vector3(1,1,1),1,10,1);
 							int levelIndex = PlayerPrefs.GetInt ("Level", 1);
 							if (levelIndex == 1) {								
-								doubleTrans.GetComponentInChildren<Text>().text = "Bonus×3";
+								//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×3";
+								if (Application.systemLanguage == SystemLanguage.English) {
+									doubleTrans.GetComponentInChildren<Text>().text = "Bonus×3";
+								} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+									doubleTrans.GetComponentInChildren<Text>().text = "三倍收益";
+								}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+									doubleTrans.GetComponentInChildren<Text>().text = "三倍收益";
+								}
 							}
 							if (levelIndex == 2) {
-								doubleTrans.GetComponentInChildren<Text>().text = "Bonus×4";
+								//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×4";
+								if (Application.systemLanguage == SystemLanguage.English) {
+									doubleTrans.GetComponentInChildren<Text>().text = "Bonus×4";
+								} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+									doubleTrans.GetComponentInChildren<Text>().text = "四倍收益";
+								}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+									doubleTrans.GetComponentInChildren<Text>().text = "四倍收益";
+								}
 							}
 							if (levelIndex == 3) {
-								doubleTrans.GetComponentInChildren<Text>().text = "Bonus×5";
+								//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×5";
+								if (Application.systemLanguage == SystemLanguage.English) {
+									doubleTrans.GetComponentInChildren<Text>().text = "Bonus×5";
+								} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+									doubleTrans.GetComponentInChildren<Text>().text = "五倍收益";
+								}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+									doubleTrans.GetComponentInChildren<Text>().text = "五倍收益";
+								}
 							}
 						}
 						//UpdateGoldMutiple ();
 
 						string doubleText = doubleTrans.GetComponentInChildren<Text>().text;
-						if(doubleText == "Bonus×2"){
+						if(doubleText == "Bonus×2"||doubleText == "双倍收益"||doubleText == "雙倍收益"){
 							if (!TGSDK.CouldShowAd (TGSDKManager.doubleID)) {
 								doubleTrans.GetComponent<Button> ().interactable = false;
 							} else {
@@ -214,10 +243,24 @@ public class SubmarineController : MonoBehaviour {
 
 						//弹出结算窗口
 						if (PlayerPrefs.GetInt ("golden_net", 0) == 1) {
-							MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum*2));
+							//MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum*2));
+							if (Application.systemLanguage == SystemLanguage.English) {
+								MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum*2));
+							} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+								MessageBox.Show("你赚取了","$"+ UIManager.UnitChange(goldSum*2));
+							}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+								MessageBox.Show("妳賺取了","$"+ UIManager.UnitChange(goldSum*2));
+							}
 						}
 						if (PlayerPrefs.GetInt ("golden_net", 0) == 0) {
-							MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
+							//MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
+							if (Application.systemLanguage == SystemLanguage.English) {
+								MessageBox.Show("You Earend","$"+ UIManager.UnitChange(goldSum));
+							} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+								MessageBox.Show("你赚取了","$"+ UIManager.UnitChange(goldSum));
+							}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+								MessageBox.Show("妳賺取了","$"+ UIManager.UnitChange(goldSum));
+							}
 						}
 						ChangeUIWithGoldNet(GameObject.Find("PopBG(Clone)").transform);
 
@@ -288,7 +331,7 @@ public class SubmarineController : MonoBehaviour {
                             //GameObject popBG = (GameObject)Resources.Load("PopBG");
                             //Transform doubleTrans = popBG.transform.Find("double");
 
-                            if (doubleText == "Bonus×2"){
+							if (doubleText == "Bonus×2"||doubleText == "双倍收益"||doubleText == "雙倍收益"){
 								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
 									TGSDK.ShowAd(TGSDKManager.doubleID);
 								}
@@ -325,16 +368,16 @@ public class SubmarineController : MonoBehaviour {
 									if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
 										PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
 									}
-									if(doubleName == "Bonus×3"){
+									if(doubleName == "Bonus×3"||doubleName == "三倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*3;
 										curAccumulation = goldSum*3;
-									}else if(doubleName == "Bonus×4"){
+									}else if(doubleName == "Bonus×4"||doubleName == "四倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*4;
 										curAccumulation = goldSum*4;
-									}else if(doubleName == "Bonus×5"){
+									}else if(doubleName == "Bonus×5"||doubleName == "五倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*5;
 										curAccumulation = goldSum*5;
-									}else if(doubleName == "Bonus×2"){
+									}else if(doubleName == "Bonus×2"||doubleName == "双倍收益"||doubleName == "雙倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*2;
 										curAccumulation = goldSum*2;
 									}
@@ -605,10 +648,25 @@ public class SubmarineController : MonoBehaviour {
 
                 if (lastEpicFishName == "")
                 {
-                    lastEpicFishName = FishManager.Instance.epicNames[index];
+                    //lastEpicFishName = FishManager.Instance.epicNames[index];
+					if (Application.systemLanguage == SystemLanguage.English) {
+						lastEpicFishName = FishManager.Instance.epicNames[index];
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						lastEpicFishName = FishManager.Instance.epicNames_CH[index];
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						lastEpicFishName = FishManager.Instance.epicNames_TW[index];
+					}
                 }
 
-                findEpic.EpicPicture (FishManager.Instance.epicNames [index], FishManager.Instance.epicSprites [index], time);
+				if (Application.systemLanguage == SystemLanguage.English) {
+					findEpic.EpicPicture (FishManager.Instance.epicNames [index], FishManager.Instance.epicSprites [index], time);
+				} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+					findEpic.EpicPicture (FishManager.Instance.epicNames_CH [index], FishManager.Instance.epicSprites [index], time);
+				}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+					findEpic.EpicPicture (FishManager.Instance.epicNames_TW [index], FishManager.Instance.epicSprites [index], time);
+				}
+
+                //findEpic.EpicPicture (FishManager.Instance.epicNames [index], FishManager.Instance.epicSprites [index], time);
 
 				epicTrans.DOScale (1, time);
 				epicTrans.DORotate (new Vector3 (0, 0, Random.Range(14,21)), time, 0).OnComplete (() => {

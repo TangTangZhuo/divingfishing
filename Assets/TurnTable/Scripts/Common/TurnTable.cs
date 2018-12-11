@@ -215,7 +215,14 @@ public class TurnTable : MonoBehaviour {
 			multiText.text = m * 100 + "%";
 		} else {
 			multiText.transform.parent.gameObject.SetActive (false);
-			countDown.text = "Boost?";
+			//countDown.text = "Boost?";
+			if (Application.systemLanguage == SystemLanguage.English) {
+				countDown.text = "Boost?";
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				countDown.text = "提速?";
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				countDown.text = "提速?";
+			}
 		}
 	}
 

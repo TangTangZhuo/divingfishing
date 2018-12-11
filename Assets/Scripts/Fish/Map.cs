@@ -108,7 +108,14 @@ public class Map : MonoBehaviour {
 			}
 		} else {
 			long cost = 2000000;
-			MessageBox.Show ("", "It costs "+"$2,000K" +"to unlock" ,2);
+			//MessageBox.Show ("", "It costs "+"$2,000K" +"to unlock" ,2);
+			if (Application.systemLanguage == SystemLanguage.English) {
+				MessageBox.Show ("", "It costs "+"$2,000K " +"to unlock" ,2);
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				MessageBox.Show ("", "花费 "+"$2,000K " +"进行解锁" ,2);
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				MessageBox.Show ("", "花費 "+"$2,000K " +"進行解鎖" ,2);
+			}
 			MessageBox.confim =()=>{
 				long gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
 				if(gold>cost){
@@ -121,7 +128,13 @@ public class Map : MonoBehaviour {
 					transform.Find("Level2").Find("lock").gameObject.SetActive(false);
 					FaceBookGetLog.LogFirstLevel2Event();
 				}else{
-					GenerateText (lv4, "Not enough money！");
+					if (Application.systemLanguage == SystemLanguage.English) {
+						GenerateText (lv4, "Not enough money！");
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						GenerateText (lv4, "没有足够的钱！");
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						GenerateText (lv4, "沒有足夠的錢！");
+					}
 				}					
 			};
 		}
@@ -158,7 +171,14 @@ public class Map : MonoBehaviour {
 			}
 		} else {
 			long cost = 300000000;
-			MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,2);
+			//MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,2);
+			if (Application.systemLanguage == SystemLanguage.English) {
+				MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,2);
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				MessageBox.Show ("", "花费 "+"$300,000K " +"进行解锁" ,2);
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				MessageBox.Show ("", "花費 "+"$300,000K " +"進行解鎖" ,2);
+			}
 			MessageBox.confim =()=>{
 				long gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
 				if(gold>cost){
@@ -171,7 +191,13 @@ public class Map : MonoBehaviour {
 					transform.Find("Level3").Find("lock").gameObject.SetActive(false);
 					FaceBookGetLog.LogFirstLevel3Event();
 				}else{
-					GenerateText (lv4, "Not enough money！");
+					if (Application.systemLanguage == SystemLanguage.English) {
+						GenerateText (lv4, "Not enough money！");
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						GenerateText (lv4, "没有足够的钱！");
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						GenerateText (lv4, "沒有足夠的錢！");
+					}
 				}					
 			};
 		}
@@ -179,7 +205,14 @@ public class Map : MonoBehaviour {
 
 	public void OnLevel4Btn(){
 		MultiHaptic.HapticMedium ();
-		GenerateText (lv4, "To Be Continue...");
+		if (Application.systemLanguage == SystemLanguage.English) {
+			GenerateText (lv4, "To Be Continue...");
+		} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+			GenerateText (lv4, "暂未开放...");
+		}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+			GenerateText (lv4, "暫未開放...");
+		}
+
 	}
 
 	void GenerateText(Transform trans,string content){

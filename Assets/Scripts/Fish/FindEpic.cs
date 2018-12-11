@@ -22,7 +22,7 @@ public class FindEpic : MonoBehaviour {
 		});
 	}
 
-	public void OnBackBtn(){
+	public void OnBackBtn(){		
         if (epicStr == SubmarineController.Instance.lastEpicFishName)
         {
             SubmarineController.Instance.settlePop.SetActive(true);

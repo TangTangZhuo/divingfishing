@@ -9,6 +9,8 @@ public class AreaIllustration : MonoBehaviour {
 	public Sprite[] AreaClickImage;
 	public Sprite[] fishImage;
 	public string[] fishName;
+	//public string[] fishName_Ch;
+	//public string[] fishName_TW;
 	public Sprite[] unusualImage;
 	public Sprite[] unLockImage;
 
@@ -39,13 +41,33 @@ public class AreaIllustration : MonoBehaviour {
 		int index = 0;
 		if (transform.name == "Area1") {
 			index = 0;
+			if (Application.systemLanguage == SystemLanguage.English) {
+				Illustration.Instance.fishName = fishName;
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				Illustration.Instance.fishName = FishTranslate.Instance.fishName_Ch1;
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				Illustration.Instance.fishName = FishTranslate.Instance.fishName_TW1;
+			}
 		}if (transform.name == "Area2") {
 			index = 10;
+			if (Application.systemLanguage == SystemLanguage.English) {
+				Illustration.Instance.fishName = fishName;
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				Illustration.Instance.fishName = FishTranslate.Instance.fishName_Ch2;
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				Illustration.Instance.fishName = FishTranslate.Instance.fishName_TW2;
+			}
 		}if (transform.name == "Area3") {
 			index = 20;
+			if (Application.systemLanguage == SystemLanguage.English) {
+				Illustration.Instance.fishName = fishName;
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				Illustration.Instance.fishName = FishTranslate.Instance.fishName_Ch3;
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				Illustration.Instance.fishName = FishTranslate.Instance.fishName_TW3;
+			}
 		}
 		Illustration.Instance.fishImage = fishImage;
-		Illustration.Instance.fishName = fishName;
 		Illustration.Instance.unusualImage = unusualImage;
 		Illustration.Instance.unLockImage = unLockImage;
 		Illustration.Instance.IllUpdate (index);
