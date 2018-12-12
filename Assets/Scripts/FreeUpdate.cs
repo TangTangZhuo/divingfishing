@@ -49,7 +49,14 @@ public class FreeUpdate : MonoBehaviour {
 		Sprite curSprite = depthImage.sprite;
         depthImage.sprite = freePicture;
         depthImage.color = new Color(1, 1, 1, 1);
-        price.text = "Free";
+        //price.text = "Free";
+		if (Application.systemLanguage == SystemLanguage.English) {
+			price.text = "Free";
+		} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+			price.text = "免费";
+		}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+			price.text = "免費";
+		}
         StartCoroutine(coroutine);
         PlayerPrefs.SetInt(level, 0);
         depthButton.onClick.RemoveAllListeners();
@@ -65,7 +72,13 @@ public class FreeUpdate : MonoBehaviour {
                 };
             }
             else{
-                TipPop.GenerateTip("no ads", 0.5f);
+				if (Application.systemLanguage == SystemLanguage.English) {
+					TipPop.GenerateTip("no ads", 0.5f);
+				} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+					TipPop.GenerateTip("广告不可播放", 0.5f);
+				}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+					TipPop.GenerateTip("廣告不可播放", 0.5f);
+				}
             }
         });
     }

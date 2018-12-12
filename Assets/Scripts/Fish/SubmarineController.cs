@@ -279,7 +279,7 @@ public class SubmarineController : MonoBehaviour {
                             FreeDepthWithLevel();
 
                             //如果倒计时结束则播放插屏，（无VIP和Noads)
-                            if (PlayerPrefs.GetInt("fishingpass",0)==0 || PlayerPrefs.GetInt("no_ads", 0) == 0)
+                            if (PlayerPrefs.GetInt("fishingpass",0)==0 && PlayerPrefs.GetInt("no_ads", 0) == 0)
                             {
                                 if (PlayerPrefs.GetInt("ForceReady", 0) == 1)
                                 {

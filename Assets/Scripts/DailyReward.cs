@@ -59,7 +59,13 @@ public class DailyReward : MonoBehaviour {
                 };
                 
             }else{
-                TipPop.GenerateTip("no ads", 0.5f);
+				if (Application.systemLanguage == SystemLanguage.English) {
+					TipPop.GenerateTip("no ads", 0.5f);
+				} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+					TipPop.GenerateTip("广告不可播放", 0.5f);
+				}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+					TipPop.GenerateTip("廣告不可播放", 0.5f);
+				}
             }
         }
 	}

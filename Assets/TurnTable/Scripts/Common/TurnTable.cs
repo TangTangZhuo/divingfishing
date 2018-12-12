@@ -73,7 +73,7 @@ public class TurnTable : MonoBehaviour {
 	//点击广告旋转按钮
 	public void OnTurnBtn(){
 		bool completeAD = false;
-		if (TGSDK.CouldShowAd (TGSDKManager.turnID)) {
+		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) {
 			TGSDK.ShowAd (TGSDKManager.turnID);
 
 			turnBtn.SetActive (false);
@@ -100,7 +100,13 @@ public class TurnTable : MonoBehaviour {
 			};
 
 		} else {
-			TipPop.GenerateTip ("no ads", 0.5f);
+			if (Application.systemLanguage == SystemLanguage.English) {
+				TipPop.GenerateTip ("no ads", 0.5f,new Color(105,183,221));
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				TipPop.GenerateTip ("广告不可播放", 0.5f,new Color(105,183,221));
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				TipPop.GenerateTip ("廣告不可播放", 0.5f,new Color(105,183,221));
+			}
 		}
 
 //		rotation.RotateThis();
@@ -111,7 +117,7 @@ public class TurnTable : MonoBehaviour {
     //延长转盘奖励时间
     public void OnContinueBtn(){
         bool completeAD = false;
-        if (TGSDK.CouldShowAd(TGSDKManager.turnID))
+		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) 
         {
             gameObject.SetActive(true);
             turnContinue.SetActive(false);
@@ -146,7 +152,13 @@ public class TurnTable : MonoBehaviour {
         }
         else
         {
-            TipPop.GenerateTip("no ads", 0.5f,Color.gray);
+			if (Application.systemLanguage == SystemLanguage.English) {
+				TipPop.GenerateTip ("no ads", 0.5f,new Color(105,183,221));
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				TipPop.GenerateTip ("广告不可播放", 0.5f,new Color(105,183,221));
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				TipPop.GenerateTip ("廣告不可播放", 0.5f,new Color(105,183,221));
+			}
         }
         //gameObject.SetActive(true);
         //turnContinue.SetActive(false);
