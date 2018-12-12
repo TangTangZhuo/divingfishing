@@ -90,6 +90,15 @@ public class DailyReward : MonoBehaviour {
 
 		freeBtn.transform.Find("Text").GetComponent<Text>().text = freeRward+"/10";
 
+		if (freeRward == 10) {			
+			if (Application.systemLanguage == SystemLanguage.English) {
+				freeBtn.transform.Find ("Text").GetComponent<Text> ().text = "CLAIM";
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				freeBtn.transform.Find ("Text").GetComponent<Text> ().text = "领取";
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				freeBtn.transform.Find ("Text").GetComponent<Text> ().text = "領取";
+			}
+		}
 		//if (freeRward < 5) {
 		//	freeBtn.interactable = false;
 		//}
