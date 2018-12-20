@@ -49,6 +49,7 @@ public class TurnTable : MonoBehaviour {
 		
 		rotation.RotationFinish +=()=>{ 
 			RotateFinish ();
+			rotation.RotateLittle ();
 		};
 		needle.CheckNeedleCallBack += (Collider2D coll) => {
 			CheckNeedle(coll);
@@ -75,7 +76,6 @@ public class TurnTable : MonoBehaviour {
 		bool completeAD = false;
 		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) {
 			TGSDK.ShowAd (TGSDKManager.turnID);
-
 			turnBtn.SetActive (false);
 			backBtn.SetActive (false);
 
@@ -89,7 +89,7 @@ public class TurnTable : MonoBehaviour {
 
 				}
 			};
-			TGSDK.AdCompleteCallback = (string obj) => {
+			TGSDK.AdRewardSuccessCallback = (string obj) => {
 				completeAD = true;
 			};
 			TGSDK.AdRewardFailedCallback = (string obj) => {
@@ -139,7 +139,7 @@ public class TurnTable : MonoBehaviour {
 
                 }
             };
-            TGSDK.AdCompleteCallback = (string obj) => {
+			TGSDK.AdRewardSuccessCallback = (string obj) => {
                 completeAD = true;
             };
             TGSDK.AdRewardFailedCallback = (string obj) => {

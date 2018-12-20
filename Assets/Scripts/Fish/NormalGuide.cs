@@ -5,6 +5,7 @@ using UnityEngine;
 public class NormalGuide : MonoBehaviour {
 
     public GameObject[] guide;
+	public bool turnGuide = false;
 
 
     private static NormalGuide instance;
@@ -26,12 +27,16 @@ public class NormalGuide : MonoBehaviour {
             }
         }
 
+
+
+
         if (PlayerPrefs.GetInt("IlluGuide", 0) == 1)
         {
             if (PlayerPrefs.GetInt("TurnGuide", 0) == 0)
             {
                 guide[3].SetActive(true);
                 PlayerPrefs.SetInt("TurnGuide", 1);
+				turnGuide = true;
             }
         }
 

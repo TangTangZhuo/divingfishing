@@ -264,6 +264,15 @@ public class SubmarineController : MonoBehaviour {
 						}
 						ChangeUIWithGoldNet(GameObject.Find("PopBG(Clone)").transform);
 
+
+						if (PlayerPrefs.GetInt ("GoodGameGuide", 0) == 0) {
+							Debug.Log("StartGoodGameGuide");
+							if(NormalGuide.Instance.turnGuide){
+								GoodGuide.GoodGameGuide ();
+								PlayerPrefs.SetInt ("GoodGameGuide", 1);
+								Debug.Log("EndGoodGameGuide");
+							}
+						}
                        
                         StartCoroutine( FindEpicFish (1));
 

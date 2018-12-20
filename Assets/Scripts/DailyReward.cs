@@ -41,7 +41,7 @@ public class DailyReward : MonoBehaviour {
 
 
     public void GetFreeDailyReward()
-    {
+	{	
         freeRward = PlayerPrefs.GetInt("FreeRward", 0);
         if (freeRward >= 10)
         {
@@ -52,11 +52,17 @@ public class DailyReward : MonoBehaviour {
             if (TGSDK.CouldShowAd(TGSDKManager.DailyID))
             {
                 TGSDK.ShowAd(TGSDKManager.DailyID);
-                TGSDK.AdCompleteCallback = (string msg) =>
+				bool adReward = false;
+				TGSDK.AdCloseCallback = (string msg) =>
                 {
-                    PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
-                    UpdateDailyState();
+					if(adReward){
+                   		PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
+                    	UpdateDailyState();
+					}
                 };
+				TGSDK.AdRewardSuccessCallback = (string obj) => {
+					adReward = true;
+				};
                 
             }else{
 				if (Application.systemLanguage == SystemLanguage.English) {

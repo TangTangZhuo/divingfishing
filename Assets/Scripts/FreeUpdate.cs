@@ -63,13 +63,20 @@ public class FreeUpdate : MonoBehaviour {
         depthButton.onClick.AddListener(() => {			
             if(TGSDK.CouldShowAd(TGSDKManager.FreeId)){
                 TGSDK.ShowAd(TGSDKManager.FreeId);
+				bool adReward = false;
                 StopCoroutine(coroutine);
                 TGSDK.AdCloseCallback = (string obj) => {
-                    Upgrading.Instance.FreeClick();
-					depthImage.sprite = curSprite;
-					depthButton.onClick.RemoveAllListeners();
-					depthButton.onClick.AddListener(Upgrading.Instance.OnDepthClick);
+					if(adReward){
+                    	Upgrading.Instance.FreeClick();
+						depthImage.sprite = curSprite;
+						depthButton.onClick.RemoveAllListeners();
+						depthButton.onClick.AddListener(Upgrading.Instance.OnDepthClick);
+					}
                 };
+				TGSDK.AdRewardSuccessCallback = (string obj) => {
+					adReward = true;
+				};
+
             }
             else{
 				if (Application.systemLanguage == SystemLanguage.English) {

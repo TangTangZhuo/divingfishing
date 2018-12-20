@@ -21,8 +21,11 @@ public class IPAManager : MonoBehaviour
 	//Transform targetGoldPos;
 
 	bool onClicking = false;
-	private static IPAManager instance;
 
+	public GameObject passDaily;
+	public Transform freeDaily;
+
+	private static IPAManager instance;
 	public static IPAManager Instance {
 		get{ return instance; }
 	}
@@ -201,11 +204,14 @@ public class IPAManager : MonoBehaviour
 
 	public void UpdateDailyState(){
 		if (PlayerPrefs.GetInt ("NewDay", 0) == 1) {
-			transform.Find ("Daily").gameObject.SetActive (true);
+			//transform.Find ("Daily").gameObject.SetActive (true);
+			passDaily.SetActive (true);
 			Debug.Log ("newday");
 		}
 		if (PlayerPrefs.GetInt ("NewDay", 0) == 0) {
-			transform.Find ("Daily").gameObject.SetActive (false);
+			//transform.Find ("Daily").gameObject.SetActive (false);
+			freeDaily.position = passDaily.transform.position- new Vector3(0,135,0);
+			passDaily.SetActive(false);
 			Debug.Log ("notnewday");
 		}
 	}

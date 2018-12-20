@@ -48,6 +48,7 @@ public class ProgressManager : MonoBehaviour {
 	}
 
 	void LoadScene(){
+		PlayerPrefs.SetInt ("Level", 4);
 		int levelIndex = PlayerPrefs.GetInt ("Level", 1);
 		if (levelIndex == 1) {
 			SceneManager.LoadScene ("Level1");
@@ -57,6 +58,9 @@ public class ProgressManager : MonoBehaviour {
 		}
 		if (levelIndex == 3) {
 			SceneManager.LoadScene ("Level3");
+		}
+		if (levelIndex == 4) {
+			SceneManager.LoadScene ("Level4");
 		}
 	}
 
