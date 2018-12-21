@@ -193,7 +193,7 @@ public class SubmarineController : MonoBehaviour {
 							//doubleTrans.DOPunchRotation(new Vector3(100,100,100),1,10,1);
 							//MessageBox.Messagebox.transform.Find("double").DOPunchRotation(new Vector3(1,1,1),1,10,1);
 							int levelIndex = PlayerPrefs.GetInt ("Level", 1);
-							if (levelIndex == 1) {								
+							if (levelIndex == 1||levelIndex == 4) {								
 								//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×3";
 								if (Application.systemLanguage == SystemLanguage.English) {
 									doubleTrans.GetComponentInChildren<Text>().text = "Bonus×3";
@@ -438,6 +438,8 @@ public class SubmarineController : MonoBehaviour {
 			FaceBookGetLog.LogFinishLevel1Event();
 		} else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
 			FaceBookGetLog.LogFinishLevel1Event();
+		}else if (PlayerPrefs.GetInt ("Level", 1) == 4) {
+			FaceBookGetLog.LogFinishLevelChristmasEvent();
 		}
 	}
 
@@ -455,6 +457,10 @@ public class SubmarineController : MonoBehaviour {
         {
             PlayerPrefs.SetInt("freeDepth3", PlayerPrefs.GetInt("freeDepth3", 0) + 1);
         }
+		else if (PlayerPrefs.GetInt("Level", 1) == 4)
+		{
+			PlayerPrefs.SetInt("freeDepth4", PlayerPrefs.GetInt("freeDepth4", 0) + 1);
+		}
     }
 
 	void ChangeUIWithGoldNet(Transform popBG){
@@ -729,7 +735,18 @@ public class SubmarineController : MonoBehaviour {
 		fishDic.Add ("fish29(Clone)", 3095640);
 		fishDic.Add ("fish30(Clone)", 4179110);
 
-		AddUnusual (30);
+		fishDic.Add ("fish31(Clone)", 520);
+		fishDic.Add ("fish32(Clone)", 730);
+		fishDic.Add ("fish33(Clone)", 1150);
+		fishDic.Add ("fish34(Clone)", 2100);
+		fishDic.Add ("fish35(Clone)", 3050);
+		fishDic.Add ("fish36(Clone)", 4400);
+		fishDic.Add ("fish37(Clone)", 7100);
+		fishDic.Add ("fish38(Clone)", 10000);
+		fishDic.Add ("fish39(Clone)", 16000);
+		fishDic.Add ("fish40(Clone)", 25000);
+
+		AddUnusual (40);
 	}
 
 	void InitExpDic(){
@@ -764,7 +781,18 @@ public class SubmarineController : MonoBehaviour {
 		expDic.Add ("fish29(Clone)", 29);
 		expDic.Add ("fish30(Clone)", 30);
 
-		AddUnusualExp (30);
+		expDic.Add ("fish31(Clone)", 1);
+		expDic.Add ("fish32(Clone)", 2);
+		expDic.Add ("fish33(Clone)", 3);
+		expDic.Add ("fish34(Clone)", 4);
+		expDic.Add ("fish35(Clone)", 5);
+		expDic.Add ("fish36(Clone)", 6);
+		expDic.Add ("fish37(Clone)", 7);
+		expDic.Add ("fish38(Clone)", 8);
+		expDic.Add ("fish39(Clone)", 9);
+		expDic.Add ("fish40(Clone)", 10);
+
+		AddUnusualExp (40);
 	}
 
 

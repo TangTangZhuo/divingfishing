@@ -23,6 +23,15 @@ public class FaceBookGetLog {
 		Debug.Log ("LogFirstLevel3Event");
 	}
 
+	public static void LogFirstLevelChristmasEvent () {
+		FB.LogAppEvent(
+			"FirstLevelChristmas",
+			default(float?),
+			null
+		);
+		Debug.Log ("LogFirstLevelChristmasEvent");
+	}
+
 	public static void LogFinishLevel1Event () {
 		FB.LogAppEvent(
 			"CompleteLevel1",
@@ -48,5 +57,14 @@ public class FaceBookGetLog {
 			null
 		);
 		Debug.Log ("LogFinishLevel3Event");
+	}
+
+	public static void LogFinishLevelChristmasEvent () {
+		FB.LogAppEvent(
+			"CompleteLevelChristmas",
+			default(float?),
+			null
+		);
+		Debug.Log ("LogFinishLevelChristmasEvent");
 	}
 }

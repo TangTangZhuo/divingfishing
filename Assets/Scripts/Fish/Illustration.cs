@@ -76,6 +76,38 @@ public class Illustration : MonoBehaviour {
 		}
 	}
 
+
+	public void ChristmasIllUpdate(int index){
+		for (int i = 0; i < scrollContent.childCount; i++) {
+			Destroy (scrollContent.GetChild (i).gameObject);
+		}
+		//int index = 0;
+
+		for (int i = 0; i < fishImage.Length; i++) {
+
+			Transform item = Transform.Instantiate (fishItem, scrollContent);
+			if (PlayerPrefs.GetInt ("fish" + (i + 1+index), 0) == 1) {
+				item.Find ("name").GetComponent<Text> ().text = fishName [i];
+				item.Find ("image").GetComponent<Image> ().sprite = fishImage [i];
+			} else {
+				item.Find ("name").GetComponent<Text> ().text = "???";
+				item.Find ("image").GetComponent<Image> ().sprite = unLockImage [i];
+
+			}
+			if (PlayerPrefs.GetInt ("unusual" + (i + 1+index), 0) == 1) {
+				item.Find ("unusual").GetComponent<Image> ().sprite = unusualImage [i];
+			} else {
+				item.Find ("unusual").GetComponent<Image> ().enabled = false;
+			}
+		}
+
+		for (int i = 0; i < 2; i++) {
+			GameObject obj = new GameObject ("go");
+			obj.AddComponent<RectTransform> ();
+			obj.transform.SetParent (scrollContent);
+		}
+	}
+
 	public void OnIllBtnClick(){
 		if (!isShow) {
 			MultiHaptic.HapticMedium ();

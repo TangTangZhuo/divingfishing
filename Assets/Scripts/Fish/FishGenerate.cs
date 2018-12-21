@@ -14,6 +14,8 @@ public class FishGenerate : MonoBehaviour {
 	RuntimeAnimatorController[] wind4;
 	RuntimeAnimatorController[] wind5;
 
+	public Transform snowman;
+
 	int typeDistance;
 	int fishIndex;
 	int[] euler;
@@ -59,6 +61,9 @@ public class FishGenerate : MonoBehaviour {
 				isBig = false;
 				fishNumber = 10;
 			}
+			if (int.Parse (fishName.Split (new char []{'h'}) [1]) > 30) {
+				isBig = true;
+			}
 			for (int num = 0; num < fishNumber; num++) {
 				
 				Transform fishNormal = Transform.Instantiate (fish[fishIndex], new Vector3 (screenMid + Random.Range (-2, 3), baseGeneratePosy + Random.Range (-5, 6)), 
@@ -98,7 +103,10 @@ public class FishGenerate : MonoBehaviour {
 						Quaternion.Euler (0, euler [Random.Range (0, 2)], 0), transform);
 					ChangeFishEye (fishHighLevel);
 				}
-
+				if (Random.Range (0, 100) == 10&&PlayerPrefs.GetInt ("Level", 1) == 4) {					
+					Transform.Instantiate (snowman, new Vector3 (screenMid + Random.Range (-2, 3), baseGeneratePosy + Random.Range (-5, 6)), 
+						Quaternion.Euler (0, euler [Random.Range (0, 2)], 0), transform);					
+				}
 			}
 			i -= typeDistance;
 			counter++;
@@ -145,6 +153,9 @@ public class FishGenerate : MonoBehaviour {
 			GenerateNextFishByDepth (depth);
 		}else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
 			int depth = PlayerPrefs.GetInt ("valueDepth3", UIManager.Instance.diveDepth);
+			GenerateNextFishByDepth (depth);
+		}else if (PlayerPrefs.GetInt ("Level", 1) == 4) {
+			int depth = PlayerPrefs.GetInt ("valueDepth4", UIManager.Instance.diveDepth);
 			GenerateNextFishByDepth (depth);
 		}
 

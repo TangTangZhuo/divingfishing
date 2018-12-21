@@ -41,6 +41,10 @@ public class FreeUpdate : MonoBehaviour {
         {
             UpdateFreeBtn("freeDepth3");
         }
+		if (PlayerPrefs.GetInt("Level", 1) == 4 && PlayerPrefs.GetInt("freeDepth3", 0) >= 5)
+		{
+			UpdateFreeBtn("freeDepth4");
+		}
     }
 
     void UpdateFreeBtn(string level){

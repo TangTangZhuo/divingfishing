@@ -59,6 +59,7 @@ public class DivingExperience : MonoBehaviour {
 		PlayerPrefs.SetInt ("Level", 1);
 		PlayerPrefs.SetInt ("Lock2", 0);
 		PlayerPrefs.SetInt ("Lock3", 0);
+		PlayerPrefs.SetInt ("LockChristmas", 0);
 		PlayerPrefs.SetInt ("valueDepth", -17);
 		PlayerPrefs.SetInt ("valueDepth2", -17);
 		PlayerPrefs.SetInt ("valueDepth3", -17);

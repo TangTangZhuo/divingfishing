@@ -15,6 +15,8 @@ public class ProgressManager : MonoBehaviour {
 
     public GameObject fingerGuide;
 
+	public FishShip fishShip;
+
 	private static ProgressManager instance;
 	public static ProgressManager Instance{
 		get{return instance;}
@@ -44,11 +46,13 @@ public class ProgressManager : MonoBehaviour {
 	public void GameOver(){
 		isOver = true;
 		isRunning = false;
+		if (fishShip) {
+			fishShip.BodyReady ();
+		}
         //DepthLine.Instance.gameObject.SetActive(false);
 	}
 
 	void LoadScene(){
-		PlayerPrefs.SetInt ("Level", 4);
 		int levelIndex = PlayerPrefs.GetInt ("Level", 1);
 		if (levelIndex == 1) {
 			SceneManager.LoadScene ("Level1");
@@ -96,6 +100,10 @@ public class ProgressManager : MonoBehaviour {
             PlayerPrefs.SetInt("quitGame", 0);
             ReShape.Instance.ChangeShape();
 			AudioManager.Instance.waterAudio.SetActive (false);
+			if (fishShip) {
+				fishShip.MouthOC ();
+				fishShip.BodyStart ();
+			}
         }else{
 
             HideUI();

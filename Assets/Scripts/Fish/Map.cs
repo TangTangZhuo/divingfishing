@@ -10,6 +10,7 @@ public class Map : MonoBehaviour {
 	public Text noLeveltext;
 	public Transform[] levelPos;
 	public Transform lv4;
+	public Transform lvChristmasPos;
 
 	public Transform path;
 	public Transform point;
@@ -28,7 +29,9 @@ public class Map : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {		
+	void Start () {	
+//		PlayerPrefs.SetInt ("LockChristmas",0);
+//		PlayerPrefs.SetInt ("christmasGuid", 0);	
 		shipMark.position = levelPos [PlayerPrefs.GetInt ("Level", 1) - 1].position;
 		pathPoint = new Transform[path.childCount];
 		for (int i = 0; i < path.childCount; i++) {
@@ -39,6 +42,12 @@ public class Map : MonoBehaviour {
 		}
 		if (PlayerPrefs.GetInt ("Lock3", 0) == 1) {
 			transform.Find("Level3").Find("lock").gameObject.SetActive(false);
+		}
+		if (PlayerPrefs.GetInt ("LockChristmas", 0) == 1) {
+			transform.Find("LevelChristmas").Find("lock").gameObject.SetActive(false);
+		}
+		if(PlayerPrefs.GetInt ("Level", 1)==4){
+			shipMark.position = lvChristmasPos.position;
 		}
 	}
 
@@ -69,11 +78,17 @@ public class Map : MonoBehaviour {
 				pathV3 [i] = pathPoint [v3Count - i -1].position;
 			}
 			Destroy (point.gameObject);
-			shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete(()=>{
+			if (level != 4) {
+				shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
+					PlayerPrefs.SetInt ("Level", 1);
+					PlayerPrefs.SetInt ("EnterGame", 1);
+					SceneManager.LoadScene ("Level1");
+				});
+			} else {
 				PlayerPrefs.SetInt ("Level", 1);
 				PlayerPrefs.SetInt ("EnterGame", 1);
 				SceneManager.LoadScene ("Level1");
-			});
+			}
 		}
 	}
 
@@ -100,11 +115,17 @@ public class Map : MonoBehaviour {
 					}
 				}
 				Destroy (point.gameObject);
-				shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
+				if (level != 4) {
+					shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
+						PlayerPrefs.SetInt ("Level", 2);
+						PlayerPrefs.SetInt ("EnterGame", 1);
+						SceneManager.LoadScene ("Level2");
+					});
+				} else {
 					PlayerPrefs.SetInt ("Level", 2);
 					PlayerPrefs.SetInt ("EnterGame", 1);
 					SceneManager.LoadScene ("Level2");
-				});
+				}
 			}
 		} else {
 			long cost = 2000000;
@@ -163,11 +184,17 @@ public class Map : MonoBehaviour {
 					}
 				}
 				Destroy (point.gameObject);
-				shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
+				if (level != 4) {
+					shipMark.DOPath (pathV3, 1, PathType.Linear, PathMode.TopDown2D, 10, null).OnComplete (() => {
+						PlayerPrefs.SetInt ("Level", 3);
+						PlayerPrefs.SetInt ("EnterGame", 1);
+						SceneManager.LoadScene ("Level3");
+					});
+				} else {
 					PlayerPrefs.SetInt ("Level", 3);
 					PlayerPrefs.SetInt ("EnterGame", 1);
 					SceneManager.LoadScene ("Level3");
-				});
+				}
 			}
 		} else {
 			long cost = 300000000;
@@ -197,6 +224,52 @@ public class Map : MonoBehaviour {
 						GenerateText (lv4, "没有足够的钱！");
 					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
 						GenerateText (lv4, "沒有足夠的錢！");
+					}
+				}					
+			};
+		}
+	}
+
+	public void OnLevelChristmasBtn(){
+		if (PlayerPrefs.GetInt ("LockChristmas", 0) == 1) {
+			int level = PlayerPrefs.GetInt ("Level", 1);
+			if (level != 4) {
+				MultiHaptic.HapticMedium ();
+				shipMark.DOMove (lvChristmasPos.position,1,false).OnComplete (() => {
+					PlayerPrefs.SetInt ("Level", 4);
+					PlayerPrefs.SetInt ("EnterGame", 1);
+					SceneManager.LoadScene ("Level4");
+				});
+			}
+		} else {
+			if (Application.systemLanguage == SystemLanguage.English) {
+				MessageBox.Show ("", "77 meters in depth to unlock" ,2);
+			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+				MessageBox.Show ("", "深度达到77米可进行解锁" ,2);
+			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+				MessageBox.Show ("", "深度達到77米可進行解鎖" ,2);
+			}
+			MessageBox.confim =()=>{				
+				int depth = PlayerPrefs.GetInt ("valueDepth", UIManager.Instance.diveDepth);
+				if(depth<=-77){										
+					PlayerPrefs.SetInt ("LockChristmas",1);
+					transform.Find("LevelChristmas").Find("lock").gameObject.SetActive(false);
+					PlayerPrefs.SetInt ("christmasGuid", 1);
+					FaceBookGetLog.LogFirstLevelChristmasEvent();
+					if (Application.systemLanguage == SystemLanguage.English) {
+						TipPop.GenerateTip("Successfully unlocked",0.5f);
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						TipPop.GenerateTip("解锁成功",0.5f);
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						TipPop.GenerateTip("解鎖成功",0.5f);
+					}
+				}else{
+					if (Application.systemLanguage == SystemLanguage.English) {
+						GenerateText (lv4, "Not enough depth！");
+					} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
+						GenerateText (lv4, "深度没有到达77米！");
+					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
+						GenerateText (lv4, "深度沒有到達77米！");
 					}
 				}					
 			};
