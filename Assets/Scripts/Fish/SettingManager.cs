@@ -6,15 +6,28 @@ using DG.Tweening;
 
 public class SettingManager : MonoBehaviour {
 	bool onSetting = false;
+
+	public AudioSource bg1;
+	public AudioSource bg2;
 	// Use this for initialization
 	void Start () {
 		UpdateState ();
+		int audio = PlayerPrefs.GetInt ("Audio", 1);
+		if (audio == 0) {	
+			if (bg1) {
+				bg1.mute = true;
+				bg2.mute = true;
+			}
+		}
+		if (audio == 1) {			
+			GameObject.Find ("AudioManager").GetComponent<AudioSource> ().mute = false;
+			GameObject.Find ("waterAudio").GetComponent<AudioSource> ().mute = false;
+		}
+		UpdateAudioState ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+
 
 	public void OnTapticClick(){
 		int taptic = PlayerPrefs.GetInt ("Taptic", 1);
@@ -32,9 +45,13 @@ public class SettingManager : MonoBehaviour {
 		int audio = PlayerPrefs.GetInt ("Audio", 1);
 		if (audio == 0) {
 			PlayerPrefs.SetInt ("Audio", 1);
+			GameObject.Find ("AudioManager").GetComponent<AudioSource> ().mute = false;
+			GameObject.Find ("waterAudio").GetComponent<AudioSource> ().mute = false;
 		}
 		if (audio == 1) {
 			PlayerPrefs.SetInt ("Audio", 0);
+			GameObject.Find ("AudioManager").GetComponent<AudioSource> ().mute = true;
+			GameObject.Find ("waterAudio").GetComponent<AudioSource> ().mute = true;
 		}
 		UpdateAudioState ();
 

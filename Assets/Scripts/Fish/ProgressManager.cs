@@ -104,12 +104,25 @@ public class ProgressManager : MonoBehaviour {
 				fishShip.MouthOC ();
 				fishShip.BodyStart ();
 			}
+			if (PlayerPrefs.GetInt ("fishingpass", 0) == 0 && PlayerPrefs.GetInt ("no_ads", 0) == 0) {				
+				StartCoroutine (ChangeOffset ());
+			}
         }else{
 
             HideUI();
             fingerGuide.SetActive(true);
         }
 
+	}
+
+	IEnumerator ChangeOffset(){
+		while (true) {
+			Camera.main.GetComponent<CameraController> ().offset = Mathf.Lerp (1.6f, 0.7f, Time.deltaTime);
+			if (Camera.main.GetComponent<CameraController> ().offset < 0.8f) {
+				yield break;
+			}
+			yield return null;
+		}
 	}
 
 	void HideUI(){

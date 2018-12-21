@@ -67,12 +67,16 @@ public class NetTop : MonoBehaviour {
 		if (fish.name.StartsWith ("fish")) {
 			text = Text.Instantiate (score, fish.position, score.transform.rotation, scoreParent);
 			text.color = Color.white;
-			GameObject go = Instantiate (AudioManager.Instance.fishAudio);
-			Destroy (go, 1f);
+			if (PlayerPrefs.GetInt ("Audio", 1) == 1) {
+				GameObject go = Instantiate (AudioManager.Instance.fishAudio);
+				Destroy (go, 1f);
+			}
 		} else {
 			text = Text.Instantiate (specialScore, fish.position, score.transform.rotation, scoreParent);
-			GameObject go = Instantiate (AudioManager.Instance.epicAudio);
-			Destroy (go, 1f);
+			if (PlayerPrefs.GetInt ("Audio", 1) == 1) {
+				GameObject go = Instantiate (AudioManager.Instance.epicAudio);
+				Destroy (go, 1f);
+			}
 		}
 		text.text = "$"+((int)((submarine.fishDic [fish.name]/2)*submarine.rebirthMulti*submarine.turnMulti)).ToString();
 		text.transform.position = Camera.main.WorldToScreenPoint (fish.position)+offset;

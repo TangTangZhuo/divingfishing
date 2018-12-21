@@ -626,12 +626,20 @@ public class SubmarineController : MonoBehaviour {
 		Text text = score;
 		if (fish.name.StartsWith ("fish")) {
 			text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
-			GameObject go = Instantiate (AudioManager.Instance.fishAudio);
-			Destroy (go, 1f);
+			if (PlayerPrefs.GetInt ("Audio", 1) == 1) {
+				
+					GameObject go = Instantiate (AudioManager.Instance.fishAudio);
+					Destroy (go, 1f);
+
+			}
 		} else {
 			text = Text.Instantiate (specialScore, netParent.position, score.transform.rotation, scoreParent);
-			GameObject go = Instantiate (AudioManager.Instance.epicAudio);
-			Destroy (go, 1f);
+			if (PlayerPrefs.GetInt ("Audio", 1) == 1) {
+				
+					GameObject go = Instantiate (AudioManager.Instance.epicAudio);
+					Destroy (go, 1f);
+
+			}
 		}
 		//text = Text.Instantiate (score, netParent.position, score.transform.rotation, scoreParent);
 
