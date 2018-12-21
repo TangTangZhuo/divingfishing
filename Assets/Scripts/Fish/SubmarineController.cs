@@ -745,6 +745,7 @@ public class SubmarineController : MonoBehaviour {
 		fishDic.Add ("fish38(Clone)", 10000);
 		fishDic.Add ("fish39(Clone)", 16000);
 		fishDic.Add ("fish40(Clone)", 25000);
+		fishDic.Add ("fish101(Clone)", 25000);
 
 		AddUnusual (40);
 	}
@@ -791,6 +792,7 @@ public class SubmarineController : MonoBehaviour {
 		expDic.Add ("fish38(Clone)", 8);
 		expDic.Add ("fish39(Clone)", 9);
 		expDic.Add ("fish40(Clone)", 10);
+		expDic.Add ("fish101(Clone)", 10);
 
 		AddUnusualExp (40);
 	}

@@ -57,6 +57,9 @@ public class NetTop : MonoBehaviour {
 				}
 			}
 		}
+		if (collider.name == "fish101(Clone)") {
+			TipPop.GenerateTip ("Merry Christmas！", 1f, Color.yellow);
+		}
 	}
 
 	void ScoreGenerate(Transform fish,Vector3 offset){

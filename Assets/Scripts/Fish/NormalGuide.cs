@@ -20,15 +20,17 @@ public class NormalGuide : MonoBehaviour {
 
     // Use this for initialization
     public void NormalGuideStart () {
+		
+		if (Mathf.Abs (((Screen.height / (Screen.width * 1f)) - 1.33f)) < 0.1f) {
+			return;
+		}
+
         if(PlayerPrefs.GetInt("fish10", 0)==1 && PlayerPrefs.GetInt("Lock2", 0)==0){
             if(PlayerPrefs.GetInt("MapGuide", 0)==0){
                 guide[2].SetActive(true);
                 PlayerPrefs.SetInt("MapGuide", 1);
             }
-        }
-
-
-
+        }			
 
         if (PlayerPrefs.GetInt("IlluGuide", 0) == 1)
         {
