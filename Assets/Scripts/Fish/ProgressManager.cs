@@ -95,6 +95,7 @@ public class ProgressManager : MonoBehaviour {
             SubmarineController.Instance.SynDepth();
             PlayerPrefs.SetInt("quitGame", 0);
             ReShape.Instance.ChangeShape();
+			AudioManager.Instance.waterAudio.SetActive (false);
         }else{
 
             HideUI();

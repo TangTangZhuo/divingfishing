@@ -28,11 +28,32 @@ public class SettingManager : MonoBehaviour {
 
 	}
 
+	public void OnAudioClick(){
+		int audio = PlayerPrefs.GetInt ("Audio", 1);
+		if (audio == 0) {
+			PlayerPrefs.SetInt ("Audio", 1);
+		}
+		if (audio == 1) {
+			PlayerPrefs.SetInt ("Audio", 0);
+		}
+		UpdateAudioState ();
+
+	}
+
 	void UpdateState(){
 		int taptic = PlayerPrefs.GetInt ("Taptic", 1);
 		if (taptic == 0) {
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 0.5f);
 		}if (taptic == 1) {
+			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
+		}
+	}
+
+	void UpdateAudioState(){
+		int audio = PlayerPrefs.GetInt ("Audio", 1);
+		if (audio == 0) {
+			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 0.5f);
+		}if (audio == 1) {
 			transform.GetComponent<Image> ().color = new Color (1, 1, 1, 1);
 		}
 	}
@@ -46,8 +67,8 @@ public class SettingManager : MonoBehaviour {
 		RectTransform rect = transform.parent.GetComponent<RectTransform> ();
 		while(true){
 			if (!onSetting) {				
-				rect.sizeDelta = Vector2.Lerp(rect.sizeDelta,new Vector2(rect.sizeDelta.x,488),Time.deltaTime*10);
-				if (Mathf.Abs( rect.sizeDelta.y - 488)<0.1f) {
+				rect.sizeDelta = Vector2.Lerp(rect.sizeDelta,new Vector2(rect.sizeDelta.x,650),Time.deltaTime*10);
+				if (Mathf.Abs( rect.sizeDelta.y - 650)<0.1f) {
 					onSetting = true;
 					yield break;
 				}

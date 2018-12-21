@@ -32,12 +32,16 @@ public class GoldCollect : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col){
 		if (col.tag == "goldCollider") {
+			GameObject go = Instantiate (AudioManager.Instance.goldAudio);
+			Destroy (go, 1);
 			goldImage.DOScale (new Vector3 (2f, 2f, 2f), 0.2f).OnComplete(()=>{
 				goldImage.DOScale (1.8f, 0.2f);
 				Destroy(gameObject);
 			});
 		}
 		if (col.tag == "extraCollider") {
+			GameObject go = Instantiate (AudioManager.Instance.goldAudio);
+			Destroy (go, 1);
 			extraImage.DOScale (new Vector3 (1.2f, 1.2f, 1.2f), 0.2f).OnComplete(()=>{
 				extraImage.DOScale (1f, 0.2f);
 				Destroy(gameObject);
