@@ -41,7 +41,7 @@ public class FreeUpdate : MonoBehaviour {
         {
             UpdateFreeBtn("freeDepth3");
         }
-		if (PlayerPrefs.GetInt("Level", 1) == 4 && PlayerPrefs.GetInt("freeDepth3", 0) >= 5)
+		if (PlayerPrefs.GetInt("Level", 1) == 4 && PlayerPrefs.GetInt("freeDepth4", 0) >= 5)
 		{
 			UpdateFreeBtn("freeDepth4");
 		}
@@ -67,9 +67,11 @@ public class FreeUpdate : MonoBehaviour {
         depthButton.onClick.AddListener(() => {			
             if(TGSDK.CouldShowAd(TGSDKManager.FreeId)){
                 TGSDK.ShowAd(TGSDKManager.FreeId);
+				SettingManager.Instance.OnAudioClick();
 				bool adReward = false;
                 StopCoroutine(coroutine);
                 TGSDK.AdCloseCallback = (string obj) => {
+					SettingManager.Instance.OnAudioClick();
 					if(adReward){
                     	Upgrading.Instance.FreeClick();
 						depthImage.sprite = curSprite;

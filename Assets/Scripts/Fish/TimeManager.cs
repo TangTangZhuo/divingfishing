@@ -58,11 +58,14 @@ public class TimeManager : MonoBehaviour {
 
     void OnApplicationPause(bool isPause){
 		if (isPause) {
+			//print(DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("sysString", "1"))));
 			PlayerPrefs.SetString("sysString", System.DateTime.Now.ToBinary().ToString());
+			//print(DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("sysString", "1"))));
 			PlayerPrefs.SetInt ("quitGame", 1);
            // PlayerPrefs.SetInt("EnterGame", 1);
             PlayerPrefs.SetInt("TurnTip", 0);
         } else {
+			//print(DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("sysString", "1"))));
 			UpdateGold ();
             if (!offlineShowing && PlayerPrefs.GetInt("TurnGuideFinish", 0) == 1)
             {
@@ -91,7 +94,7 @@ public class TimeManager : MonoBehaviour {
 	public void UpdateGold(){
 		if (messageCount == 0) {
 			int min = OfflineTime ();
-			if (min > 0) {
+			if (min > 1) {
 				float goldMutiple = 1;
 				if (PlayerPrefs.GetInt ("fishingpass", 0) == 1) {
 					goldMutiple = 0.2f;
@@ -151,10 +154,13 @@ public class TimeManager : MonoBehaviour {
                     IPAManager.Instance.AutoPopVIP();
                 };
                 MessageBox.doubleR = () => {
-					TGSDK.ShowAdScene(TGSDKManager.doubleID);
-
+					//TGSDK.ShowAdScene(TGSDKManager.doubleID);
 					if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
+						SettingManager.Instance.OnAudioClick();
 						TGSDK.ShowAd(TGSDKManager.doubleID);
+						TGSDK.AdCloseCallback = (string obj) => {
+							SettingManager.Instance.OnAudioClick();
+						};
 					}
 						
 

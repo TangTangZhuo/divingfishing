@@ -10,28 +10,25 @@ public class Banner : MonoBehaviour {
 
 	void Start () {
 		if (PlayerPrefs.GetInt ("fishingpass", 0) == 0 && PlayerPrefs.GetInt ("no_ads", 0) == 0) {
-			TGSDK.SetBannerConfig (bannerID, "TGBannerNormal", 0, Screen.height-Screen.height / 12, Screen.width, Screen.height / 12, 30);
-			if (TGSDK.CouldShowAd (bannerID)) {
-				TGSDK.ShowAd (bannerID);
-				Debug.Log ("TGBANNERFinish");
-			}
 			GameObject[] Gos = GameObject.FindGameObjectsWithTag ("bannerUI");
 			for (int i = 0; i < Gos.Length; i++) {
-				Gos [i].transform.position += new Vector3 (0, 50, 0);
+				Gos [i].transform.position += new Vector3 (0, Screen.height / 20, 0);
 			}
+
+			TGSDK.SetBannerConfig (bannerID, "TGBannerNormal", 0, Screen.height-Screen.height / 12, Screen.width, Screen.height / 12, 30);
+			TGSDK.ShowAd (bannerID);				
 			TGSDK.BannerFailedCallback = (string m1, string m2, string m3) => {
 				TGSDK.CloseBanner (bannerID);
 				Invoke ("ShowBanner", 4);
 			};
-				
+			TGSDK.BannerLoadedCallback = (string arg1, string arg2) => {
+				Debug.Log ("TGBANNERFinish");
+			};
 		}
 	}
 
-	void ShowBanner(){
-		if (TGSDK.CouldShowAd (bannerID)) {
-			TGSDK.ShowAd (bannerID);
-			Debug.Log ("TGBANNERFinish");
-		}
+	void ShowBanner(){		
+		TGSDK.ShowAd (bannerID);
 	}		
 
 

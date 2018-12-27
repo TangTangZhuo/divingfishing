@@ -51,10 +51,12 @@ public class DailyReward : MonoBehaviour {
         }else{
             if (TGSDK.CouldShowAd(TGSDKManager.DailyID))
             {
+				SettingManager.Instance.OnAudioClick();
                 TGSDK.ShowAd(TGSDKManager.DailyID);
 				bool adReward = false;
 				TGSDK.AdCloseCallback = (string msg) =>
                 {
+					SettingManager.Instance.OnAudioClick();
 					if(adReward){
                    		PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
                     	UpdateDailyState();

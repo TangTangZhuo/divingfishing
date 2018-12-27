@@ -10,6 +10,15 @@ public class SettingManager : MonoBehaviour {
 	public AudioSource bg1;
 	public AudioSource bg2;
 	// Use this for initialization
+
+	private static SettingManager instance;
+	public static SettingManager Instance{
+		get{return instance;}
+	}
+	void Awake(){
+		instance = this;
+	}
+
 	void Start () {
 		UpdateState ();
 		int audio = PlayerPrefs.GetInt ("Audio", 1);

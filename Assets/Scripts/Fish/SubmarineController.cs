@@ -295,8 +295,10 @@ public class SubmarineController : MonoBehaviour {
                                     if (TGSDK.CouldShowAd(TGSDKManager.forceID))
                                     {
                                         TGSDK.ShowAd(TGSDKManager.forceID);
+										SettingManager.Instance.OnAudioClick();
                                         TGSDK.AdCloseCallback = (string obj) =>
                                         {
+											SettingManager.Instance.OnAudioClick();
                                             PlayerPrefs.SetInt("ForceReady", 0);
                                             Timer.Instance.StartCountDownForce(45);
                                             PlayerPrefs.SetInt("PopNoAds", 1);
@@ -343,10 +345,12 @@ public class SubmarineController : MonoBehaviour {
 							if (doubleText == "Bonus×2"||doubleText == "双倍收益"||doubleText == "雙倍收益"){
 								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
 									TGSDK.ShowAd(TGSDKManager.doubleID);
+									SettingManager.Instance.OnAudioClick();
 								}
 							}else{
 								if (TGSDK.CouldShowAd(TGSDKManager.tripleID)) {
 									TGSDK.ShowAd(TGSDKManager.tripleID);
+									SettingManager.Instance.OnAudioClick();
 								}
 							}
 								
@@ -371,6 +375,9 @@ public class SubmarineController : MonoBehaviour {
 									ProgressManager.Instance.GameWin ();	
 								});
 
+								TGSDK.AdCloseCallback = (string obj) => {
+									SettingManager.Instance.OnAudioClick();
+								};
 								TGSDK.AdCompleteCallback = (string msg) => {
 									Debug.Log("AdCompleteCallback");
 									PlayerPrefs.SetInt("double",0);

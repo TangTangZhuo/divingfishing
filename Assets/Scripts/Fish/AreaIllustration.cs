@@ -81,6 +81,9 @@ public class AreaIllustration : MonoBehaviour {
 		if (PlayerPrefs.GetInt ("Level", 1) == 3) {
 			transform.GetComponent<Image> ().sprite = AreaClickImage [2];
 		}
+		if (PlayerPrefs.GetInt ("Level", 1) == 4) {
+			transform.GetComponent<Image> ().sprite = AreaClickImage [2];
+		}
 	//	transform.GetComponent<Image> ().color = new Color (255/255f, 142/255f, 13/255f);
 		MultiHaptic.HapticMedium ();
 
@@ -96,6 +99,9 @@ public class AreaIllustration : MonoBehaviour {
 			transform.GetComponent<Image> ().sprite = AreaImage [1];
 		}
 		if (PlayerPrefs.GetInt ("Level", 1) == 3) {
+			transform.GetComponent<Image> ().sprite = AreaImage [2];
+		}
+		if (PlayerPrefs.GetInt ("Level", 1) == 4) {
 			transform.GetComponent<Image> ().sprite = AreaImage [2];
 		}
 	}
