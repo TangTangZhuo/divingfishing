@@ -295,10 +295,10 @@ public class SubmarineController : MonoBehaviour {
                                     if (TGSDK.CouldShowAd(TGSDKManager.forceID))
                                     {
                                         TGSDK.ShowAd(TGSDKManager.forceID);
-										SettingManager.Instance.OnAudioClick();
+										AudioListener.pause = true;
                                         TGSDK.AdCloseCallback = (string obj) =>
                                         {
-											SettingManager.Instance.OnAudioClick();
+											AudioListener.pause = false;
                                             PlayerPrefs.SetInt("ForceReady", 0);
                                             Timer.Instance.StartCountDownForce(45);
                                             PlayerPrefs.SetInt("PopNoAds", 1);
@@ -345,12 +345,12 @@ public class SubmarineController : MonoBehaviour {
 							if (doubleText == "Bonus×2"||doubleText == "双倍收益"||doubleText == "雙倍收益"){
 								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
 									TGSDK.ShowAd(TGSDKManager.doubleID);
-									SettingManager.Instance.OnAudioClick();
+									AudioListener.pause = true;
 								}
 							}else{
 								if (TGSDK.CouldShowAd(TGSDKManager.tripleID)) {
 									TGSDK.ShowAd(TGSDKManager.tripleID);
-									SettingManager.Instance.OnAudioClick();
+									AudioListener.pause = true;
 								}
 							}
 								
@@ -376,7 +376,7 @@ public class SubmarineController : MonoBehaviour {
 								});
 
 								TGSDK.AdCloseCallback = (string obj) => {
-									SettingManager.Instance.OnAudioClick();
+									AudioListener.pause = false;
 								};
 								TGSDK.AdCompleteCallback = (string msg) => {
 									Debug.Log("AdCompleteCallback");
@@ -437,6 +437,7 @@ public class SubmarineController : MonoBehaviour {
 
 		}
 	}
+		
 
 	void FBLogWithLevel(){
 		if (PlayerPrefs.GetInt ("Level", 1) == 1) {

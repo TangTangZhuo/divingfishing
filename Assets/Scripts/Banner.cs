@@ -16,7 +16,8 @@ public class Banner : MonoBehaviour {
 			}
 
 			TGSDK.SetBannerConfig (bannerID, "TGBannerNormal", 0, Screen.height-Screen.height / 12, Screen.width, Screen.height / 12, 30);
-			TGSDK.ShowAd (bannerID);				
+			TGSDK.ShowAd (bannerID);	
+			Debug.Log ("start show banner");
 			TGSDK.BannerFailedCallback = (string m1, string m2, string m3) => {
 				TGSDK.CloseBanner (bannerID);
 				Invoke ("ShowBanner", 4);
@@ -29,6 +30,7 @@ public class Banner : MonoBehaviour {
 
 	void ShowBanner(){		
 		TGSDK.ShowAd (bannerID);
+		Debug.Log ("Retry show banner");
 	}		
 
 

@@ -76,12 +76,12 @@ public class TurnTable : MonoBehaviour {
 		bool completeAD = false;
 		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) {
 			TGSDK.ShowAd (TGSDKManager.turnID);
-			SettingManager.Instance.OnAudioClick();
+			AudioListener.pause = true;
 			turnBtn.SetActive (false);
 			backBtn.SetActive (false);
 
 			TGSDK.AdCloseCallback = (string obj) => {
-				SettingManager.Instance.OnAudioClick();
+				AudioListener.pause = false;
 				if(completeAD){
 					rotation.RotateThis();
 
@@ -125,13 +125,13 @@ public class TurnTable : MonoBehaviour {
             turnContinue.SetActive(false);
 
             TGSDK.ShowAd(TGSDKManager.turnID);
-			SettingManager.Instance.OnAudioClick();
+			AudioListener.pause = true;
 
             turnBtn.SetActive(false);
             backBtn.SetActive(false);
 
             TGSDK.AdCloseCallback = (string obj) => {
-				SettingManager.Instance.OnAudioClick();
+				AudioListener.pause = false;
                 if (completeAD)
                 {
                     rotation.RotateThis();

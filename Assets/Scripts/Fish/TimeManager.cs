@@ -156,10 +156,10 @@ public class TimeManager : MonoBehaviour {
                 MessageBox.doubleR = () => {
 					//TGSDK.ShowAdScene(TGSDKManager.doubleID);
 					if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
-						SettingManager.Instance.OnAudioClick();
+						AudioListener.pause = true;
 						TGSDK.ShowAd(TGSDKManager.doubleID);
 						TGSDK.AdCloseCallback = (string obj) => {
-							SettingManager.Instance.OnAudioClick();
+							AudioListener.pause = false;
 						};
 					}
 						

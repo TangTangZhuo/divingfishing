@@ -67,11 +67,11 @@ public class FreeUpdate : MonoBehaviour {
         depthButton.onClick.AddListener(() => {			
             if(TGSDK.CouldShowAd(TGSDKManager.FreeId)){
                 TGSDK.ShowAd(TGSDKManager.FreeId);
-				SettingManager.Instance.OnAudioClick();
+				AudioListener.pause = true;
 				bool adReward = false;
                 StopCoroutine(coroutine);
                 TGSDK.AdCloseCallback = (string obj) => {
-					SettingManager.Instance.OnAudioClick();
+					AudioListener.pause = false;
 					if(adReward){
                     	Upgrading.Instance.FreeClick();
 						depthImage.sprite = curSprite;
