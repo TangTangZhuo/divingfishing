@@ -167,7 +167,8 @@ public class FishGenerate : MonoBehaviour {
 		float screenMid = startPosition.position.x;
 		bool canFindNew = (depth + 24) % (-21) == 0;
 		int indexNew = (depth + 24) / (-21)+1;
-		if (canFindNew) {
+
+		if (canFindNew&&indexNew<10) {
 			for (int i = 0; i < 2; i++) {
 				Transform.Instantiate (fish [indexNew], new Vector3 (screenMid + Random.Range (-2, 3), depth - Random.Range (5.0f, 5.5f)), 
 					Quaternion.Euler (0, euler [Random.Range (0, 2)], 0), transform);
