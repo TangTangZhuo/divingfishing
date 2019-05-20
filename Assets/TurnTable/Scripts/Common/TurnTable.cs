@@ -40,7 +40,7 @@ public class TurnTable : MonoBehaviour {
 	bool isFinish = false;
 
 	//转盘元素倍数
-	float[] multiple = new float[]{1.4f,2f,1.2f,1.1f,1.5f,1.3f};
+	float[] multiple = new float[]{1.2f,1.5f,1.3f,1.1f,1.4f,2f};
 	//转盘元素金币数
 	int[] golds;
 

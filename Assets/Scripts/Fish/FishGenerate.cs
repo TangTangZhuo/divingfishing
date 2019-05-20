@@ -62,6 +62,7 @@ public class FishGenerate : MonoBehaviour {
 				fishNumber = 10;
 			}
 			if (!fishName.EndsWith ("Eye")) {
+				print (fishName.Split (new char []{ 'h' }) [1]);
 				if (int.Parse (fishName.Split (new char []{ 'h' }) [1]) > 30) {
 					isBig = true;
 				}
