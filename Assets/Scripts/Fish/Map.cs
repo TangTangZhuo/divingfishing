@@ -18,6 +18,8 @@ public class Map : MonoBehaviour {
 
 	public Transform shipMark;
 
+	public Sprite[] mapImages;
+
     private static Map instance;
     public static Map Instance
     {
@@ -52,9 +54,9 @@ public class Map : MonoBehaviour {
 	}
 
 	void OnEnable(){
-		if (PlayerPrefs.GetInt ("ReBirthGuide", 0) == 0) {
-			transform.Find ("ReBirthGuide").gameObject.SetActive (true);
-		}
+//		if (PlayerPrefs.GetInt ("ReBirthGuide", 0) == 0) {
+//			transform.Find ("ReBirthGuide").gameObject.SetActive (true);
+//		}
 	}
 
 	public void OnBackBtn(){
@@ -131,11 +133,11 @@ public class Map : MonoBehaviour {
 			long cost = 2000000;
 			//MessageBox.Show ("", "It costs "+"$2,000K" +"to unlock" ,2);
 			if (Application.systemLanguage == SystemLanguage.English) {
-				MessageBox.Show ("", "It costs "+"$2,000K " +"to unlock" ,2);
+				MessageBox.Show ("", "It costs "+"$2,000K " +"to unlock" ,mapImages[0]);
 			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
-				MessageBox.Show ("", "花费 "+"$2,000K " +"进行解锁" ,2);
+				MessageBox.Show ("", "花费 "+"$2,000K " +"进行解锁" ,mapImages[0]);
 			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
-				MessageBox.Show ("", "花費 "+"$2,000K " +"進行解鎖" ,2);
+				MessageBox.Show ("", "花費 "+"$2,000K " +"進行解鎖" ,mapImages[0]);
 			}
 			MessageBox.confim =()=>{
 				long gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
@@ -148,6 +150,7 @@ public class Map : MonoBehaviour {
 					PlayerPrefs.SetInt ("Lock2",1);
 					transform.Find("Level2").Find("lock").gameObject.SetActive(false);
 					FaceBookGetLog.LogFirstLevel2Event();
+					TTADManager.Instance.Map_Unlock("Map_2");
 				}else{
 					if (Application.systemLanguage == SystemLanguage.English) {
 						GenerateText (lv4, "Not enough money！");
@@ -200,11 +203,11 @@ public class Map : MonoBehaviour {
 			long cost = 300000000;
 			//MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,2);
 			if (Application.systemLanguage == SystemLanguage.English) {
-				MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,2);
+				MessageBox.Show ("", "It costs "+"$300,000K " +"to unlock" ,mapImages[1]);
 			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
-				MessageBox.Show ("", "花费 "+"$300,000K " +"进行解锁" ,2);
+				MessageBox.Show ("", "花费 "+"$300,000K " +"进行解锁" ,mapImages[1]);
 			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
-				MessageBox.Show ("", "花費 "+"$300,000K " +"進行解鎖" ,2);
+				MessageBox.Show ("", "花費 "+"$300,000K " +"進行解鎖" ,mapImages[1]);
 			}
 			MessageBox.confim =()=>{
 				long gold = long.Parse( PlayerPrefs.GetString ("gold", "0"));
@@ -217,6 +220,7 @@ public class Map : MonoBehaviour {
 					PlayerPrefs.SetInt ("Lock3",1);
 					transform.Find("Level3").Find("lock").gameObject.SetActive(false);
 					FaceBookGetLog.LogFirstLevel3Event();
+					TTADManager.Instance.Map_Unlock("Map_3");
 				}else{
 					if (Application.systemLanguage == SystemLanguage.English) {
 						GenerateText (lv4, "Not enough money！");
@@ -243,11 +247,11 @@ public class Map : MonoBehaviour {
 			}
 		} else {
 			if (Application.systemLanguage == SystemLanguage.English) {
-				MessageBox.Show ("", "77 meters in depth to unlock" ,2);
+				MessageBox.Show ("", "77 meters in depth to unlock" ,mapImages[2]);
 			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
-				MessageBox.Show ("", "深度达到77米可进行解锁" ,2);
+				MessageBox.Show ("", "深度达到77米可进行解锁" ,mapImages[2]);
 			}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
-				MessageBox.Show ("", "深度達到77米可進行解鎖" ,2);
+				MessageBox.Show ("", "深度達到77米可進行解鎖" ,mapImages[2]);
 			}
 			MessageBox.confim =()=>{				
 				int depth = PlayerPrefs.GetInt ("valueDepth", UIManager.Instance.diveDepth);
@@ -263,6 +267,7 @@ public class Map : MonoBehaviour {
 					}else if (Application.systemLanguage == SystemLanguage.ChineseTraditional) {
 						TipPop.GenerateTip("解鎖成功",0.5f);
 					}
+					TTADManager.Instance.Map_Unlock("Map_Christmas");
 				}else{
 					if (Application.systemLanguage == SystemLanguage.English) {
 						GenerateText (lv4, "Not enough depth！");

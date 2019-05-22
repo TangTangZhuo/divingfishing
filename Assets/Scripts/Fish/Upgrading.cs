@@ -80,15 +80,19 @@ public class Upgrading : MonoBehaviour {
 			if (PlayerPrefs.GetInt ("Level", 1) == 1) {
 				PlayerPrefs.SetInt ("valueDepth", UIManager.Instance.diveDepth);
 				PlayerPrefs.SetString ("priceDepth", price.ToString());
+				TTADManager.Instance.Map_Depth ("Map_1", UIManager.Instance.diveDepth);
 			} else if (PlayerPrefs.GetInt ("Level", 1) == 2) {
 				PlayerPrefs.SetInt ("valueDepth2", UIManager.Instance.diveDepth);
 				PlayerPrefs.SetString ("priceDepth2", price.ToString());
+				TTADManager.Instance.Map_Depth ("Map_2", UIManager.Instance.diveDepth);
 			}else if (PlayerPrefs.GetInt ("Level", 1) == 3) {
 				PlayerPrefs.SetInt ("valueDepth3", UIManager.Instance.diveDepth);
 				PlayerPrefs.SetString ("priceDepth3", price.ToString());
+				TTADManager.Instance.Map_Depth ("Map_3", UIManager.Instance.diveDepth);
 			}else if (PlayerPrefs.GetInt ("Level", 1) == 4) {
 				PlayerPrefs.SetInt ("valueDepth4", UIManager.Instance.diveDepth);
 				PlayerPrefs.SetString ("priceDepth4", price.ToString());
+				TTADManager.Instance.Map_Depth ("Map_Christmas", UIManager.Instance.diveDepth);
 			}
 
 			PlayerPrefs.SetString ("gold", gold.ToString());

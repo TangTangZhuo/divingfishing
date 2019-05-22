@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.UI;
 
 namespace Common
 {
@@ -16,6 +17,7 @@ namespace Common
 		public static DoubleR doubleR;
 		public static string TitleStr;
 		public static string ContentStr;
+		public static Sprite mapImage;
 
 		public static void Show(string content)
 		{          
@@ -56,6 +58,20 @@ namespace Common
 		//	Messagebox.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
 		//	Messagebox.GetComponent<RectTransform>().offsetMin = Vector2.zero;
 		//	Messagebox.GetComponent<RectTransform>().offsetMax = Vector2.zero;    
+			//Time.timeScale = 0;     
+		}
+
+		public static void Show(string title,string content,Sprite image)
+		{
+			TitleStr = title;
+			ContentStr = content;
+			mapImage = image;
+			Messagebox = (GameObject)Resources.Load ("PurchasePop");		
+			Messagebox = GameObject.Instantiate(Messagebox, GameObject.Find("Canvas").transform) as GameObject;
+			Messagebox.transform.DOScale (1, 0.3f);
+			//	Messagebox.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+			//	Messagebox.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+			//	Messagebox.GetComponent<RectTransform>().offsetMax = Vector2.zero;    
 			//Time.timeScale = 0;     
 		}
 

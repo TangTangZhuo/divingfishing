@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Together;
+//using Together;
 
 public class FreeUpdate : MonoBehaviour {
     public Sprite freePicture;
@@ -18,7 +18,7 @@ public class FreeUpdate : MonoBehaviour {
     }
 
     void Awake()
-    {
+	{
         instance = this;
     }
 
@@ -65,25 +65,40 @@ public class FreeUpdate : MonoBehaviour {
         PlayerPrefs.SetInt(level, 0);
         depthButton.onClick.RemoveAllListeners();
         depthButton.onClick.AddListener(() => {			
-            if(TGSDK.CouldShowAd(TGSDKManager.FreeId)){
-                TGSDK.ShowAd(TGSDKManager.FreeId);
+//            if(TGSDK.CouldShowAd(TGSDKManager.FreeId)){
+//                TGSDK.ShowAd(TGSDKManager.FreeId);
+//				AudioListener.pause = true;
+//				bool adReward = false;
+//                StopCoroutine(coroutine);
+//                TGSDK.AdCloseCallback = (string obj) => {
+//					AudioListener.pause = false;
+//					if(adReward){
+//                    	Upgrading.Instance.FreeClick();
+//						depthImage.sprite = curSprite;
+//						depthButton.onClick.RemoveAllListeners();
+//						depthButton.onClick.AddListener(Upgrading.Instance.OnDepthClick);
+//					}
+//                };
+//				TGSDK.AdRewardSuccessCallback = (string obj) => {
+//					adReward = true;
+//				};
+			//            }
+			TTADManager.Instance.Ad_Button_Click("FreeUpdate");
+			if(TTADManager.Instance.couldShow){
 				AudioListener.pause = true;
-				bool adReward = false;
-                StopCoroutine(coroutine);
-                TGSDK.AdCloseCallback = (string obj) => {
+				StopCoroutine(coroutine);
+				TTADManager.Instance.Ad_Show_Event("FreeUpdate");
+				TTADManager.Instance.AutoShowReward ();
+				TTADManager.Instance.CheckRewardEvent();
+				TTADManager.Instance.RewardFinish += () => {
+					TTADManager.Instance.Ad_View("FreeUpdate");
 					AudioListener.pause = false;
-					if(adReward){
-                    	Upgrading.Instance.FreeClick();
-						depthImage.sprite = curSprite;
-						depthButton.onClick.RemoveAllListeners();
-						depthButton.onClick.AddListener(Upgrading.Instance.OnDepthClick);
-					}
-                };
-				TGSDK.AdRewardSuccessCallback = (string obj) => {
-					adReward = true;
+					Upgrading.Instance.FreeClick();
+					depthImage.sprite = curSprite;
+					depthButton.onClick.RemoveAllListeners();
+					depthButton.onClick.AddListener(Upgrading.Instance.OnDepthClick);
 				};
-
-            }
+			}
             else{
 				if (Application.systemLanguage == SystemLanguage.English) {
 					TipPop.GenerateTip("no ads", 0.5f);

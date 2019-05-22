@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Together;
+//using Together;
 
 public class DailyReward : MonoBehaviour {
 
@@ -49,24 +49,38 @@ public class DailyReward : MonoBehaviour {
             PlayerPrefs.SetInt("NewDay", 0);
             ClamReward();
         }else{
-            if (TGSDK.CouldShowAd(TGSDKManager.DailyID))
-            {
+//            if (TGSDK.CouldShowAd(TGSDKManager.DailyID))
+//            {
+//				AudioListener.pause = true;
+//                TGSDK.ShowAd(TGSDKManager.DailyID);
+//				bool adReward = false;
+//				TGSDK.AdCloseCallback = (string msg) =>
+//                {
+//					AudioListener.pause = false;
+//					if(adReward){
+//                   		PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
+//                    	UpdateDailyState();
+//					}
+//                };
+//				TGSDK.AdRewardSuccessCallback = (string obj) => {
+//					adReward = true;
+//				};
+//                
+//            }
+			TTADManager.Instance.Ad_Button_Click("DailyReward");
+			if(TTADManager.Instance.couldShow){
+				TTADManager.Instance.Ad_Show_Event("DailyReward");
 				AudioListener.pause = true;
-                TGSDK.ShowAd(TGSDKManager.DailyID);
-				bool adReward = false;
-				TGSDK.AdCloseCallback = (string msg) =>
-                {
+				TTADManager.Instance.AutoShowReward ();
+				TTADManager.Instance.CheckRewardEvent();
+				TTADManager.Instance.RewardFinish += () => {
+					TTADManager.Instance.Ad_View("DailyReward");
 					AudioListener.pause = false;
-					if(adReward){
-                   		PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
-                    	UpdateDailyState();
-					}
-                };
-				TGSDK.AdRewardSuccessCallback = (string obj) => {
-					adReward = true;
+					PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
+					UpdateDailyState();
 				};
-                
-            }else{
+			}
+			else{
 				if (Application.systemLanguage == SystemLanguage.English) {
 					TipPop.GenerateTip("no ads", 0.5f);
 				} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
@@ -83,6 +97,7 @@ public class DailyReward : MonoBehaviour {
 		iPAManager.UpdateDailyState ();
 		long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + 1000000;
 		PlayerPrefs.SetString ("gold", gold.ToString());
+		TTADManager.Instance.Get_Coins (UIManager.UnitChange(1000000), "DailyReward");
 		flyGold.FlyGoldGenerate (flyGold.targetPos);
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 1f, false, ScrambleMode.Numerals, null).SetDelay (1);
 		Upgrading.Instance.CheckGold (gold);

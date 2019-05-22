@@ -80,6 +80,8 @@ public class IPAManager : MonoBehaviour
 			if (product.definition.id == "marine_vip") {
 				PlayerPrefs.SetInt ("fishingpass", 1);
                 PlayerPrefs.SetInt("golden_net", 1);
+				TTADManager.Instance.Get_Virtual_Items ("vip_item", 1, "fishingpass", "recharge");
+				TTADManager.Instance.Get_Virtual_Items ("vip_item", 1, "golden_net", "recharge");
                 SubmarineController.Instance.UpdateGoldMutiple();
                // transform.Find("goldNet").gameObject.SetActive(false);
             }
@@ -135,7 +137,9 @@ public class IPAManager : MonoBehaviour
 	void OnCollectClick(){
 		long gold = 0;
 		//UIManager.Instance.goldT.text = PlayerPrefs.GetInt ("gold", 0).ToString ();
-		gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + long.Parse( PlayerPrefs.GetString ("accumulation", "0"));
+		long accumulationlong = long.Parse(PlayerPrefs.GetString ("accumulation", "0"));
+		TTADManager.Instance.Get_Coins (UIManager.UnitChange (accumulationlong), "VIPClaim");
+		gold = long.Parse (PlayerPrefs.GetString ("gold", "0")) + accumulationlong;
 		PlayerPrefs.SetString ("gold", gold.ToString());
 		UIManager.Instance.goldT.DOText (UIManager.UnitChange (gold), 0.5f, false, ScrambleMode.None, null);
 		if (PlayerPrefs.GetString ("accumulation", "0") != "0") {
@@ -196,6 +200,7 @@ public class IPAManager : MonoBehaviour
 
 	public void OnVipBackBtn(){
 		transform.Find ("VIPPurchase").gameObject.SetActive (false);
+		TTADManager.Instance.Cancel_Award ("Vip", 1);
 	}
 
 	public void OnDailyBackBtn(){

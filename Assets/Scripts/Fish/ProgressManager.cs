@@ -107,6 +107,8 @@ public class ProgressManager : MonoBehaviour {
 			if (PlayerPrefs.GetInt ("fishingpass", 0) == 0 && PlayerPrefs.GetInt ("no_ads", 0) == 0) {				
 				StartCoroutine (ChangeOffset ());
 			}
+			SubmarineController.Instance.StartFishingTime ();
+			TTADManager.Instance.Start_Game ();
         }else{
 
             HideUI();

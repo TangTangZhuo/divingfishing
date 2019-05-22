@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Together;
+//using Together;
 
 public class TGSDKManager : MonoBehaviour {
 
@@ -14,8 +14,8 @@ public class TGSDKManager : MonoBehaviour {
 
 
     void Awake(){
-		TGSDK.Initialize ("Hn4Xb1am9p7ZJ5CLu932");
-		TGSDK.PreloadAd ();
+//		TGSDK.Initialize ("Hn4Xb1am9p7ZJ5CLu932");
+//		TGSDK.PreloadAd ();
 	}
 	// Use this for initialization
 	void Start () {

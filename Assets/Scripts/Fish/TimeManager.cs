@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Common;
-using Together;
+//using Together;
 using UnityEngine.UI;
 using DG.Tweening;
 
@@ -111,7 +111,7 @@ public class TimeManager : MonoBehaviour {
 					doubleTrans.GetComponentInChildren<Text>().text = "雙倍收益";
 				}
 				//doubleTrans.GetComponentInChildren<Text>().text = "Bonus×2";
-				if (!TGSDK.CouldShowAd (TGSDKManager.doubleID)) {
+				if (!TTADManager.Instance.couldShow) {
 					doubleTrans.GetComponent<Button> ().interactable = false;
 				} else {
 					doubleTrans.GetComponent<Button> ().interactable = true;
@@ -147,28 +147,43 @@ public class TimeManager : MonoBehaviour {
 				messageCount++;
 
 				MessageBox.confim = () => {
-					TGSDK.ReportAdRejected(TGSDKManager.doubleID);
-					long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple));
+					//TGSDK.ReportAdRejected(TGSDKManager.doubleID);
+					long goldreward = (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*(1+goldMutiple));
+					TTADManager.Instance.Get_Coins(UIManager.UnitChange( goldreward),"OfflineReward");
+					TTADManager.Instance.Click_Award("OfflineReward");
+					long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldreward;
 					OnMessageBoxBtn(gold);
 					PlayerPrefs.SetInt ("quitGame", 0);
                     IPAManager.Instance.AutoPopVIP();
                 };
                 MessageBox.doubleR = () => {
 					//TGSDK.ShowAdScene(TGSDKManager.doubleID);
-					if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
+					TTADManager.Instance.Ad_Button_Click("OfflineReward");
+					if (TTADManager.Instance.couldShow) {
 						AudioListener.pause = true;
-						TGSDK.ShowAd(TGSDKManager.doubleID);
-						TGSDK.AdCloseCallback = (string obj) => {
+						TTADManager.Instance.Ad_Show_Event("OfflineReward");
+						TTADManager.Instance.Click_Award("OfflineReward");
+						TTADManager.Instance.AutoShowReward ();
+						TTADManager.Instance.CheckRewardEvent();
+						TTADManager.Instance.RewardFinish += () => {
+							TTADManager.Instance.Ad_View("OfflineReward");
 							AudioListener.pause = false;
+							if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
+								PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
+							}
 						};
+//						TGSDK.ShowAd(TGSDKManager.doubleID);
+//						TGSDK.AdCloseCallback = (string obj) => {
+//							AudioListener.pause = false;
+//						};
 					}
 						
 
 					doubleTrans.DOScale(1,2).OnComplete(()=>{
 						GameObject adPop =Instantiate ((GameObject)Resources.Load("ADPopBG"),GameObject.Find("Canvas").transform); 
-
-						long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*2*(1+goldMutiple));
-
+						long goldreward = (long)(min * long.Parse( PlayerPrefs.GetString ("valueOffline", "40"))*2*(1+goldMutiple));
+						long gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldreward;
+						TTADManager.Instance.Get_Coins(UIManager.UnitChange(goldreward),"OfflineReward");
 
 						Button btn = adPop.transform.Find("sure").GetComponent<Button>();
 						adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((long)(((gold-long.Parse( PlayerPrefs.GetString ("gold", "0")))/(2*(1+goldMutiple)))*(1+goldMutiple))).ToString();

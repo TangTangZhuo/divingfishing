@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using Common;
-using Together;
+//using Together;
 
 public class SubmarineController : MonoBehaviour {
 	public float moveSpeed;
@@ -60,6 +60,7 @@ public class SubmarineController : MonoBehaviour {
 	//升级所需经验
 	int rebirthExp = 0;
 
+	int fishingTime = 0;
 
 	public Dictionary<string,int> fishDic = new Dictionary<string, int>();
 	Dictionary<string,int> expDic = new Dictionary<string, int>();
@@ -228,13 +229,13 @@ public class SubmarineController : MonoBehaviour {
 
 						string doubleText = doubleTrans.GetComponentInChildren<Text>().text;
 						if(doubleText == "Bonus×2"||doubleText == "双倍收益"||doubleText == "雙倍收益"){
-							if (!TGSDK.CouldShowAd (TGSDKManager.doubleID)) {
+							if (!TTADManager.Instance.couldShow) {
 								doubleTrans.GetComponent<Button> ().interactable = false;
 							} else {
 								doubleTrans.GetComponent<Button> ().interactable = true;
 							}
 						}else{
-							if (!TGSDK.CouldShowAd (TGSDKManager.tripleID)) {
+							if (!TTADManager.Instance.couldShow) {
 								doubleTrans.GetComponent<Button> ().interactable = false;
 							} else {
 								doubleTrans.GetComponent<Button> ().interactable = true;
@@ -263,7 +264,7 @@ public class SubmarineController : MonoBehaviour {
 							}
 						}
 						ChangeUIWithGoldNet(GameObject.Find("PopBG(Clone)").transform);
-
+						StopFishingTime(UIManager.UnitChange(goldSum));
 
 						if (PlayerPrefs.GetInt ("GoodGameGuide", 0) == 0) {
 							Debug.Log("StartGoodGameGuide");
@@ -288,35 +289,36 @@ public class SubmarineController : MonoBehaviour {
                             FreeDepthWithLevel();
 
                             //如果倒计时结束则播放插屏，（无VIP和Noads)
-                            if (PlayerPrefs.GetInt("fishingpass",0)==0 && PlayerPrefs.GetInt("no_ads", 0) == 0)
-                            {
-                                if (PlayerPrefs.GetInt("ForceReady", 0) == 1)
-                                {
-                                    if (TGSDK.CouldShowAd(TGSDKManager.forceID))
-                                    {
-                                        TGSDK.ShowAd(TGSDKManager.forceID);
-										AudioListener.pause = true;
-                                        TGSDK.AdCloseCallback = (string obj) =>
-                                        {
-											AudioListener.pause = false;
-                                            PlayerPrefs.SetInt("ForceReady", 0);
-                                            Timer.Instance.StartCountDownForce(45);
-                                            PlayerPrefs.SetInt("PopNoAds", 1);
-                                            IPAManager.Instance.AutoPopNoads();
-                                        };
-                                    }
-                                    else
-                                    {
-                                        Debug.Log("can't play forceAD");
-                                    }
-
-                                }
-                            }
+//                            if (PlayerPrefs.GetInt("fishingpass",0)==0 && PlayerPrefs.GetInt("no_ads", 0) == 0)
+//                            {
+//                                if (PlayerPrefs.GetInt("ForceReady", 0) == 1)
+//                                {
+//                                    if (TGSDK.CouldShowAd(TGSDKManager.forceID))
+//                                    {
+//                                        TGSDK.ShowAd(TGSDKManager.forceID);
+//										AudioListener.pause = true;
+//                                        TGSDK.AdCloseCallback = (string obj) =>
+//                                        {
+//											AudioListener.pause = false;
+//                                            PlayerPrefs.SetInt("ForceReady", 0);
+//                                            Timer.Instance.StartCountDownForce(45);
+//                                            PlayerPrefs.SetInt("PopNoAds", 1);
+//                                            IPAManager.Instance.AutoPopNoads();
+//                                        };
+//                                    }
+//                                    else
+//                                    {
+//                                        Debug.Log("can't play forceAD");
+//                                    }
+//
+//                                }
+//                            }
 
 
 							long gold =long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*goldMultiple;
 
 							curAccumulation = goldSum*goldMultiple;
+							TTADManager.Instance.Get_Coins(UIManager.UnitChange(curAccumulation),"FinishFishing");
 							PlayerPrefs.SetString ("accumulation", (long.Parse( PlayerPrefs.GetString ("accumulation", "0"))+curAccumulation).ToString());
 
 							PlayerPrefs.SetString ("gold", gold.ToString());
@@ -343,13 +345,17 @@ public class SubmarineController : MonoBehaviour {
                             //Transform doubleTrans = popBG.transform.Find("double");
 
 							if (doubleText == "Bonus×2"||doubleText == "双倍收益"||doubleText == "雙倍收益"){
-								if (TGSDK.CouldShowAd(TGSDKManager.doubleID)) {
-									TGSDK.ShowAd(TGSDKManager.doubleID);
+								TTADManager.Instance.Ad_Button_Click("DoubleAwards");
+								if (TTADManager.Instance.couldShow) {
+									TTADManager.Instance.Ad_Show_Event("DoubleAwards");
+									TTADManager.Instance.AutoShowReward ();
 									AudioListener.pause = true;
 								}
 							}else{
-								if (TGSDK.CouldShowAd(TGSDKManager.tripleID)) {
-									TGSDK.ShowAd(TGSDKManager.tripleID);
+								TTADManager.Instance.Ad_Button_Click("MultipleAwards");
+								if (TTADManager.Instance.couldShow) {
+									TTADManager.Instance.Ad_Show_Event("MultipleAwards");
+									TTADManager.Instance.AutoShowReward ();
 									AudioListener.pause = true;
 								}
 							}
@@ -375,30 +381,61 @@ public class SubmarineController : MonoBehaviour {
 									ProgressManager.Instance.GameWin ();	
 								});
 
-								TGSDK.AdCloseCallback = (string obj) => {
+								TTADManager.Instance.CheckRewardEvent();
+								TTADManager.Instance.RewardFinish += () => {
 									AudioListener.pause = false;
-								};
-								TGSDK.AdCompleteCallback = (string msg) => {
-									Debug.Log("AdCompleteCallback");
-									PlayerPrefs.SetInt("double",0);
 									if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
 										PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
 									}
+									PlayerPrefs.SetInt("double",0);
 									if(doubleName == "Bonus×3"||doubleName == "三倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*3;
 										curAccumulation = goldSum*3;
+										TTADManager.Instance.Get_Coins(UIManager.UnitChange(curAccumulation),"FinishFishing");
+										TTADManager.Instance.Ad_View("MultipleAwards");
 									}else if(doubleName == "Bonus×4"||doubleName == "四倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*4;
 										curAccumulation = goldSum*4;
+										TTADManager.Instance.Get_Coins(UIManager.UnitChange(curAccumulation),"FinishFishing");
+										TTADManager.Instance.Ad_View("MultipleAwards");
 									}else if(doubleName == "Bonus×5"||doubleName == "五倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*5;
 										curAccumulation = goldSum*5;
+										TTADManager.Instance.Get_Coins(UIManager.UnitChange(curAccumulation),"FinishFishing");
+										TTADManager.Instance.Ad_View("MultipleAwards");
 									}else if(doubleName == "Bonus×2"||doubleName == "双倍收益"||doubleName == "雙倍收益"){
 										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*2;
 										curAccumulation = goldSum*2;
+										TTADManager.Instance.Get_Coins(UIManager.UnitChange(curAccumulation),"FinishFishing");
+										TTADManager.Instance.Ad_View("DoubleAwards");
 									}
 									adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-long.Parse( PlayerPrefs.GetString ("gold", "0"))-goldSum)*2).ToString();
 								};
+
+//								TGSDK.AdCloseCallback = (string obj) => {
+//									AudioListener.pause = false;
+//								};
+//								TGSDK.AdCompleteCallback = (string msg) => {
+//									Debug.Log("AdCompleteCallback");
+//									PlayerPrefs.SetInt("double",0);
+//									if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
+//										PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
+//									}
+//									if(doubleName == "Bonus×3"||doubleName == "三倍收益"){
+//										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*3;
+//										curAccumulation = goldSum*3;
+//									}else if(doubleName == "Bonus×4"||doubleName == "四倍收益"){
+//										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*4;
+//										curAccumulation = goldSum*4;
+//									}else if(doubleName == "Bonus×5"||doubleName == "五倍收益"){
+//										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*5;
+//										curAccumulation = goldSum*5;
+//									}else if(doubleName == "Bonus×2"||doubleName == "双倍收益"||doubleName == "雙倍收益"){
+//										gold = long.Parse( PlayerPrefs.GetString ("gold", "0")) + goldSum*2;
+//										curAccumulation = goldSum*2;
+//									}
+//									adPop.transform.Find("content").GetComponent<Text>().text ="$" + ((gold-long.Parse( PlayerPrefs.GetString ("gold", "0"))-goldSum)*2).ToString();
+//								};
 
 							});
 								
@@ -866,5 +903,34 @@ public class SubmarineController : MonoBehaviour {
 		doubleImage.SetActive (!bo);
 		passVip.SetActive (false);
 		extra.SetActive (false);
+	}
+
+	IEnumerator FishingTime(){
+		while (true) {
+			yield return new WaitForSeconds (1);
+			fishingTime += 1;
+		}
+	}
+
+	public void StartFishingTime(){
+		StartCoroutine ("FishingTime");
+	}
+
+	void StopFishingTime(string gold){
+		string maptype = "";
+		int levelIndex = PlayerPrefs.GetInt ("Level", 1);
+		if (levelIndex == 1) {
+			maptype = "Map_1";
+		} else if (levelIndex == 2) {
+			maptype = "Map_2";
+		} else if (levelIndex == 3) {
+			maptype = "Map_3";
+		} else if (levelIndex == 4) {
+			maptype = "Map_Christmas";
+		}
+		StopCoroutine ("FishingTime");
+		int depth = UIManager.Instance.diveDepth;
+		TTADManager.Instance.Quest (maptype, gold, fishingTime.ToString(),depth.ToString());
+		fishingTime = 0;
 	}
 }

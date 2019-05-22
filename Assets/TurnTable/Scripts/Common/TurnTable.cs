@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Together;
+//using Together;
 
 public class TurnTable : MonoBehaviour {
 
@@ -73,35 +73,54 @@ public class TurnTable : MonoBehaviour {
 
 	//点击广告旋转按钮
 	public void OnTurnBtn(){
-		bool completeAD = false;
-		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) {
-			TGSDK.ShowAd (TGSDKManager.turnID);
+//		bool completeAD = false;
+//		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) {
+//			TGSDK.ShowAd (TGSDKManager.turnID);
+//			AudioListener.pause = true;
+//			turnBtn.SetActive (false);
+//			backBtn.SetActive (false);
+//
+//			TGSDK.AdCloseCallback = (string obj) => {
+//				AudioListener.pause = false;
+//				if(completeAD){
+//					rotation.RotateThis();
+//
+//					if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
+//						PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
+//					}
+//
+//				}
+//			};
+//			TGSDK.AdRewardSuccessCallback = (string obj) => {
+//				completeAD = true;
+//			};
+//			TGSDK.AdRewardFailedCallback = (string obj) => {
+//				OnBackBtn();
+//			};
+//			TGSDK.AdShowFailedCallback = (string obj) => {
+//				OnBackBtn();
+//			};
+//
+//		} 
+		TTADManager.Instance.Ad_Button_Click("TurnTable");
+		if(TTADManager.Instance.couldShow){
 			AudioListener.pause = true;
 			turnBtn.SetActive (false);
 			backBtn.SetActive (false);
-
-			TGSDK.AdCloseCallback = (string obj) => {
+			TTADManager.Instance.Ad_Show_Event("TurnTable");
+			TTADManager.Instance.AutoShowReward ();
+			TTADManager.Instance.CheckRewardEvent();
+			TTADManager.Instance.RewardFinish += () => {
+				TTADManager.Instance.Ad_View("TurnTable");
 				AudioListener.pause = false;
-				if(completeAD){
-					rotation.RotateThis();
-
-					if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
-						PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
-					}
-
+				rotation.RotateThis();
+				if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
+					PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
 				}
 			};
-			TGSDK.AdRewardSuccessCallback = (string obj) => {
-				completeAD = true;
-			};
-			TGSDK.AdRewardFailedCallback = (string obj) => {
-				OnBackBtn();
-			};
-			TGSDK.AdShowFailedCallback = (string obj) => {
-				OnBackBtn();
-			};
+		}
 
-		} else {
+		else {
 			if (Application.systemLanguage == SystemLanguage.English) {
 				TipPop.GenerateTip ("no ads", 0.5f,new Color(105,183,221));
 			} else if (Application.systemLanguage == SystemLanguage.ChineseSimplified||Application.systemLanguage == SystemLanguage.Chinese) {			
@@ -118,42 +137,62 @@ public class TurnTable : MonoBehaviour {
 
     //延长转盘奖励时间
     public void OnContinueBtn(){
-        bool completeAD = false;
-		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) 
-        {
-            gameObject.SetActive(true);
-            turnContinue.SetActive(false);
-
-            TGSDK.ShowAd(TGSDKManager.turnID);
+//        bool completeAD = false;
+//		if (TGSDK.CouldShowAd (TGSDKManager.turnID)&&(Application.internetReachability!= NetworkReachability.NotReachable)) 
+//        {
+//            gameObject.SetActive(true);
+//            turnContinue.SetActive(false);
+//
+//            TGSDK.ShowAd(TGSDKManager.turnID);
+//			AudioListener.pause = true;
+//
+//            turnBtn.SetActive(false);
+//            backBtn.SetActive(false);
+//
+//            TGSDK.AdCloseCallback = (string obj) => {
+//				AudioListener.pause = false;
+//                if (completeAD)
+//                {
+//                    rotation.RotateThis();
+//
+//                    if (PlayerPrefs.GetInt("FreeRward", 0) < 10)
+//                    {
+//                        PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
+//                    }
+//
+//                }
+//            };
+//			TGSDK.AdRewardSuccessCallback = (string obj) => {
+//                completeAD = true;
+//            };
+//            TGSDK.AdRewardFailedCallback = (string obj) => {
+//                OnBackBtn();
+//            };
+//            TGSDK.AdShowFailedCallback = (string obj) => {
+//                OnBackBtn();
+//            };
+//
+//        }
+		TTADManager.Instance.Ad_Button_Click("TurnTable_Continue");
+		if(TTADManager.Instance.couldShow){
 			AudioListener.pause = true;
-
-            turnBtn.SetActive(false);
-            backBtn.SetActive(false);
-
-            TGSDK.AdCloseCallback = (string obj) => {
+			gameObject.SetActive(true);
+			turnContinue.SetActive(false);
+			turnBtn.SetActive(false);
+			backBtn.SetActive(false);
+			TTADManager.Instance.Ad_Show_Event ("TurnTable_Continue");
+			TTADManager.Instance.AutoShowReward ();
+			TTADManager.Instance.CheckRewardEvent();
+			TTADManager.Instance.RewardFinish += () => {
+				TTADManager.Instance.Ad_View("TurnTable_Continue");
 				AudioListener.pause = false;
-                if (completeAD)
-                {
-                    rotation.RotateThis();
+				rotation.RotateThis();
+				if (PlayerPrefs.GetInt ("FreeRward", 0) < 10) {
+					PlayerPrefs.SetInt ("FreeRward", PlayerPrefs.GetInt ("FreeRward", 0) + 1);
+				}
+			};
+		}
 
-                    if (PlayerPrefs.GetInt("FreeRward", 0) < 10)
-                    {
-                        PlayerPrefs.SetInt("FreeRward", PlayerPrefs.GetInt("FreeRward", 0) + 1);
-                    }
-
-                }
-            };
-			TGSDK.AdRewardSuccessCallback = (string obj) => {
-                completeAD = true;
-            };
-            TGSDK.AdRewardFailedCallback = (string obj) => {
-                OnBackBtn();
-            };
-            TGSDK.AdShowFailedCallback = (string obj) => {
-                OnBackBtn();
-            };
-
-        }
         else
         {
 			if (Application.systemLanguage == SystemLanguage.English) {
@@ -164,9 +203,9 @@ public class TurnTable : MonoBehaviour {
 				TipPop.GenerateTip ("廣告不可播放", 0.5f,new Color(105,183,221));
 			}
         }
-        //gameObject.SetActive(true);
-        //turnContinue.SetActive(false);
-        //rotation.RotateThis();
+//        gameObject.SetActive(true);
+//        turnContinue.SetActive(false);
+//        rotation.RotateThis();
     }
 
     //点击金币旋转按钮
