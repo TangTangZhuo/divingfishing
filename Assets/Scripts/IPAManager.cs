@@ -221,26 +221,29 @@ public class IPAManager : MonoBehaviour
 		}
 	}
 
-	//	public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e){
-	//		if (string.Equals (e.purchasedProduct.definition.id, "fishingpass", StringComparison.Ordinal)) {
-	//			print ("fishingpass");
-	//		}
-	//		if (string.Equals (e.purchasedProduct.definition.id, "golden_net", StringComparison.Ordinal)) {
-	//			print ("golden_net");
-	//		}
-	//		waiting.SetActive (false);
-	//		return PurchaseProcessingResult.Complete;
-	//	}
-	//
-	//	public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-	//	{
-	//		extensions.GetExtension<IAppleExtensions> ().RestoreTransactions (result => {
-	//			if (result) {
-	//				Debug.Log("restoration process succeeded");
-	//			} else {
-	//				Debug.Log("Restoration failed");
-	//			}
-	//		});
-	//	}
+    //public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
+    //{
+    //    if (string.Equals(e.purchasedProduct.definition.id, "fishingpass", StringComparison.Ordinal))
+    //    {
+    //        print("fishingpass");
+    //    }
+    //    if (string.Equals(e.purchasedProduct.definition.id, "golden_net", StringComparison.Ordinal))
+    //    {
+    //        print("golden_net");
+    //    }
+    //    waiting.SetActive(false);
+    //    return PurchaseProcessingResult.Complete;
+    //}
+    //
+    //	public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
+    //	{
+    //		extensions.GetExtension<IAppleExtensions> ().RestoreTransactions (result => {
+    //			if (result) {
+    //				Debug.Log("restoration process succeeded");
+    //			} else {
+    //				Debug.Log("Restoration failed");
+    //			}
+    //		});
+    //	}
 }
 
